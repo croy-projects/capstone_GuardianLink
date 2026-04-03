@@ -2,7 +2,7 @@
 
 # Full Stack App (Vite + React + Node.js)
 
-A clean starter project using **Vite + React** for the frontend and **Node.js + Express** for the backend.
+A web application designed to connect cybersecurity volunteers with non-profit organizations (NGOs) that require security assistance.
 
 ---
 
@@ -20,16 +20,7 @@ my-app/
 
 ## Getting Started
 
-### 1. Clone the repository
-
-```bash
-git clone <your-repo-url>
-cd my-app
-```
-
----
-
-### 2. Install dependencies
+### 1. Install dependencies
 
 #### Install root dependencies
 
@@ -88,7 +79,9 @@ Response:
 
 ## Environment Variables
 
-.env file in the server folder:
+add .env file in the server folder
+
+PORT=5000
 
 ## Available Scripts
 
