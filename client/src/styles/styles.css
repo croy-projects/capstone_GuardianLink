@@ -1,3 +1,28 @@
+/* =========================
+   CSS VARIABLES (THEME)
+========================= */
+:root {
+  --color-primary: #345D88;
+  --color-primary-dark: #2A4A6D;
+  --color-primary-light: #4A7FB8;
+
+  --color-accent: #F2A65A;
+
+  --color-bg: #F5F7FA;
+  --color-surface: #FFFFFF;
+
+  --color-text-primary: #1F2A37;
+  --color-text-secondary: #6B7280;
+
+  --color-border: #E5E7EB;
+
+  --color-success: #22C55E;
+  --color-error: #EF4444;
+
+  --radius: 10px;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
 /* Reset default browser styles */
 * {
   margin: 0;              /* remove default spacing */
@@ -8,13 +33,13 @@
 
 /* Body base styling */
 body {
-  background: #f5f7fa; /* light gray background */
-  color: #333;         /* dark text color */
+  background: var(--color-bg);
+  color: var(--color-text-primary);
 }
 
 /* ================= NAVBAR ================= */
 nav {
-  background: #1e3a8a;          /* dark blue background */
+  background:  var(--color-primary); /* dark blue background */
   color: white;                /* white text */
   display: flex;               /* flex layout */
   justify-content: space-between; /* space between logo and menu */
@@ -35,11 +60,15 @@ nav a {
   font-weight: bold;       /* bold text */
 }
 
+nav a:hover {
+  text-decoration: underline;
+}
+
 /* ================= HERO SECTION ================= */
 .hero {
   text-align: center;      /* center content */
   padding: 4rem 2rem;      /* large spacing */
-  background: #e0e7ff;     /* light blue background */
+  background: linear-gradient(135deg, #EAF2FB, #D6E6F8);     /* light blue background */
 }
 
 .hero h1 {
@@ -59,17 +88,23 @@ nav a {
 
 /* Primary button (blue) */
 .btn-primary {
-  background: #1e3a8a;
+  background: var(--color-primary);
   color: white;
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-dark);
 }
 
 /* Secondary button (outlined) */
 .btn-secondary {
-  background: white;
-  border: 1px solid #1e3a8a;
-  color: #1e3a8a;
+  background: var(--color-accent);
+  color: white;
 }
 
+.btn-secondary:hover {
+  opacity: 0.9;
+}
 /* ================= SECTIONS ================= */
 section {
   padding: 2rem;     /* spacing around section */
@@ -89,7 +124,7 @@ section {
 
 /* Individual card */
 .card {
-  background: white;
+  background:  var(--color-surface);
   padding: 1rem;
   border-radius: 10px;              /* rounded corners */
   box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* subtle shadow */
@@ -117,7 +152,7 @@ button {
   width: 100%;       /* full width */
   padding: 0.7rem;
   margin-top: 1rem;
-  background: #1e3a8a;
+  background:  var(--color-primary);
   color: white;
   border: none;
   cursor: pointer;
@@ -127,7 +162,7 @@ button {
 footer {
   text-align: center;     /* center text */
   padding: 1rem;
-  background: #1e3a8a;    /* same as navbar */
+  background:  var(--color-primary); /* same as navbar */
   color: white;
   margin-top: 2rem;       /* space above footer */
 }
