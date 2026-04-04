@@ -1,9 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 
+// Import routes
+const testRoutes = require("./routes/testRoutes.js");
+const userRoutes = require('./routes/userRoutes');
+
 // Create Express app
 const app = express();
-
 
 // Middleware = functions that run before routes
 
@@ -23,11 +26,11 @@ app.get("/api/data", (req, res) => {
   res.json({ message: "Hello from backend!" });
 });
 
-// Import routes
-const testRoutes = require("./routes/testRoutes.js");
+
 
 // Mount routes under /api
 app.use("/api", testRoutes);
+app.use("/users", userRoutes);
 
 // Export app (used in server.js)
 module.exports = app;
