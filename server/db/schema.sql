@@ -1,5 +1,11 @@
+DROP DATABASE IF EXISTS GLC_DB;
 CREATE DATABASE IF NOT EXISTS GLC_DB;
 USE GLC_DB;
+
+
+CREATE USER 'glcdbuser'@'localhost' IDENTIFIED BY 'password123';
+GRANT ALL PRIVILEGES ON GLC_DB.* TO 'glcdbuser'@'localhost';
+FLUSH PRIVILEGES;
 
 -- ==========================
 -- User Role Table
