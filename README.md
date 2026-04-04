@@ -103,3 +103,11 @@ npm run dev     # Start Vite dev server
 npm run dev     # Start server with nodemon
 npm start       # Start server normally
 ```
+
+
+
+### Database
+```bash
+mysql -u root -p < server/db/schema.sql # create database structure
+mysql -u root -p < server/db/seed.sql # import initial data
+```
