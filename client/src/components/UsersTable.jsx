@@ -34,6 +34,9 @@ export default function UsersTable() {
               <td>{u.role}</td>
               <td>{u.email}</td>
               <td className="actions">
+                <button className="btn-edit">
+                  Edit
+                </button>
                 <button className="btn-reset">
                   Reset Pass
                 </button>
@@ -45,6 +48,11 @@ export default function UsersTable() {
           ))}
         </tbody>
       </table>
+        <div className="table-actions">
+          <button className="btn-create">
+            Create User
+          </button>
+        </div>      
     </section>
   );
 }
