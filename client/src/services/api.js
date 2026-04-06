@@ -3,7 +3,14 @@
 // Base URL 
 const API_URL = "/api";
 
-// GET request
+
+// GET requests
+
+export async function getUsers(){
+  const response = await fetch(`${API_URL}/users`);
+  return response.json();
+} 
+
 export async function getTestMessage() {
   try {
     // Call backend endpoint

@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 // Page components
 import Home from "../pages/Home";
+import Admin from "../pages/DashboardAdmin";
 
 
 // Main App component
@@ -17,6 +18,7 @@ function App() {
         {/* Routes is a container for all routes */}
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
 
         <Footer />

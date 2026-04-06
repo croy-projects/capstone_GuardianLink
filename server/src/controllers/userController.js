@@ -7,7 +7,7 @@ exports.getUsers = async (req, res) => {
   try {
     conn = await pool.getConnection();
 
-    const users = await conn.query('SELECT * FROM users');
+    const users = await conn.query('SELECT u.*, r.name role FROM users u JOIN roles r WHERE r.id = u.role_id');
     res.json(users);
 
   } catch (err) {
