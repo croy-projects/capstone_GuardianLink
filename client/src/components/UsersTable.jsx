@@ -17,6 +17,11 @@ export default function UsersTable() {
 
     <section className="table-container admin-section">
       <h3>Users</h3>
+      <div className="table-actions">
+        <button className="btn-create">
+          Create User
+        </button>
+      </div>
       <table className="users-table">
         <thead>
           <tr>
@@ -48,11 +53,6 @@ export default function UsersTable() {
           ))}
         </tbody>
       </table>
-        <div className="table-actions">
-          <button className="btn-create">
-            Create User
-          </button>
-        </div>      
     </section>
   );
 }
