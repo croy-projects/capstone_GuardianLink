@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getUsers } from '../services/api';
+import { getUsers, deleteUser } from '../services/api';
 
 export default function UsersTable() {
   const [users, setUsers] = useState([]);
@@ -41,7 +41,7 @@ export default function UsersTable() {
                 <button className="btn-reset">
                   Reset Pass
                 </button>
-                <button className="btn-delete">
+                <button className="btn-delete" onClick={() => deleteUser(u.id).then(loadUsers)}>
                   Delete
                 </button>
               </td>

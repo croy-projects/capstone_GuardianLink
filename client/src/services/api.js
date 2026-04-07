@@ -19,6 +19,10 @@ export const createUser = async (user) => {
   });
 };
 
+export const deleteUser = async (id) => {
+  await fetch(`${API_URL}/users/${id}`, { method: 'DELETE' });
+};
+
 export async function getRoles(){
   const response = await fetch(`${API_URL}/users/roles`);
   return response.json();

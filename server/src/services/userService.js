@@ -29,6 +29,15 @@ const createUser = async (user) => {
   }
 };
 
+const deleteUser = async (id) => {
+  const conn = await pool.getConnection();
+  try {
+    await conn.query('DELETE FROM users WHERE id=?', [id]);
+  }  finally {
+    conn.release();
+  }
+};
+
 const getRoles = async () => {
   const conn = await pool.getConnection();
 
@@ -42,4 +51,4 @@ const getRoles = async () => {
   }
 };
 
-module.exports = { getUsers, createUser, getRoles };
+module.exports = { getUsers, createUser, deleteUser, getRoles };

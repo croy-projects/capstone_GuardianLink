@@ -18,7 +18,15 @@ const createUser = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-
+const deleteUser = async (req, res) => {
+  try {
+    await userService.deleteUser(req.params.id);
+    res.status(200).json({ message: 'User deleted' });
+  } catch (err) {
+    console.log(err.message)
+    res.status(500).json({ error: err.message });
+  }
+};
 const getRoles = async (req, res) => {
   try {
     const roles = await userService.getRoles();
@@ -27,4 +35,4 @@ const getRoles = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-module.exports = { getUsers, createUser, getRoles };
+module.exports = { getUsers, createUser, deleteUser, getRoles };
