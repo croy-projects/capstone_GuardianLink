@@ -1,0 +1,92 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
+import { createUser, getRoles } from "../services/api";
+
+function  CreateUser(){
+    const navigate = useNavigate();
+
+    const [roles, setRoles] = useState([]);
+
+    const [form, setForm] = useState({
+        name: '',
+        role_id: '',
+        email: '',
+        password: ''
+    });
+    
+    const handleChange = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        await createUser(form);
+        navigate('/admin'); // go back to dashboard
+    };
+
+  // Fetch roles
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const data = await getRoles();
+        setRoles(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchRoles();
+  }, []);    
+
+  return (
+    <div className="form-page">
+      <h2>Create User</h2>
+      <form onSubmit={handleSubmit} className="form-container">
+        <input
+          name="name"
+          placeholder="Name"
+          value={form.name}
+          onChange={handleChange}
+          required
+        />
+        <select
+          name="role_id"
+          value={form.role_id}
+          onChange={handleChange}
+          required
+        >
+          <option value="">Select role</option>
+          {roles.map(role => (
+            <option key={role.id} value={role.id}>
+              {role.role}
+            </option>
+          ))}
+        </select>
+        <input
+          name="email"
+          placeholder="Email"
+          value={form.email}
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="password"
+          placeholder="Password"
+          value={form.password}
+          onChange={handleChange}
+          required
+        />
+        <div className="form-actions">
+          <button type="button" onClick={() => navigate('/admin')}>
+            Cancel
+          </button>
+          <button type="submit">
+            Create
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+export default CreateUser;

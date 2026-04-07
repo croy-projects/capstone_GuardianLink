@@ -1,9 +1,11 @@
 // React Router handles page navigation without reload
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+// Page components
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-// Page components
+import CreateUser from "../components/CreateUser";
+
 import Home from "../pages/Home";
 import Admin from "../pages/DashboardAdmin";
 
@@ -19,6 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/create-user" element={<CreateUser />} />
         </Routes>
 
         <Footer />

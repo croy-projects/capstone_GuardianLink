@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getUsers } from '../services/api';
 
 export default function UsersTable() {
@@ -12,7 +13,7 @@ export default function UsersTable() {
   useEffect(() => {
     loadUsers();
   }, []);
-
+  const navigate = useNavigate();
   return (
 
     <section className="table-container admin-section">
@@ -49,7 +50,9 @@ export default function UsersTable() {
         </tbody>
       </table>
       <div className="table-actions">
-        <button className="btn-create">
+        <button className="btn-create"
+                onClick={() => navigate('/create-user')}
+        >
           Create User
         </button>
       </div>

@@ -11,6 +11,19 @@ export async function getUsers(){
   return response.json();
 } 
 
+export const createUser = async (user) => {
+  await fetch(`${API_URL}/users`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(user)
+  });
+};
+
+export async function getRoles(){
+  const response = await fetch(`${API_URL}/users/roles`);
+  return response.json();
+} 
+
 export async function getTestMessage() {
   try {
     // Call backend endpoint

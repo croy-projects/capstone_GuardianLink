@@ -1,20 +1,30 @@
-const pool = require('../db');
+//Controllers = HTTP only
+const userService = require('../services/userService');
 
-// GET all users
-exports.getUsers = async (req, res) => {
-  let conn;
-
+const getUsers = async (req, res) => {
   try {
-    conn = await pool.getConnection();
-
-    const users = await conn.query('SELECT u.*, r.name role FROM users u JOIN roles r WHERE r.id = u.role_id');
+    const users = await userService.getUsers();
     res.json(users);
-
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Database error' });
-
-  } finally {
-    if (conn) conn.release();
+    res.status(500).json({ error: err.message });
   }
 };
+
+const createUser = async (req, res) => {
+  try {
+    await userService.createUser(req.body);
+    res.status(201).json({ message: 'User created' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+const getRoles = async (req, res) => {
+  try {
+    const roles = await userService.getRoles();
+    res.json(roles);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+module.exports = { getUsers, createUser, getRoles };

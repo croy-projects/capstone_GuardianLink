@@ -222,7 +222,7 @@ section {
   color: white;
   border: none;
   padding: 0.6rem 1.2rem;
-  border-radius: 6px;
+  border-radius: 5px;
   cursor: pointer;
   font-size: 0.95rem;
   transition: 0.2s ease;
@@ -234,21 +234,31 @@ section {
 
 
 /* ================= FORM ================= */
+.form-page {
+  padding: 1rem;
+}
 .form-container {
-  max-width: 400px;  /* limit width */
+  max-width: 98%;  /* limit width */
   margin: 2rem auto; /* center horizontally */
   background: white;
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
-
 /* Inputs & textarea */
-input, textarea {
+.form-container input, .form-container textarea, .form-container select {
   width: 100%;       /* full width */
   padding: 0.5rem;   /* spacing inside */
   margin: 0.5rem 0;  /* space between fields */
 }
+
+/* Actions */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
 
 /* General button style (form button) */
 button {
@@ -259,6 +269,7 @@ button {
   color: white;
   border: none;
   cursor: pointer;
+  border-radius: 5px;
 }
 
 /* ================= FOOTER ================= */
