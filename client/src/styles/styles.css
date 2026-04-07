@@ -150,6 +150,7 @@ section {
   border-radius: 10px;
   overflow: hidden;
   min-width: 600px;
+  margin-top: 1rem;
 }
 
 .users-table thead {
