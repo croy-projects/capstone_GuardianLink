@@ -105,6 +105,7 @@ nav a:hover {
 .btn-secondary:hover {
   opacity: 0.9;
 }
+
 /* ================= SECTIONS ================= */
 section {
   padding: 2rem;     /* spacing around section */
@@ -129,8 +130,6 @@ section {
   border-radius: 10px;              /* rounded corners */
   box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* subtle shadow */
 }
-
-
 
 /* ADMIN SECTION */
 .admin-section {
@@ -216,7 +215,7 @@ section {
   justify-content: flex-start;
 }
 
-.btn-create {
+.btn-action {
   width: auto; 
   background: var(--color-primary);
   color: white;
@@ -266,7 +265,7 @@ section {
 /* Actions */
 .form-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 10px;
 }
 

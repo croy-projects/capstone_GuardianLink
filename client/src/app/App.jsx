@@ -7,17 +7,18 @@ import Footer from "../components/Footer";
 import CreateUser from "../components/CreateUser";
 import EditUser from "../components/EditUser";
 
+// Pages
 import Home from "../pages/Home";
 import Admin from "../pages/DashboardAdmin";
-
 
 // Main App component
 function App() {
   return (
     // BrowserRouter enables routing in the app
-      <BrowserRouter>
+    <BrowserRouter>
       <>
         <Navbar />
+
         {/* Routes is a container for all routes */}
         <Routes>
           <Route path="/" element={<Home />} />

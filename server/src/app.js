@@ -26,8 +26,6 @@ app.get("/api/data", (req, res) => {
   res.json({ message: "Hello from backend!" });
 });
 
-
-
 // Mount routes under /api
 app.use("/api", testRoutes);
 app.use("/api/users", userRoutes);

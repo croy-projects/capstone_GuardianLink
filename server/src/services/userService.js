@@ -68,7 +68,7 @@ const deleteUser = async (id) => {
   const conn = await pool.getConnection();
   try {
     await conn.query('DELETE FROM users WHERE id=?', [id]);
-  }  finally {
+  } finally {
     conn.release();
   }
 };

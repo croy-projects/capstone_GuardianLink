@@ -2,27 +2,27 @@ import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { createUser, getRoles } from "../services/api";
 
-function  CreateUser(){
-    const navigate = useNavigate();
+function CreateUser() {
+  const navigate = useNavigate();
 
-    const [roles, setRoles] = useState([]);
+  const [roles, setRoles] = useState([]);
 
-    const [form, setForm] = useState({
-        name: '',
-        role_id: '',
-        email: '',
-        password: ''
-    });
-    
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
+  const [form, setForm] = useState({
+    name: '',
+    role_id: '',
+    email: '',
+    password: ''
+  });
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        await createUser(form);
-        navigate('/admin'); // go back to dashboard
-    };
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await createUser(form);
+    navigate('/admin'); // go back to dashboard
+  };
 
   // Fetch roles
   useEffect(() => {
@@ -36,7 +36,7 @@ function  CreateUser(){
     };
 
     fetchRoles();
-  }, []);    
+  }, []);
 
   return (
     <div className="form-page">
@@ -93,10 +93,10 @@ function  CreateUser(){
           />
         </div>
         <div className="form-actions">
-          <button type="button" onClick={() => navigate('/admin')}>
+          <button type="button" className="btn-action" onClick={() => navigate('/admin')}>
             Cancel
           </button>
-          <button type="submit">
+          <button type="submit" className="btn-action">
             Create
           </button>
         </div>

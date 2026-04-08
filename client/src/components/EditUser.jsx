@@ -112,10 +112,10 @@ function EditUser() {
                     />
                 </div>
                 <div className="form-actions">
-                    <button type="button" onClick={() => navigate('/admin')}>
+                    <button type="button" className="btn-action" onClick={() => navigate('/admin')}>
                         Cancel
                     </button>
-                    <button type="submit">
+                    <button type="submit" className="btn-action">
                         Update
                     </button>
                 </div>

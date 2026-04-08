@@ -27,7 +27,6 @@ export default function UsersTable() {
             <th className="actions-col">Actions</th>
           </tr>
         </thead>
-
         <tbody>
           {users.map((u) => (
             <tr key={u.id}>
@@ -50,8 +49,8 @@ export default function UsersTable() {
         </tbody>
       </table>
       <div className="table-actions">
-        <button className="btn-create"
-                onClick={() => navigate('/create-user')}
+        <button className="btn-action"
+          onClick={() => navigate('/create-user')}
         >
           Create User
         </button>

@@ -9,6 +9,6 @@ function DashboardAdmin() {
       </section>
     </>
   );
-} 
+}
 
 export default DashboardAdmin;
