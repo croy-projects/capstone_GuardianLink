@@ -1,4 +1,5 @@
 //Services : logic + DB
+const bcrypt = require('bcrypt');
 const pool = require('../db');
 
 const getUsers = async () => {
@@ -6,7 +7,7 @@ const getUsers = async () => {
 
   try {
     return await conn.query(`
-      SELECT u.id, u.name, u.email, u.password, r.name AS role
+      SELECT u.id, u.name, u.email, r.name AS role
       FROM users u
       JOIN roles r ON u.role_id = r.id
     `);
@@ -20,7 +21,7 @@ const getUserByID = async (id) => {
 
   try {
     return await conn.query(`
-      SELECT u.id, u.name, u.email, u.password, u.role_id, r.name AS role
+      SELECT u.id, u.name, u.email, u.role_id, r.name AS role
       FROM users u
       JOIN roles r ON u.role_id = r.id
       WHERE u.id = ?
@@ -36,9 +37,11 @@ const createUser = async (user) => {
 
   try {
     const { name, email, role_id, password } = user;
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     await conn.query(
       'INSERT INTO users (name, email, password, role_id) VALUES (?, ?, ?, ?)',
-      [name, email, password, role_id]
+      [name, email, hashedPassword, role_id]
     );
   } finally {
     conn.release();
