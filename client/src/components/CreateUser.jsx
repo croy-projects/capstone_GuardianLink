@@ -42,40 +42,56 @@ function  CreateUser(){
     <div className="form-page">
       <h2>Create User</h2>
       <form onSubmit={handleSubmit} className="form-container">
-        <input
-          name="name"
-          placeholder="Name"
-          value={form.name}
-          onChange={handleChange}
-          required
-        />
-        <select
-          name="role_id"
-          value={form.role_id}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Select role</option>
-          {roles.map(role => (
-            <option key={role.id} value={role.id}>
-              {role.role}
-            </option>
-          ))}
-        </select>
-        <input
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-        />
-        <input
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          required
-        />
+        <div className="form-group">
+          <label htmlFor="name">Name</label>
+
+          <input
+            name="name"
+            placeholder="Name"
+            value={form.name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="role_id">Role</label>
+
+          <select
+            name="role_id"
+            value={form.role_id}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select role</option>
+            {roles.map(role => (
+              <option key={role.id} value={role.id}>
+                {role.role}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="form-group">
+          <label htmlFor="email">Email</label>
+
+          <input
+            name="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
+
+          <input
+            name="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
         <div className="form-actions">
           <button type="button" onClick={() => navigate('/admin')}>
             Cancel

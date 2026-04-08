@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import CreateUser from "../components/CreateUser";
+import EditUser from "../components/EditUser";
 
 import Home from "../pages/Home";
 import Admin from "../pages/DashboardAdmin";
@@ -22,6 +23,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/create-user" element={<CreateUser />} />
+          <Route path="/edit-user/:id" element={<EditUser />} />
         </Routes>
 
         <Footer />

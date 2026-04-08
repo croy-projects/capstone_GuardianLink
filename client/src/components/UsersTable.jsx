@@ -35,7 +35,7 @@ export default function UsersTable() {
               <td>{u.role}</td>
               <td>{u.email}</td>
               <td className="actions">
-                <button className="btn-edit">
+                <button className="btn-edit" onClick={() => navigate(`/edit-user/${u.id}`)}>
                   Edit
                 </button>
                 <button className="btn-reset">

@@ -252,6 +252,17 @@ section {
   margin: 0.5rem 0;  /* space between fields */
 }
 
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
 /* Actions */
 .form-actions {
   display: flex;
@@ -262,7 +273,7 @@ section {
 
 /* General button style (form button) */
 button {
-  width: 100%;       /* full width */
+  width: fit-content;
   padding: 0.7rem;
   margin-top: 1rem;
   background:  var(--color-primary);

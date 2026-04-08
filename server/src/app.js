@@ -31,7 +31,6 @@ app.get("/api/data", (req, res) => {
 // Mount routes under /api
 app.use("/api", testRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/users/roles", userRoutes);
 
 // Export app (used in server.js)
 module.exports = app;

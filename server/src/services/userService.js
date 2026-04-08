@@ -15,6 +15,22 @@ const getUsers = async () => {
   }
 };
 
+const getUserByID = async (id) => {
+  const conn = await pool.getConnection();
+
+  try {
+    return await conn.query(`
+      SELECT u.id, u.name, u.email, u.password, u.role_id, r.name AS role
+      FROM users u
+      JOIN roles r ON u.role_id = r.id
+      WHERE u.id = ?
+    `, [id]);
+  } finally {
+    conn.release();
+  }
+};
+
+
 const createUser = async (user) => {
   const conn = await pool.getConnection();
 
@@ -24,6 +40,25 @@ const createUser = async (user) => {
       'INSERT INTO users (name, email, password, role_id) VALUES (?, ?, ?, ?)',
       [name, email, password, role_id]
     );
+  } finally {
+    conn.release();
+  }
+};
+
+const updateUser = async (id, user) => {
+  const conn = await pool.getConnection();
+
+  try {
+    const { name, email, role_id } = user;
+
+    const result = await conn.query(
+      `UPDATE users
+        SET name = ?, email = ?, role_id = ?
+        WHERE id = ?`,
+      [name, email, role_id, id]
+    );
+
+    return result;
   } finally {
     conn.release();
   }
@@ -51,4 +86,4 @@ const getRoles = async () => {
   }
 };
 
-module.exports = { getUsers, createUser, deleteUser, getRoles };
+module.exports = { getUsers, getUserByID, createUser, updateUser, deleteUser, getRoles };

@@ -6,10 +6,24 @@ const API_URL = "/api";
 
 // GET requests
 
-export async function getUsers(){
+export async function getUsers() {
   const response = await fetch(`${API_URL}/users`);
   return response.json();
-} 
+}
+
+export async function getRoles() {
+  try {
+    const response = await fetch(`${API_URL}/users/roles`);
+    // Convert response to JSON
+    const data = await response.json();
+    return data;
+
+  } catch (error) {
+    // handle errors
+    console.error("API Error:", error);
+    throw error;
+  }
+}
 
 export const createUser = async (user) => {
   await fetch(`${API_URL}/users`, {
@@ -19,14 +33,30 @@ export const createUser = async (user) => {
   });
 };
 
+export const getUserById = async (id) => {
+  const response = await fetch(`${API_URL}/users/${id}`);
+  if (!response.ok) throw new Error('Failed to fetch user');
+  return response.json();
+};
+
+export const updateUser = async (id, user) => {
+  try {
+    const response = await fetch(`${API_URL}/users/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(user)
+    });
+
+  } catch (error) {
+    // handle errors
+    console.error("API Error update user:", error);
+    throw new Error('Failed to update user');
+  }
+};
+
 export const deleteUser = async (id) => {
   await fetch(`${API_URL}/users/${id}`, { method: 'DELETE' });
 };
-
-export async function getRoles(){
-  const response = await fetch(`${API_URL}/users/roles`);
-  return response.json();
-} 
 
 export async function getTestMessage() {
   try {
