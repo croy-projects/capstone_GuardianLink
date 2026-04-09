@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import CreateUser from "../components/CreateUser";
 import EditUser from "../components/EditUser";
+import Login from "../components/Login";
 
 // Pages
 import Home from "../pages/Home";
@@ -23,6 +24,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/create-user" element={<CreateUser />} />
           <Route path="/edit-user/:id" element={<EditUser />} />
         </Routes>

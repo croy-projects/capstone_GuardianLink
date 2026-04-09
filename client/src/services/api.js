@@ -4,6 +4,29 @@
 const API_URL = "/api";
 
 
+// Login
+export async function loginUser(form) {
+  try {
+    const response = await fetch(`${API_URL}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form)
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message || "Login failed");
+    }
+    return data;
+  } catch (error) {
+    // handle errors
+    console.error("API Login failed:", error);
+    throw error;
+  }
+  return response.json();
+};
+
+
 // GET requests
 
 export async function getUsers() {

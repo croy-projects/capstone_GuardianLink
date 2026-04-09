@@ -4,6 +4,7 @@ const cors = require("cors");
 // Import routes
 const testRoutes = require("./routes/testRoutes.js");
 const userRoutes = require('./routes/userRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 // Create Express app
 const app = express();
@@ -29,6 +30,7 @@ app.get("/api/data", (req, res) => {
 // Mount routes under /api
 app.use("/api", testRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
 
 // Export app (used in server.js)
 module.exports = app;
