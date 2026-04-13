@@ -3,16 +3,19 @@ const router = express.Router();
 
 const userController = require('../controllers/userController');
 
+const { authenticate } = require("../middleware/authMiddleware");
+
 // GET /api/users
-router.get("/", userController.getUsers);
-router.post("/", userController.createUser);
+router.get("/", authenticate, userController.getUsers);
+
+router.post("/", authenticate, userController.createUser);
 
 //Put specific routes first to avoid conflict
-router.get("/roles", userController.getRoles);
+router.get("/roles", authenticate, userController.getRoles);
 
-router.get("/:id", userController.getUserByID);
+router.get("/:id", authenticate, userController.getUserByID);
 
-router.put("/:id", userController.updateUser);
-router.delete("/:id", userController.deleteUser);
+router.put("/:id", authenticate, userController.updateUser);
+router.delete("/:id", authenticate, userController.deleteUser);
 
 module.exports = router;

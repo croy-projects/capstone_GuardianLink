@@ -24,10 +24,11 @@ function Login() {
         e.preventDefault(); // "Prevent page reloads immediately
         setLoading(true);
         try {
-            const user = await loginUser(form);
+            const data = await loginUser(form);
 
             // store user
-            localStorage.setItem("user", JSON.stringify(user));
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("user", JSON.stringify(data.user));
 
             // redirect
             navigate("/");

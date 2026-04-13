@@ -7,6 +7,7 @@ import Footer from "../components/Footer";
 import CreateUser from "../components/CreateUser";
 import EditUser from "../components/EditUser";
 import Login from "../components/Login";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 // Pages
 import Home from "../pages/Home";
@@ -23,12 +24,25 @@ function App() {
         {/* Routes is a container for all routes */}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/admin" element={<Admin />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/create-user" element={<CreateUser />} />
-          <Route path="/edit-user/:id" element={<EditUser />} />
-        </Routes>
 
+          <Route path="/admin" element={
+            <ProtectedRoute>
+              <Admin />
+            </ProtectedRoute>
+          } />
+          <Route path="/create-user" element={
+            <ProtectedRoute>
+              <CreateUser />
+            </ProtectedRoute>
+          } />
+          <Route path="/edit-user/:id" element={
+            <ProtectedRoute>
+              <EditUser />
+            </ProtectedRoute>
+          } />
+
+        </Routes>
         <Footer />
       </>
     </BrowserRouter>

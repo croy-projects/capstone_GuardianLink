@@ -11,12 +11,12 @@ const login = async (req, res) => {
          });
         }
 
-        const user = await authService.login(email, password);
-        if (!user) {
+        const result = await authService.login(email, password);
+        if (!result) {
             return res.status(401).json({ message: "Invalid credentials" });
         }
         //success
-        res.json(user);
+        res.json(result);
     } catch (err) {
         console.error("authController.login error:", err);
         res.status(500).json({ error: "Server error" });
