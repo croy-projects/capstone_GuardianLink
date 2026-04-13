@@ -1,0 +1,25 @@
+import { apiRequest } from "./api";
+
+// GET requests
+export const getUsers = () => apiRequest("/users");
+
+export const getUserById = (id) => apiRequest(`/users/${id}`);
+
+// POST + PUT
+export const createUser = (user) =>
+  apiRequest("/users", {
+    method: "POST",
+    body: JSON.stringify(user)
+  });
+
+export const updateUser = (id, user) =>
+  apiRequest(`/users/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(user)
+  });
+
+export const deleteUser = (id) =>
+  apiRequest(`/users/${id}`, {
+    method: "DELETE"
+  });
+

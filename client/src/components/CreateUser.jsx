@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import { createUser, getRoles } from "../services/api";
+import { createUser } from "../services/userService";
+import { getRoles } from "../services/roleService";
 
 function CreateUser() {
   const navigate = useNavigate();

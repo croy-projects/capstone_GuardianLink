@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
-import { getUserById, updateUser, getRoles } from "../services/api";
+import { getRoles } from "../services/roleService";
+import { getUserById, updateUser } from "../services/userService";
 
 function EditUser() {
     const navigate = useNavigate();

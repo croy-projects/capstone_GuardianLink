@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getUsers, deleteUser } from '../services/api';
+import { getUsers, deleteUser } from '../services/userService';
 
 export default function UsersTable() {
   const [users, setUsers] = useState([]);
