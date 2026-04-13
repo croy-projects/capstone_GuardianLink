@@ -111,3 +111,10 @@ npm start       # Start server normally
 mysql -u root -p < server/db/schema.sql # create database structure
 mysql -u root -p < server/db/seed.sql # import initial data
 ```
+
+
+
+### Tests (server api)
+```bash
+npm test
+```
