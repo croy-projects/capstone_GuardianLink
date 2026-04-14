@@ -22,4 +22,3 @@ export const deleteUser = (id) =>
   apiRequest(`/users/${id}`, {
     method: "DELETE"
   });
-

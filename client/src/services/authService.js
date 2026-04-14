@@ -6,3 +6,10 @@ export const loginUser = (form) => {
     body: JSON.stringify(form)
   });
 };
+
+// register NGO
+export const registerNGO = (form) =>
+  apiRequest("/auth/register-ngo", {
+    method: "POST",
+    body: JSON.stringify(form)
+  });

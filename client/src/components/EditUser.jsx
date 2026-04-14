@@ -40,7 +40,7 @@ function EditUser() {
         e.preventDefault();
         try {
             await updateUser(id, form);
-            navigate('/admin'); // go back to dashboard
+            navigate('/dashboard-admin'); // go back to dashboard
         } catch (err) {
             console.error(err);
             alert('Error updating user');
@@ -61,7 +61,7 @@ function EditUser() {
             } catch (err) {
                 console.error(err);
                 alert('User not found');
-                navigate('/admin');
+                navigate('/dashboard-admin');
             } finally {
                 setLoading(false);
             }
@@ -113,7 +113,7 @@ function EditUser() {
                     />
                 </div>
                 <div className="form-actions">
-                    <button type="button" className="btn-action" onClick={() => navigate('/admin')}>
+                    <button type="button" className="btn-action" onClick={() => navigate('/dashboard-admin')}>
                         Cancel
                     </button>
                     <button type="submit" className="btn-action">

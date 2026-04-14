@@ -22,7 +22,7 @@ function CreateUser() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await createUser(form);
-    navigate('/admin'); // go back to dashboard
+    navigate('/dashboard-admin'); // go back to dashboard
   };
 
   // Fetch roles
@@ -94,7 +94,7 @@ function CreateUser() {
           />
         </div>
         <div className="form-actions">
-          <button type="button" className="btn-action" onClick={() => navigate('/admin')}>
+          <button type="button" className="btn-action" onClick={() => navigate('/dashboard-admin')}>
             Cancel
           </button>
           <button type="submit" className="btn-action">

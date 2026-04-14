@@ -11,7 +11,9 @@ import ProtectedRoute from "../components/ProtectedRoute";
 
 // Pages
 import Home from "../pages/Home";
-import Admin from "../pages/DashboardAdmin";
+import DashboardAdmin from "../pages/DashboardAdmin";
+import RegisterNGO from "../pages/RegisterNGO";
+import DashboardNGO from "../pages/DashboardNGO";
 
 // Main App component
 function App() {
@@ -25,10 +27,15 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-
-          <Route path="/admin" element={
+          <Route path="/register-ngo" element={<RegisterNGO />} />
+          <Route path="/dashboard-ngo" element={
             <ProtectedRoute>
-              <Admin />
+              <DashboardNGO />
+            </ProtectedRoute>
+          } />
+          <Route path="/dashboard-admin" element={
+            <ProtectedRoute>
+              <DashboardAdmin />
             </ProtectedRoute>
           } />
           <Route path="/create-user" element={

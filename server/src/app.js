@@ -19,12 +19,12 @@ app.use(express.json());
 
 // Basic test route
 app.get("/", (req, res) => {
-  res.send("API is running...");
+    res.send("API is running...");
 });
 
 // Example API endpoint
 app.get("/api/data", (req, res) => {
-  res.json({ message: "Hello from backend!" });
+    res.json({ message: "Hello from backend!" });
 });
 
 // Mount routes under /api

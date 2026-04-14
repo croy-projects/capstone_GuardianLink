@@ -3,7 +3,7 @@ CREATE DATABASE IF NOT EXISTS GLC_DB;
 USE GLC_DB;
 
 
-CREATE USER 'glcdbuser'@'localhost' IDENTIFIED BY 'password123';
+--CREATE USER 'glcdbuser'@'localhost' IDENTIFIED BY 'password123';
 GRANT ALL PRIVILEGES ON GLC_DB.* TO 'glcdbuser'@'localhost';
 FLUSH PRIVILEGES;
 
@@ -11,7 +11,7 @@ FLUSH PRIVILEGES;
 -- User Role Table
 -- ==========================
 CREATE TABLE IF NOT EXISTS roles (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
 );
 
@@ -25,4 +25,14 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+
+-- ==========================
+-- Organizations Table (NGOs/Small Companies)
+-- ==========================
+CREATE TABLE IF NOT EXISTS organizations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    area_of_concern TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
