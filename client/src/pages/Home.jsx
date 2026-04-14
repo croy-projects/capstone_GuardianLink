@@ -1,10 +1,12 @@
+import { useNavigate } from 'react-router-dom';
 function Home() {
+  const navigate = useNavigate();
   return (
     <>
       <div className="hero">
         <h1>Connecting Cybersecurity Experts with NGOs</h1>
         <button className="btn-primary">Become a Volunteer</button>
-        <button className="btn-secondary">Request Help</button>
+        <button className="btn-secondary" onClick={() => navigate('/register-ngo')}>Request Help</button>
       </div>
 
       <section>
