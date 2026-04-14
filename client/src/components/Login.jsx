@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import { loginUser } from "../services/authService";
+import { ROLES } from "../config/roles";
 import "../styles/login.css";
 
 function Login() {
@@ -26,12 +28,23 @@ function Login() {
         try {
             const data = await loginUser(form);
 
-            // store user
+            // Store token
             localStorage.setItem("token", data.token);
-            localStorage.setItem("user", JSON.stringify(data.user));
+            
+            // Decode token to get role
+            const user = jwtDecode(data.token);
 
-            // redirect
-            navigate("/");
+            // Redirect based on role
+            if (user.role_id === ROLES.ADMIN ) {
+                navigate("/dashboard-admin");
+            } else if (user.role_id === ROLES.NGO) {
+                navigate("/dashboard-ngo");
+            } else if (user.role_id === ROLES.VOLUNTEER) {
+                navigate("/dashboard-volunteer");
+            } else {
+                navigate("/");
+            }
+
         } catch (err) {
             console.log("err", err);
             alert("Invalid email or password");

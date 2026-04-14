@@ -14,6 +14,7 @@ import Home from "../pages/Home";
 import DashboardAdmin from "../pages/DashboardAdmin";
 import RegisterNGO from "../pages/RegisterNGO";
 import DashboardNGO from "../pages/DashboardNGO";
+import DashboardVolunteer from "../pages/DashboardVolunteer";
 
 // Main App component
 function App() {
@@ -33,6 +34,11 @@ function App() {
               <DashboardNGO />
             </ProtectedRoute>
           } />
+          <Route path="/dashboard-volunteer" element={
+            <ProtectedRoute>
+              <DashboardVolunteer />
+            </ProtectedRoute>
+          } />          
           <Route path="/dashboard-admin" element={
             <ProtectedRoute>
               <DashboardAdmin />
