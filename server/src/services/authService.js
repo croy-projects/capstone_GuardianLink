@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const pool = require('../db');
 const userService = require("./userService");
 const orgService = require("./orgService");
+const volunteerService = require("./volunteerService");
 
 const login = async (email, password) => {
     let conn;
@@ -27,17 +28,17 @@ const login = async (email, password) => {
         }
 
         const token = jwt.sign(
-        {
-            id: user.id,
-            role_id: user.role_id
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: process.env.JWT_EXPIRES_IN }
-        );        
+            {
+                id: user.id,
+                role_id: user.role_id
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: process.env.JWT_EXPIRES_IN }
+        );
 
         return {
             token,
-            user:{
+            user: {
                 id: user.id,
                 name: user.name,
                 email: user.email,
@@ -45,7 +46,7 @@ const login = async (email, password) => {
             }
         };
 
-    } catch(err) {
+    } catch (err) {
         console.log("authService.login error:", err);
         throw err;
     } finally {
@@ -54,38 +55,74 @@ const login = async (email, password) => {
 };
 
 const registerNGO = async (data) => {
-  let conn;
+    let conn;
 
-  try {
+    try {
 
-    conn = await pool.getConnection();
-    await conn.beginTransaction();
+        conn = await pool.getConnection();
+        await conn.beginTransaction();
 
-    // Check existing user
-    const existing = await conn.query(
-      "SELECT id FROM users WHERE email = ?",
-      [data.email]
-    );
+        // Check existing user
+        const existing = await conn.query(
+            "SELECT id FROM users WHERE email = ?",
+            [data.email]
+        );
 
-    if (existing.length > 0) {
-      throw new Error("Email already registered");
+        if (existing.length > 0) {
+            throw new Error("Email already registered");
+        }
+
+        const { userId } = await userService.createUser(data, conn);
+        data.user_id = userId
+
+        await orgService.createOrganization(data, conn);
+
+        await conn.commit();
+
+        return { userId };
+
+    } catch (err) {
+        if (conn) await conn.rollback();
+        throw err;
+    } finally {
+        if (conn) conn.release();
     }
-
-    const { userId } = await userService.createUser(data, conn);
-    data.user_id = userId
-
-    await orgService.createOrganization(data, conn);
-
-    await conn.commit();
-
-    return { userId };
-
-  } catch (err) {
-    if (conn) await conn.rollback();
-    throw err;
-  } finally {
-    if (conn) conn.release();
-  }
 };
 
-module.exports = { login, registerNGO };
+const registerVolunteer = async (data) => {
+    let conn;
+
+    try {
+
+        conn = await pool.getConnection();
+        await conn.beginTransaction();
+
+        // Check existing user
+        const existing = await conn.query(
+            "SELECT id FROM users WHERE email = ?",
+            [data.email]
+        );
+
+        if (existing.length > 0) {
+            throw new Error("Email already registered");
+        }
+
+        const { userId } = await userService.createUser(data, conn);
+        data.user_id = userId
+
+        await volunteerService.createVolunteer(data, conn);
+
+        await conn.commit();
+
+        return { userId };
+
+    } catch (err) {
+        if (conn) await conn.rollback();
+        throw err;
+    } finally {
+        if (conn) conn.release();
+    }
+
+};
+
+module.exports = { login, registerNGO, registerVolunteer };

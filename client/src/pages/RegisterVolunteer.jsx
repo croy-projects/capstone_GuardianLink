@@ -1,0 +1,119 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { registerVolunteer } from "../services/authService";
+import "../styles/register.css";
+
+function RegisterVolunteer() {
+    const navigate = useNavigate();
+
+    const [form, setForm] = useState({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        hours: "",
+    });
+
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const handleChange = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    const validate = () => {
+        if (!form.name || !form.email || !form.password || !form.hours) {
+            return "Please fill in all required fields";
+        }
+
+        if (form.password.length < 6) {
+            return "Password must be at least 6 characters";
+        }
+
+        if (form.password !== form.confirmPassword) {
+            return "Passwords do not match";
+        }
+        return null;
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError("");
+
+        const validationError = validate();
+        if (validationError) {
+            setError(validationError);
+            return;
+        }
+
+        setLoading(true);
+        try{
+            await registerVolunteer(form);
+            alert("Volunteer registered successfully!");
+            navigate('/login'); // go back to login
+        } catch (err) {
+        //extract backend error message safely
+            const message =
+            err.message ||                 // generic error
+            "Registration failed";
+            setError(message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="register-container">
+            <div className="register-card">
+                <h2>Volunteer Registration</h2>
+
+                {error && <p className="error">{error}</p>}
+
+                <form onSubmit={handleSubmit}>
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="Name *"
+                        value={form.name}
+                        onChange={handleChange}
+                    />
+
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Email *"
+                        value={form.email}
+                        onChange={handleChange}
+                    />
+
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Password *"
+                        value={form.password}
+                        onChange={handleChange}
+                    />
+
+                    <input
+                        type="password"
+                        name="confirmPassword"
+                        placeholder="Confirm Password *"
+                        value={form.confirmPassword}
+                        onChange={handleChange}
+                    />
+                    <input
+                        type="text"
+                        name="hours"
+                        placeholder="Hours available / Week"
+                        value={form.areaOfConcern}
+                        onChange={handleChange}
+                    />
+                    <button type="submit" disabled={loading}>
+                        {loading ? "Registering..." : "Register"}
+                    </button>
+                </form>
+            </div>
+        </div>
+    );
+}
+export default RegisterVolunteer;

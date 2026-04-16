@@ -13,3 +13,10 @@ export const registerNGO = (form) =>
     method: "POST",
     body: JSON.stringify(form)
   });
+
+  // register Volunteer
+export const registerVolunteer = (form) =>
+  apiRequest("/auth/register-volunteer", {
+    method: "POST",
+    body: JSON.stringify(form)
+  });

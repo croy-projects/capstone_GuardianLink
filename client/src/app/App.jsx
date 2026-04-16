@@ -13,6 +13,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import Home from "../pages/Home";
 import DashboardAdmin from "../pages/DashboardAdmin";
 import RegisterNGO from "../pages/RegisterNGO";
+import RegisterVolunteer from "../pages/RegisterVolunteer";
 import DashboardNGO from "../pages/DashboardNGO";
 import DashboardVolunteer from "../pages/DashboardVolunteer";
 
@@ -29,6 +30,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register-ngo" element={<RegisterNGO />} />
+          <Route path="/register-volunteer" element={<RegisterVolunteer />} />
           <Route path="/dashboard-ngo" element={
             <ProtectedRoute>
               <DashboardNGO />

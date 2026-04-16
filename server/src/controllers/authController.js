@@ -16,10 +16,12 @@ const login = async (req, res) => {
         if (!result) {
             return res.status(401).json({ message: "Invalid credentials" });
         }
+
         //success
         res.json(result);
     } catch (err) {
         console.error("authController.login error:", err);
+
         res.status(500).json({ error: "Server error" });
     }
 };
@@ -60,4 +62,42 @@ const registerNGO = async (req, res) => {
     }
 };
 
-module.exports = { login, registerNGO };
+const registerVolunteer = async (req, res) => {
+
+    const { name, email, password, confirmPassword, hours } = req.body;
+
+    if (!name || !email || !password || !hours) {
+        return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    if (password !== confirmPassword) {
+        return res.status(400).json({
+            message: "Passwords do not match",
+        });
+    }
+
+    try {
+
+        const userData = {
+            name,
+            email,
+            password,
+            hours,
+            role_id: ROLES.VOLUNTEER,
+        };
+
+        const result = await authService.registerVolunteer(userData);
+
+
+        res.status(201).json({
+            message: "Volunteer registered successfully",
+            userId: result.userId,
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Server error" });
+    }
+};
+
+module.exports = { login, registerNGO, registerVolunteer };

@@ -110,10 +110,9 @@ npm start       # Start server normally
 ```bash
 node server/db/create_password.js # create admin password (if needed)
 
-mysql -u root -p < server/db/schema.sql # create database structure
-mysql -u root -p < server/db/seed.sql # import initial data
+sudo mysql -u root -p < server/db/schema.sql # create database structure 
+sudo mysql -u root -p < server/db/seed.sql # import initial data
 ```
-
 
 
 ### Tests (server api)
