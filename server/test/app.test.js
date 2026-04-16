@@ -9,6 +9,9 @@ jest.mock('../src/db', () => ({
 }));
 
 const mockConn = {
+    beginTransaction: jest.fn().mockResolvedValue(true),
+    commit: jest.fn().mockResolvedValue(true),
+    rollback: jest.fn().mockResolvedValue(true),    
     query: jest.fn(),
     release: jest.fn()
 };
@@ -162,4 +165,89 @@ test('DELETE /api/users/:id should delete user', async () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe('User deleted');
+});
+
+
+// Register NGO
+// Missing required fields
+test('POST /api/auth/register-ngo should not register ngo missing required fields', async () => {
+    //mockConn.query.mockResolvedValue({ insertId: 0 });
+
+    const res = await request(app)
+        .post('/api/auth/register-ngo')
+        .send({ name: '', email: 'ngotest@email.com', areaOfConcern: null, password: '123456' , confirmPassword: '123456'});
+
+     console.log(res.statusCode);
+     console.log("body", res.body);
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toEqual({ message: 'Missing required fields' });
+});
+
+// Passwords do not match
+test('POST /api/auth/register-ngo should not register passwords do not match', async () => {
+    mockConn.query.mockResolvedValue({ insertId: 1 });
+
+    const res = await request(app)
+        .post('/api/auth/register-ngo')
+        .send({ name: 'ngotest', email: 'ngotest@email.com', areaOfConcern: 'test', password: '123456' , confirmPassword: '123d456'});
+
+     console.log(res.statusCode);
+     console.log("body", res.body);
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toEqual( { message: 'Passwords do not match' });
+});
+
+test('POST /api/auth/register-ngo should register ngo', async () => {
+    mockConn.query.mockResolvedValue({ insertId: 1 });
+
+    const res = await request(app)
+        .post('/api/auth/register-ngo')
+        .send({ name: 'ngotest', email: 'ngotest@email.com', areaOfConcern:'test', password: '123456' , confirmPassword: '123456'});
+
+     console.log(res.statusCode);
+     console.log("body", res.body);
+    expect(res.statusCode).toBe(201);
+    expect(res.body).toEqual({ message: 'NGO registered successfully', userId: 1 });
+});
+
+// Register Volunteer
+// Missing required fields
+test('POST /api/auth/register-volunteer should not register volunteer missing required fields', async () => {
+    //mockConn.query.mockResolvedValue({ insertId: 0 });
+
+    const res = await request(app)
+        .post('/api/auth/register-volunteer')
+        .send({ name: 'voltest', email: 'voltest@email.com', hours: '', password: '123456' , confirmPassword: '123456'});
+
+     console.log(res.statusCode);
+     console.log("body", res.body);
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toEqual({ message: 'Missing required fields' });
+});
+
+// Passwords do not match
+test('POST /api/auth/register-volunteer should not register volunteer passwords do not match', async () => {
+    mockConn.query.mockResolvedValue({ insertId: 1 });
+
+    const res = await request(app)
+        .post('/api/auth/register-volunteer')
+        .send({ name: 'voltest', email: 'voltest@email.com', hours:2, password: '123456' , confirmPassword: '123d456'});
+
+     console.log(res.statusCode);
+     console.log("body", res.body);
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toEqual( { message: 'Passwords do not match' });
+});
+
+test('POST /api/auth/register-volunteer should register volunteer', async () => {
+    mockConn.query.mockResolvedValue({ insertId: 1 });
+
+    const res = await request(app)
+        .post('/api/auth/register-volunteer')
+        .send({ name: 'voltest', email: 'voltest@email.com', hours:2, password: '123456' , confirmPassword: '123456'});
+
+     console.log(res.statusCode);
+     console.log("body", res.body);
+    expect(res.statusCode).toBe(201);
+    expect(res.body).toEqual({ message: 'Volunteer registered successfully', userId: 1 });
 });
