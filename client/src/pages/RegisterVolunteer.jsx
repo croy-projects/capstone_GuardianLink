@@ -15,6 +15,7 @@ function RegisterVolunteer() {
     });
 
     const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
     const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
@@ -49,8 +50,8 @@ function RegisterVolunteer() {
         setLoading(true);
         try{
             await registerVolunteer(form);
-            alert("Volunteer registered successfully!");
-            navigate('/login'); // go back to login
+            setSuccess("Volunteer registered successfully!");
+            setTimeout(() => navigate("/login"), 1500); // go back to login 
         } catch (err) {
         //extract backend error message safely
             const message =
@@ -68,6 +69,7 @@ function RegisterVolunteer() {
                 <h2>Volunteer Registration</h2>
 
                 {error && <p className="error">{error}</p>}
+                {success && <p className="success">{success}</p>}
 
                 <form onSubmit={handleSubmit}>
                     <input
@@ -105,7 +107,7 @@ function RegisterVolunteer() {
                         type="text"
                         name="hours"
                         placeholder="Hours available / Week"
-                        value={form.areaOfConcern}
+                        value={form.hours}
                         onChange={handleChange}
                     />
                     <button type="submit" disabled={loading}>

@@ -15,6 +15,7 @@ function RegisterNGO() {
     });
 
     const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
     const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
@@ -49,9 +50,9 @@ function RegisterNGO() {
         setLoading(true);
 
         await registerNGO(form);
+        setSuccess("NGO registered successfully!");
+        setTimeout(() => navigate("/login"), 1500); // go back to login 
 
-        alert("NGO registered successfully!");
-        navigate('/login'); // go back to login
     };
 
     return (
@@ -60,6 +61,7 @@ function RegisterNGO() {
                 <h2>NGO Registration</h2>
 
                 {error && <p className="error">{error}</p>}
+                {success && <p className="success">{success}</p>}
 
                 <form onSubmit={handleSubmit}>
                     <input

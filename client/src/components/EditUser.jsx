@@ -16,6 +16,8 @@ function EditUser() {
         password: ''
     });
 
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
     const [loading, setLoading] = useState(true);
 
     // Fetch roles
@@ -26,6 +28,7 @@ function EditUser() {
                 setRoles(data);
             } catch (err) {
                 console.error(err);
+                setError("Failed to load roles. Please try again.");
             }
         };
 
@@ -38,12 +41,13 @@ function EditUser() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError("");
         try {
             await updateUser(id, form);
-            navigate('/dashboard-admin'); // go back to dashboard
+            setSuccess("User updated successfully!");
+            setTimeout(() => navigate("/dashboard-admin"), 1500); // go back to dashboard 
         } catch (err) {
-            console.error(err);
-            alert('Error updating user');
+            setError('Error updating user');
         }
     };
 
@@ -59,9 +63,9 @@ function EditUser() {
                     password: user.password
                 });
             } catch (err) {
-                console.error(err);
-                alert('User not found');
-                navigate('/dashboard-admin');
+                setError("Unable to load user profile.");
+                return;
+
             } finally {
                 setLoading(false);
             }
@@ -75,6 +79,8 @@ function EditUser() {
     return (
         <div className="form-page">
             <h2>Edit User</h2>
+            {error && <p className="error">{error}</p>}
+            {success && <p className="success">{success}</p>}
             <form onSubmit={handleSubmit} className="form-container">
                 <div className="form-group">
                     <label htmlFor="name">Name</label>

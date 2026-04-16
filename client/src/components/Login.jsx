@@ -13,6 +13,7 @@ function Login() {
         password: ""
     });
 
+    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
@@ -21,11 +22,14 @@ function Login() {
             [e.target.name]: e.target.value
         });
     };
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault(); // "Prevent page reloads immediately
+        setError("");
         setLoading(true);
         try {
+
             const data = await loginUser(form);
 
             // Store token
@@ -47,7 +51,7 @@ function Login() {
 
         } catch (err) {
             console.log("err", err);
-            alert("Invalid email or password");
+            setError('Login failed. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -56,7 +60,7 @@ function Login() {
         <div className="login-container">
             <form onSubmit={handleSubmit} className="login-card">
                 <h2>Login</h2>
-
+                {error && <p className="error">{error}</p>}
                 <div className="form-group">
                     <label>Email</label>
                     <input
