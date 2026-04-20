@@ -31,12 +31,22 @@
   font-family: Arial, sans-serif; /* set global font */
 }
 
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
 /* Body base styling */
 body {
   background: var(--color-bg);
   color: var(--color-text-primary);
 }
 
+.home-container {
+  min-height: calc(100vh - 134px);
+  display: flex;
+  flex-direction: column;
+}
 /* ================= NAVBAR ================= */
 nav {
   background:  var(--color-primary); /* dark blue background */
