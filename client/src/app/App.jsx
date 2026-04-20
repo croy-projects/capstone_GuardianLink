@@ -12,6 +12,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 // Pages
 import Home from "../pages/Home";
 import DashboardAdmin from "../pages/DashboardAdmin";
+import Register from "../pages/Register";
 import RegisterNGO from "../pages/RegisterNGO";
 import RegisterVolunteer from "../pages/RegisterVolunteer";
 import DashboardNGO from "../pages/DashboardNGO";
@@ -29,6 +30,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/register-ngo" element={<RegisterNGO />} />
           <Route path="/register-volunteer" element={<RegisterVolunteer />} />
           <Route path="/dashboard-ngo" element={

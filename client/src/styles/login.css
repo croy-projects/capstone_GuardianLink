@@ -51,5 +51,5 @@
 }
 
 .login-container button:hover {
-    background: #2A4A6D;
+    background: var(--color-primary-dark);
 }

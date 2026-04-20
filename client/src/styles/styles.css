@@ -116,17 +116,17 @@ nav a:hover {
 }
 
 .btn-primary:hover {
-  background: var(--color-primary-dark);
+  background: var(--color-accent);
 }
 
 /* Secondary button (outlined) */
 .btn-secondary {
-  background: var(--color-accent);
+  background: var(--color-primary);
   color: white;
 }
 
 .btn-secondary:hover {
-  opacity: 0.9;
+  background: var(--color-accent);
 }
 
 /* ================= SECTIONS ================= */
