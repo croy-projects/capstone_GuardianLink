@@ -19,9 +19,17 @@ function Home() {
       <section>
         <h2>Our Partners</h2>
         <div className="cards">
-          <div className="card">Partner 1</div>
-          <div className="card">Partner 2</div>
-          <div className="card">Partner 3</div>
+          <div className="card">
+            <h3>CyberShield Alliance</h3>
+            <p>Protecting those who protect others</p>
+          </div>
+          <div className="card">
+            <h3>SecureFuture Foundation</h3>
+            <p>Empowering nonprofits through digital safety</p>
+          </div>
+          <div className="card">
+            <h3>NetGuard Volunteers Network</h3>
+            <p>Connecting experts to causes that matter</p></div>
         </div>
       </section>
     </div>
