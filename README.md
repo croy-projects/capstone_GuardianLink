@@ -20,7 +20,7 @@ my-app/
 
 ## Getting Started
 
-### 1. Install dependencies
+### Install dependencies
 
 #### Install root dependencies
 
@@ -44,7 +44,13 @@ npm install
 
 ---
 
-### 3. Run the application
+###  File Uploads
+ The dedicated folder must be created on the backend server to store registration files generated during the application process.
+
+ /server/uploads
+
+
+### Run the application
 
 From the root folder:
 

@@ -38,26 +38,13 @@ CREATE TABLE IF NOT EXISTS organizations (
 );
 
 -- ==========================
--- Files Table 
--- ==========================
-CREATE TABLE IF NOT EXISTS files (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    path VARCHAR(500) NOT NULL,
-    type VARCHAR(50) NOT NULL
-);
-
--- ==========================
 -- Volunteers Table 
 -- ==========================
 CREATE TABLE IF NOT EXISTS volunteers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     hours_by_week INT,
-    resume_id INT,
-    background_check_id INT,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (resume_id) REFERENCES files(id) ON DELETE SET NULL,
-    FOREIGN KEY (background_check_id) REFERENCES files(id) ON DELETE SET NULL
-
+    resume VARCHAR(255),
+    background_check VARCHAR(255),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

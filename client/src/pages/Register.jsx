@@ -23,7 +23,7 @@ function Register() {
                     {/* NGO Card */}
                     <div className="card">
                         <h2>Request Help</h2>
-                        <p>Register your organization to receive cybersecurity support.</p>
+                        <p>Register your organization to receive cybersecurity support.&nbsp;&nbsp;</p>
                         <button onClick={() => navigate("/register-ngo")}>
                             Register as NGO
                         </button>

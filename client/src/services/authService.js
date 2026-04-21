@@ -1,4 +1,4 @@
-import { apiRequest } from "../services/api";
+import { apiRequest, apiWithFileRequest } from "../services/api";
 // Login
 export const loginUser = (form) => {
   return apiRequest("/auth/login", {
@@ -16,7 +16,7 @@ export const registerNGO = (form) =>
 
   // register Volunteer
 export const registerVolunteer = (form) =>
-  apiRequest("/auth/register-volunteer", {
+  apiWithFileRequest("/auth/register-volunteer", {
     method: "POST",
-    body: JSON.stringify(form)
+    body: form
   });

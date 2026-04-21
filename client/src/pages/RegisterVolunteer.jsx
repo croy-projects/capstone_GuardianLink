@@ -12,6 +12,7 @@ function RegisterVolunteer() {
         password: "",
         confirmPassword: "",
         hours: "",
+        resume: null,
     });
 
     const [error, setError] = useState("");
@@ -48,8 +49,18 @@ function RegisterVolunteer() {
         }
 
         setLoading(true);
+
         try{
-            await registerVolunteer(form);
+            //create built-in JavaScript object (FormData) to send form data to a server for files
+            const formData = new FormData(); 
+            formData.append("name", form.name);
+            formData.append("email", form.email);
+            formData.append("password", form.password);
+            formData.append("confirmPassword", form.confirmPassword);
+            formData.append("hours", form.hours);
+            formData.append("resume", form.resume);
+
+            await registerVolunteer(formData);
             setSuccess("Volunteer registered successfully!");
             setTimeout(() => navigate("/login"), 1500); // go back to login 
         } catch (err) {
@@ -110,6 +121,14 @@ function RegisterVolunteer() {
                         value={form.hours}
                         onChange={handleChange}
                     />
+                    <input
+                        type="file"
+                        name="resume"
+                        accept=".pdf,.doc,.docx"
+                        onChange={(e) =>
+                            setForm({ ...form, resume: e.target.files[0] })
+                        }
+                    />                    
                     <button type="submit" disabled={loading}>
                         {loading ? "Registering..." : "Register"}
                     </button>

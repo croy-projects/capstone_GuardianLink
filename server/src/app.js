@@ -8,6 +8,11 @@ const authRoutes = require('./routes/authRoutes');
 
 // Create Express app
 const app = express();
+const path = require("path");
+
+//enable static file access
+// to do add security
+//app.use("../uploads", express.static(path.join(__dirname, "uploads")));
 
 // Middleware = functions that run before routes
 
