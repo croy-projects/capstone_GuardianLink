@@ -1,5 +1,6 @@
 const authService = require('../services/authService');
 const ROLES = require('../config/roles');
+const AppError = require('../errors/AppError');
 
 const login = async (req, res) => {
 
@@ -26,7 +27,7 @@ const login = async (req, res) => {
     }
 };
 
-const registerNGO = async (req, res) => {
+const registerNGO = async (req, res, next) => {
     const { name, email, password, confirmPassword, areaOfConcern } = req.body;
     if (!name || !email || !password) {
         return res.status(400).json({ message: "Missing required fields" });
@@ -62,19 +63,17 @@ const registerNGO = async (req, res) => {
     }
 };
 
-const registerVolunteer = async (req, res) => {
+const registerVolunteer = async (req, res, next) => {
     
     const { name, email, password, confirmPassword, hours } = req.body;
     const resumePath = req.file ? req.file.path : null;
 
     if (!name || !email || !password || !hours) {
-        return res.status(400).json({ message: "Missing required fields" });
+         return next(new AppError("Missing required fields", 400));
     }
 
     if (password !== confirmPassword) {
-        return res.status(400).json({
-            message: "Passwords do not match",
-        });
+        return next(new AppError("Passwords do not match", 400));
     }
 
     try {
@@ -98,7 +97,7 @@ const registerVolunteer = async (req, res) => {
 
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: "Server error" });
+        next(err); // send to global error handler
     }
 };
 

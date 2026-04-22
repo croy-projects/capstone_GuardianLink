@@ -38,6 +38,29 @@ function RegisterVolunteer() {
         return null;
     };
 
+    const handleFileChange = (e) => {
+        setError("");
+        const file = e.target.files[0];
+
+        if (!file) return;
+
+        const allowedTypes = [
+            "application/pdf",
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        ];
+        
+        const validExt = /\.(pdf|doc|docx)$/.test(file.name.toLowerCase());
+        if (!allowedTypes.includes(file.type) || !validExt) {
+            setError("Only PDF, DOC, DOCX allowed");
+            e.target.value = null; // reset input
+            return;
+        }
+
+        setForm({ ...form, resume: e.target.files[0] })
+        //console.log("Valid file:", file);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
@@ -50,9 +73,9 @@ function RegisterVolunteer() {
 
         setLoading(true);
 
-        try{
+        try {
             //create built-in JavaScript object (FormData) to send form data to a server for files
-            const formData = new FormData(); 
+            const formData = new FormData();
             formData.append("name", form.name);
             formData.append("email", form.email);
             formData.append("password", form.password);
@@ -64,10 +87,10 @@ function RegisterVolunteer() {
             setSuccess("Volunteer registered successfully!");
             setTimeout(() => navigate("/login"), 1500); // go back to login 
         } catch (err) {
-        //extract backend error message safely
+            //extract backend error message safely
             const message =
-            err.message ||                 // generic error
-            "Registration failed";
+                err.message ||                 // generic error
+                "Registration failed";
             setError(message);
         } finally {
             setLoading(false);
@@ -125,10 +148,8 @@ function RegisterVolunteer() {
                         type="file"
                         name="resume"
                         accept=".pdf,.doc,.docx"
-                        onChange={(e) =>
-                            setForm({ ...form, resume: e.target.files[0] })
-                        }
-                    />                    
+                        onChange={handleFileChange}
+                    />
                     <button type="submit" disabled={loading}>
                         {loading ? "Registering..." : "Register"}
                     </button>

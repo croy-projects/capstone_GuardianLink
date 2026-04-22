@@ -1,5 +1,6 @@
 const multer = require("multer");
 const path = require("path");
+const AppError = require('../errors/AppError');
 
 // storage configuration
 const storage = multer.diskStorage({
@@ -14,8 +15,30 @@ const storage = multer.diskStorage({
     }
 });
 
+// file filter types accepted (pdf, doc, docx) 
+const fileFilter = (req, file, cb) => {
+    //regular expression (pattern) for allowed types
+    const allowedTypes = /pdf|doc|docx/;
+    // get extension of the file
+    const ext = path.extname(file.originalname).toLowerCase();
+    const mime = file.mimetype;
+    
+    const isValidMime =
+        mime === "application/pdf" ||
+        mime === "application/msword" ||
+        mime === "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+
+    //  finds a match, otherwise false
+    if (allowedTypes.test(ext) && isValidMime) {
+        cb(null, true);
+    } else {
+        cb(new AppError("Only PDF, DOC, DOCX allowed", 400));
+    }
+};
+
 const upload = multer({
     storage,
+    fileFilter,
     limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
 });
 

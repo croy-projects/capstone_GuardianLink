@@ -5,6 +5,7 @@ const cors = require("cors");
 const testRoutes = require("./routes/testRoutes.js");
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
+const errorHandler = require('./middleware/errorMiddleware');
 
 // Create Express app
 const app = express();
@@ -13,8 +14,6 @@ const path = require("path");
 //enable static file access
 // to do add security
 //app.use("../uploads", express.static(path.join(__dirname, "uploads")));
-
-// Middleware = functions that run before routes
 
 // Enable CORS so React frontend can talk to backend
 app.use(cors());
@@ -37,5 +36,18 @@ app.use("/api", testRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 
-// Export app (used in server.js)
+// 
+app.use(errorHandler);
+
+// Used for handling errors that are not caught by errorHandler
+app.use((err, req, res, next) => {
+  console.error(err);
+
+  res.status(500).json({
+    success: false,
+    message: "Server error",
+  });
+});
+
+//Export app (used in server.js)
 module.exports = app;
