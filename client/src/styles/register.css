@@ -1,3 +1,4 @@
+
 /* Register page selection */
 .register-page {
   min-height: calc(100vh - 134px);
@@ -74,6 +75,7 @@
 /* Register form */
 .register-container {
   min-height: calc(100vh - 134px);
+  padding-top: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -112,6 +114,7 @@
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  font-size: 14px;
 }
 .register-card button:hover {
   background: var(--color-primary-dark);

@@ -50,7 +50,7 @@ function RegisterVolunteer() {
             "application/msword",
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         ];
-        
+
         const validExt = /\.(pdf|doc|docx)$/.test(file.name.toLowerCase());
         if (!allowedTypes.includes(file.type) || !validExt) {
             setError("Only PDF, DOC, DOCX allowed");
@@ -107,56 +107,70 @@ function RegisterVolunteer() {
                 {success && <p className="success">{success}</p>}
 
                 <form onSubmit={handleSubmit}>
-                    <input
-                        type="text"
-                        name="name"
-                        placeholder="Name *"
-                        value={form.name}
-                        onChange={handleChange}
-                    />
-
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Email *"
-                        value={form.email}
-                        onChange={handleChange}
-                    />
-
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password *"
-                        value={form.password}
-                        onChange={handleChange}
-                    />
-
-                    <input
-                        type="password"
-                        name="confirmPassword"
-                        placeholder="Confirm Password *"
-                        value={form.confirmPassword}
-                        onChange={handleChange}
-                    />
-                    <input
-                        type="text"
-                        name="hours"
-                        placeholder="Hours available / Week"
-                        value={form.hours}
-                        onChange={handleChange}
-                    />
-                    <input
-                        type="file"
-                        name="resume"
-                        accept=".pdf,.doc,.docx"
-                        onChange={handleFileChange}
-                    />
-                    <input
-                        type="file"
-                        name="backgroundCheck"
-                        accept=".pdf,.doc,.docx"
-                        onChange={handleFileChange}
-                    />                    
+                    <div className="form-group">
+                        <label htmlFor="name">Name *</label>
+                        <input
+                            type="text"
+                            name="name"
+                            value={form.name}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="email">Email *</label>
+                        <input
+                            type="email"
+                            name="email"
+                            value={form.email}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="password">Password *</label>
+                        <input
+                            type="password"
+                            name="password"
+                            value={form.password}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="confirmPassword">Confirm Password *</label>
+                        <input
+                            type="password"
+                            name="confirmPassword"
+                            value={form.confirmPassword}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="hours">Hours available / Week</label>
+                        <input
+                            type="text"
+                            name="hours"
+                            value={form.hours}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="resume">Resume (.pdf, .doc or .docx)</label>
+                        <input
+                            type="file"
+                            name="resume"
+                            placeholder=""
+                            accept=".pdf,.doc,.docx"
+                            onChange={handleFileChange}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="backgroundCheck">Background Check (.pdf, .doc or .docx)</label>
+                        <input
+                            type="file"
+                            name="backgroundCheck"
+                            accept=".pdf,.doc,.docx"
+                            onChange={handleFileChange}
+                        />
+                    </div>
                     <button type="submit" disabled={loading}>
                         {loading ? "Registering..." : "Register"}
                     </button>
