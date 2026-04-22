@@ -5,6 +5,12 @@ const upload = require("../middleware/uploadMiddleware");
 
 router.post("/login", authController.login);
 router.post("/register-ngo", authController.registerNGO);
-router.post("/register-volunteer", upload.single("resume"), authController.registerVolunteer);
+
+const uploadFields = upload.fields([
+  { name: "resume", maxCount: 1 },
+  { name: "backgroundCheck", maxCount: 1 },
+]);
+
+router.post("/register-volunteer", uploadFields, authController.registerVolunteer);
 
 module.exports = router;

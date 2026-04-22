@@ -13,6 +13,7 @@ function RegisterVolunteer() {
         confirmPassword: "",
         hours: "",
         resume: null,
+        backgroundCheck: null,
     });
 
     const [error, setError] = useState("");
@@ -57,8 +58,7 @@ function RegisterVolunteer() {
             return;
         }
 
-        setForm({ ...form, resume: e.target.files[0] })
-        //console.log("Valid file:", file);
+        setForm({ ...form, [e.target.name]: e.target.files[0] })
     };
 
     const handleSubmit = async (e) => {
@@ -82,6 +82,7 @@ function RegisterVolunteer() {
             formData.append("confirmPassword", form.confirmPassword);
             formData.append("hours", form.hours);
             formData.append("resume", form.resume);
+            formData.append("backgroundCheck", form.backgroundCheck);
 
             await registerVolunteer(formData);
             setSuccess("Volunteer registered successfully!");
@@ -150,6 +151,12 @@ function RegisterVolunteer() {
                         accept=".pdf,.doc,.docx"
                         onChange={handleFileChange}
                     />
+                    <input
+                        type="file"
+                        name="backgroundCheck"
+                        accept=".pdf,.doc,.docx"
+                        onChange={handleFileChange}
+                    />                    
                     <button type="submit" disabled={loading}>
                         {loading ? "Registering..." : "Register"}
                     </button>

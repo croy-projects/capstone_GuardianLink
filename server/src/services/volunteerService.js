@@ -16,12 +16,11 @@ const getVolunteers = async () => {
 };
 
 const createVolunteer = async (data, conn) => {
-
-    const { user_id, hours, resume } = data;
+    const { user_id, hours, resume_filename, background_check_filename } = data;
 
     await conn.query(
-        'INSERT INTO volunteers (user_id, hours_by_week, resume) VALUES (?, ?, ?)',
-        [user_id, hours, resume]
+        'INSERT INTO volunteers (user_id, hours_by_week, resume, background_check) VALUES (?, ?, ?, ?)',
+        [user_id, hours, resume_filename, background_check_filename]
     );
 };
 

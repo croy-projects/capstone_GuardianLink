@@ -66,7 +66,9 @@ const registerNGO = async (req, res, next) => {
 const registerVolunteer = async (req, res, next) => {
     
     const { name, email, password, confirmPassword, hours } = req.body;
-    const resumePath = req.file ? req.file.path : null;
+
+    const resumeFile = req.files.resume?.[0];
+    const backgroundCheckFile = req.files.backgroundCheck?.[0];
 
     if (!name || !email || !password || !hours) {
          return next(new AppError("Missing required fields", 400));
@@ -84,7 +86,8 @@ const registerVolunteer = async (req, res, next) => {
             password,
             hours,
             role_id: ROLES.VOLUNTEER,
-            resume: resumePath
+            resume_filename: resumeFile.filename,
+            background_check_filename: backgroundCheckFile.filename
         };
 
         const result = await authService.registerVolunteer(userData);
