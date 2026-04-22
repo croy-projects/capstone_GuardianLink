@@ -64,44 +64,53 @@ function RegisterNGO() {
                 {success && <p className="success">{success}</p>}
 
                 <form onSubmit={handleSubmit}>
-                    <input
-                        type="text"
-                        name="name"
-                        placeholder="NGO Name *"
-                        value={form.name}
-                        onChange={handleChange}
-                    />
-
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Email *"
-                        value={form.email}
-                        onChange={handleChange}
-                    />
-
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password *"
-                        value={form.password}
-                        onChange={handleChange}
-                    />
-
-                    <input
-                        type="password"
-                        name="confirmPassword"
-                        placeholder="Confirm Password *"
-                        value={form.confirmPassword}
-                        onChange={handleChange}
-                    />
-                    <input
-                        type="text"
-                        name="areaOfConcern"
-                        placeholder="Area of Concern"
-                        value={form.areaOfConcern}
-                        onChange={handleChange}
-                    />
+                    <div className="form-group">
+                        <label htmlFor="name">NGO Name *</label>
+                        <input
+                            type="text"
+                            name="name"
+                            value={form.name}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="email">Email *</label>
+                        <input
+                            type="email"
+                            name="email"
+                            value={form.email}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="password">Password *</label>
+                        <input
+                            type="password"
+                            name="password"
+                            value={form.password}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="confirmPassword">Confirm Password *</label>
+                        <input
+                            type="password"
+                            name="confirmPassword"
+                            value={form.confirmPassword}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="areaOfConcern">Area of Concern</label>
+                        <textarea
+                            type="text"
+                            name="areaOfConcern"
+                            placeholder="Describe your cybersecurity concerns..."
+                            value={form.areaOfConcern}
+                            onChange={handleChange}
+                            rows={4}
+                        />
+                    </div>
                     <button type="submit" disabled={loading}>
                         {loading ? "Registering..." : "Register"}
                     </button>
