@@ -6,9 +6,9 @@ const getVolunteers = async () => {
 
     try {
         return await conn.query(`
-      SELECT u.id, u.name, u.email, v.hours_by_week
-      FROM users u
-      JOIN volunteers v ON u.role_id = r.id
+        SELECT u.id, u.name, u.email, v.hours_by_week, v.resume, v.background_check
+        FROM users u
+        JOIN volunteers v ON u.id = v.user_id
     `);
     } finally {
         conn.release();
@@ -24,13 +24,4 @@ const createVolunteer = async (data, conn) => {
     );
 };
 
-const deleteVolunteer = async (id) => {
-    const conn = await pool.getConnection();
-    try {
-        await conn.query('DELETE FROM volunteers WHERE id=?', [id]);
-    } finally {
-        conn.release();
-    }
-};
-
-module.exports = { getVolunteers, createVolunteer, deleteVolunteer };
+module.exports = { getVolunteers, createVolunteer };
