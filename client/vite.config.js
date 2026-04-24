@@ -7,7 +7,8 @@ export default defineConfig({
   server: {
     proxy: {
       // Redirect API calls to backend
-      "/api": "http://localhost:5000"
+      "/api": "http://localhost:5000",
+      "/uploads": "http://localhost:5000"
     }
   }
 })

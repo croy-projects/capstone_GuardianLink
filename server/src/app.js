@@ -12,8 +12,8 @@ const app = express();
 const path = require("path");
 
 //enable static file access
-// to do add security
-//app.use("../uploads", express.static(path.join(__dirname, "uploads")));
+// add security TODO
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 // Enable CORS so React frontend can talk to backend
 app.use(cors());
@@ -25,7 +25,7 @@ app.use(express.json());
 app.get("/", (req, res) => {
     res.send("API is running...");
 });
-
+  
 // Example API endpoint
 app.get("/api/data", (req, res) => {
     res.json({ message: "Hello from backend!" });

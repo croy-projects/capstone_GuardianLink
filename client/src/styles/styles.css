@@ -314,3 +314,39 @@ footer {
   color: white;
   margin-top: 2rem;       /* space above footer */
 }
+
+
+/* ================= PAGE DETAILS ================= */
+.volunteer-details {
+    display: flex;
+    gap: 30px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+    align-items: flex-start;
+    min-height: calc(100vh - 134px);
+}
+
+/* LEFT SIDE */
+.info-section {
+    flex: 1;
+    min-width: 300px;
+}
+
+/* RIGHT SIDE */
+.resume-section {
+    flex: 2;
+    min-width: 400px;
+}
+
+.resume-section embed {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+/* Responsive for mobile */
+@media (max-width: 768px) {
+    .volunteer-details {
+        flex-direction: column;
+    }
+}

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getVolunteers } from '../services/userService';
 
-export default function UsersTable() {
+export default function VolunteersTable() {
     const [users, setUsers] = useState([]);
 
     const loadUsers = async () => {
@@ -34,7 +34,7 @@ export default function UsersTable() {
                             <td>{u.email}</td>
                             <td>{u.hours_by_week}</td>
                             <td className="actions">
-                                <button className="btn-view" onClick={() => navigate(`/user/${u.id}`)}>
+                                <button className="btn-view" onClick={() => navigate(`/volunteer-details/${u.id}`)}>
                                     View Resume
                                 </button>
                                 <button

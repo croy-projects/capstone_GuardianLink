@@ -7,6 +7,8 @@ export const getUserById = (id) => apiRequest(`/users/${id}`);
 
 export const getVolunteers = () => apiRequest("/users/volunteers");
 
+export const getVolunteerById = (id) => apiRequest(`/users/volunteers/${id}`);
+
 // POST + PUT
 export const createUser = (user) =>
   apiRequest("/users", {

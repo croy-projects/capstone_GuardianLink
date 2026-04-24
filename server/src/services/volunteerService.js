@@ -15,6 +15,22 @@ const getVolunteers = async () => {
     }
 };
 
+const getVolunteerByID = async (id) => {
+    const conn = await pool.getConnection();
+
+    try {
+        return await conn.query(`
+      SELECT u.id, u.name, u.email, u.role_id, r.name AS role, v.hours_by_week, v.resume, v.background_check
+      FROM users u
+      JOIN roles r ON u.role_id = r.id
+      JOIN volunteers v ON u.id = v.user_id
+      WHERE u.id = ?
+    `, [id]);
+    } finally {
+        conn.release();
+    }
+};
+
 const createVolunteer = async (data, conn) => {
     const { user_id, hours, resume_filename, background_check_filename } = data;
 
@@ -24,4 +40,4 @@ const createVolunteer = async (data, conn) => {
     );
 };
 
-module.exports = { getVolunteers, createVolunteer };
+module.exports = { getVolunteers, createVolunteer, getVolunteerByID };

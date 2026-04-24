@@ -17,6 +17,7 @@ import RegisterNGO from "../pages/RegisterNGO";
 import RegisterVolunteer from "../pages/RegisterVolunteer";
 import DashboardNGO from "../pages/DashboardNGO";
 import DashboardVolunteer from "../pages/DashboardVolunteer";
+import VolunteerDetails from "../pages/VolunteerDetails";
 
 // Main App component
 function App() {
@@ -36,6 +37,11 @@ function App() {
           <Route path="/dashboard-ngo" element={
             <ProtectedRoute>
               <DashboardNGO />
+            </ProtectedRoute>
+          } />
+          <Route path="/volunteer-details/:id" element={
+            <ProtectedRoute>
+              <VolunteerDetails />
             </ProtectedRoute>
           } />
           <Route path="/dashboard-volunteer" element={

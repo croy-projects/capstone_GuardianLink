@@ -18,6 +18,7 @@ router.post("/", authenticate, userController.createUser);
 router.get("/roles", authenticate, userController.getRoles);
 
 router.get("/:id", authenticate, userController.getUserByID);
+router.get("/volunteers/:id", authenticate, volunteerController.getVolunteerByID);
 
 router.put("/:id", authenticate, userController.updateUser);
 router.delete("/:id", authenticate, userController.deleteUser);

@@ -51,9 +51,9 @@ function RegisterVolunteer() {
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         ];
 
-        const validExt = /\.(pdf|doc|docx)$/.test(file.name.toLowerCase());
+        const validExt = /\.(pdf)$/.test(file.name.toLowerCase());
         if (!allowedTypes.includes(file.type) || !validExt) {
-            setError("Only PDF, DOC, DOCX allowed");
+            setError("Only PDF allowed");
             e.target.value = null; // reset input
             return;
         }
@@ -153,21 +153,21 @@ function RegisterVolunteer() {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="resume">Resume (.pdf, .doc or .docx)</label>
+                        <label htmlFor="resume">Resume (.pdf)</label>
                         <input
                             type="file"
                             name="resume"
                             placeholder=""
-                            accept=".pdf,.doc,.docx"
+                            accept=".pdf"
                             onChange={handleFileChange}
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="backgroundCheck">Background Check (.pdf, .doc or .docx)</label>
+                        <label htmlFor="backgroundCheck">Background Check (.pdf)</label>
                         <input
                             type="file"
                             name="backgroundCheck"
-                            accept=".pdf,.doc,.docx"
+                            accept=".pdf"
                             onChange={handleFileChange}
                         />
                     </div>
