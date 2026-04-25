@@ -25,7 +25,7 @@ function VolunteerDetails() {
                 <h2>{volunteer.name}</h2>
                 <p><strong>Email:</strong> {volunteer.email}</p>
                 <p><strong>Hours / Week:</strong> {volunteer.hours_by_week}</p>
-                <button onClick={() => window.history.length > 1 ? navigate(-1) : navigate("/dashboard-ngo")}>Back</button>
+                <button className="btn-back" onClick={() => window.history.length > 1 ? navigate(-1) : navigate("/dashboard-ngo")}>Back</button>
             </div>
             <div className="resume-section">
                 <h3>Resume</h3>
