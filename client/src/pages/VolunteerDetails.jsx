@@ -1,10 +1,12 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getVolunteerById } from "../services/userService";
+
 
 function VolunteerDetails() {
     const { id } = useParams();
     const [volunteer, setVolunteer] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchVolunteer = async () => {
@@ -23,6 +25,7 @@ function VolunteerDetails() {
                 <h2>{volunteer.name}</h2>
                 <p><strong>Email:</strong> {volunteer.email}</p>
                 <p><strong>Hours / Week:</strong> {volunteer.hours_by_week}</p>
+                <button onClick={() => window.history.length > 1 ? navigate(-1) : navigate("/dashboard-ngo")}>Back</button>
             </div>
             <div className="resume-section">
                 <h3>Resume</h3>

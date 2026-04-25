@@ -8,7 +8,7 @@ const getOrganizations = async () => {
         return await conn.query(`
       SELECT u.id, u.name, u.email, o.area_of_concern
       FROM users u
-      JOIN organizations o ON u.role_id = r.id
+      JOIN organizations o ON u.id = o.user_id
     `);
     } finally {
         conn.release();

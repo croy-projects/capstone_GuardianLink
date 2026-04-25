@@ -4,7 +4,7 @@ const orgService = require('../services/orgService');
 const getOrganizations = async (req, res) => {
     try {
         const organizations = await orgService.getOrganizations();
-        res.json(users);
+        res.json(organizations);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
