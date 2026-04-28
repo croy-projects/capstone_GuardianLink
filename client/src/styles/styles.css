@@ -54,6 +54,7 @@ nav {
   display: flex;               /* flex layout */
   justify-content: space-between; /* space between logo and menu */
   padding: 1rem 2rem;          /* vertical & horizontal spacing */
+  font-weight: bold;
 }
 
 /* Navbar menu list */
@@ -71,6 +72,22 @@ nav a {
 }
 
 nav a:hover {
+  text-decoration: underline;
+}
+
+nav .link-button {
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+  font: inherit;
+  font-weight: bold;       /* bold text */
+}
+
+nav .link-button:hover{
   text-decoration: underline;
 }
 

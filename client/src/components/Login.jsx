@@ -3,10 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { loginUser } from "../services/authService";
 import { ROLES } from "../config/roles";
+import { useAuth } from "./AuthContext";
 import "../styles/login.css";
 
 function Login() {
     const navigate = useNavigate();
+
+    const { user, login } = useAuth();
 
     const [form, setForm] = useState({
         email: "",
@@ -30,11 +33,10 @@ function Login() {
         setLoading(true);
         try {
 
-            const data = await loginUser(form);
-
+           const data = await loginUser(form);
             // Store token
-            localStorage.setItem("token", data.token);
-            
+            login(data.token); 
+
             // Decode token to get role
             const user = jwtDecode(data.token);
 

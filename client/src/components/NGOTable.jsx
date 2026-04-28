@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { getNGOs } from '../services/userService';
 
 export default function NGOTable() {
@@ -13,7 +12,6 @@ export default function NGOTable() {
     useEffect(() => {
         loadUsers();
     }, []);
-    const navigate = useNavigate();
  return (
         <div className="dashboard-container">
             <h2>Organizations Needing Help</h2>

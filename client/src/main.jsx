@@ -1,13 +1,16 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { AuthProvider } from "./components/AuthContext";
 // Root App component
 import App from './app/App'
 import "./styles/styles.css";
 
 // Mount React app into <div id="root"> in index.html
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    {/* StrictMode helps catch bugs during development */}
-    <App />
-  </StrictMode>,
+    <StrictMode>
+        {/* StrictMode helps catch bugs during development */}
+        <AuthProvider>
+            <App />
+        </AuthProvider>
+    </StrictMode>,
 )
