@@ -15,6 +15,22 @@ const getOrganizations = async () => {
     }
 };
 
+const getOrgByID = async (id) => {
+    const conn = await pool.getConnection();
+
+    try {
+        return await conn.query(`
+      SELECT u.id, u.name, u.email, u.role_id, r.name AS role, o.area_of_concern
+      FROM users u
+      JOIN roles r ON u.role_id = r.id
+      JOIN organizations o ON o.user_id = u.id
+      WHERE u.id = ?
+    `, [id]);
+    } finally {
+        conn.release();
+    }
+};
+
 const createOrganization = async (data, conn) => {
 
     const { user_id, areaOfConcern } = data;
@@ -34,4 +50,4 @@ const deleteOrganization = async (id) => {
     }
 };
 
-module.exports = { getOrganizations, createOrganization, deleteOrganization };
+module.exports = { getOrganizations, getOrgByID, createOrganization, deleteOrganization };

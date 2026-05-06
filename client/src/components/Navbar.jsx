@@ -34,6 +34,7 @@ function Navbar() {
                         {user.role_id === ROLES.VOLUNTEER && (
                             <li><Link to="/dashboard-volunteer">Dashboard</Link></li>
                         )}
+                        <li><Link to="profile-user">Profile</Link></li>
                         <li><button className="link-button" onClick={handleLogout}>Logout</button></li>
                     </>
                 )}

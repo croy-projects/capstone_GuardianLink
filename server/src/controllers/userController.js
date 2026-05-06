@@ -1,5 +1,8 @@
 //Controllers = HTTP only
 const userService = require('../services/userService');
+const orgService = require('../services/orgService');
+const volunteerService = require('../services/volunteerService');
+const ROLES = require('../config/roles');
 
 const getUsers = async (req, res) => {
     try {
@@ -56,4 +59,32 @@ const getRoles = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
-module.exports = { getUsers, getUserByID, createUser, updateUser, deleteUser, getRoles };
+
+const getProfile = async (req, res) => {
+    try {
+        const user_id = req.user.id;
+        const role_id = req.user.role_id;
+
+        let data = {};
+
+        if (role_id === ROLES.ADMIN) {
+            data = await userService.getUserByID(user_id);
+        }
+
+        if (role_id === ROLES.NGO) {
+            data = await orgService.getOrgByID(user_id);
+        }
+
+        if (role_id === ROLES.VOLUNTEER) {
+            data = await volunteerService.getVolunteerByID(user_id);
+        }
+
+        res.json(data[0]);
+
+    } catch (err) {
+        console.log("err", err);
+        res.status(500).json({ error: err.message });
+    }
+};
+
+module.exports = { getUsers, getUserByID, createUser, updateUser, deleteUser, getRoles, getProfile };

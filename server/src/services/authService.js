@@ -11,7 +11,7 @@ const login = async (email, password) => {
     try {
         conn = await pool.getConnection();
         const rows = await conn.query(`
-            SELECT u.name, u.email, u.password, u.role_id
+            SELECT u.id, u.name, u.email, u.password, u.role_id
             FROM users u
             WHERE u.email = ?
         `, [email]);
@@ -30,7 +30,10 @@ const login = async (email, password) => {
         const token = jwt.sign(
             {
                 id: user.id,
-                role_id: user.role_id
+                name: user.name,
+                email: user.email,
+                role_id: user.role_id,
+                role: user.role
             },
             process.env.JWT_SECRET,
             { expiresIn: process.env.JWT_EXPIRES_IN }

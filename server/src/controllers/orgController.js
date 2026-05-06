@@ -12,7 +12,7 @@ const getOrganizations = async (req, res) => {
 
 const getOrgByID = async (req, res) => {
     try {
-        const organization = await userService.getOrganizationByID(req.params.id);
+        const organization = await orgService.getOrgByID(req.params.id);
         res.json(organization[0]);
     } catch (err) {
         res.status(500).json({ error: err.message });

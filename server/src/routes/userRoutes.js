@@ -13,6 +13,8 @@ router.get("/", authenticate, userController.getUsers);
 router.get("/volunteers", authenticate, volunteerController.getVolunteers);
 router.get("/ngos", authenticate, orgController.getOrganizations);
 
+router.get("/profile", authenticate, userController.getProfile);
+
 // POST
 router.post("/", authenticate, userController.createUser);
 

@@ -12,8 +12,7 @@ function EditUser() {
     const [form, setForm] = useState({
         name: '',
         role_id: '',
-        email: '',
-        password: ''
+        email: ''
     });
 
     const [error, setError] = useState("");
@@ -59,8 +58,7 @@ function EditUser() {
                 setForm({
                     name: user.name,
                     email: user.email,
-                    role_id: user.role_id,
-                    password: user.password
+                    role_id: user.role_id
                 });
             } catch (err) {
                 setError("Unable to load user profile.");
@@ -119,7 +117,7 @@ function EditUser() {
                     />
                 </div>
                 <div className="form-actions">
-                    <button type="button" className="btn-action" onClick={() => navigate('/dashboard-admin')}>
+                    <button type="button" className="btn-action" onClick={() => window.history.length > 1 ? navigate(-1) : navigate("/")}>
                         Cancel
                     </button>
                     <button type="submit" className="btn-action">

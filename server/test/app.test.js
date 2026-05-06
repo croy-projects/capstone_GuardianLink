@@ -1,3 +1,6 @@
+//run the tests in your terminal
+//npm test
+
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 

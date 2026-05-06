@@ -228,6 +228,7 @@ section {
   padding: 0.4rem 0.7rem;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 0.95rem;
 }
 .btn-delete:hover {
   background: #a51c1c;
@@ -240,6 +241,7 @@ section {
   padding: 0.4rem 0.7rem;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 0.95rem;
 }
 
 .btn-reset:hover{
@@ -253,6 +255,7 @@ section {
   padding: 0.4rem 0.7rem;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 0.95rem;
 }
 
 .btn-edit:hover{
