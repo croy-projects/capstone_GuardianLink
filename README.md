@@ -89,6 +89,11 @@ add .env file in the server folder
 
 PORT=5000
 
+add .env file in the client folder
+
+VITE_ADMIN_EMAIL=admin@guardianlink.com
+
+
 ## Available Scripts
 
 ### Root

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { loginUser } from "../services/authService";
 import { ROLES } from "../config/roles";
@@ -8,7 +8,7 @@ import "../styles/login.css";
 
 function Login() {
     const navigate = useNavigate();
-
+    const adminEmail = import.meta.env.VITE_ADMIN_EMAIL;
     const { user, login } = useAuth();
 
     const [form, setForm] = useState({
@@ -25,7 +25,15 @@ function Login() {
             [e.target.name]: e.target.value
         });
     };
-    
+
+    const handleForgotPassword = () => {
+        setError("");
+        if (!form.email) {
+            setError("Please enter your email first");
+            return;
+        }
+        window.location.href = `mailto:${adminEmail}?subject=GuardianLink Password Reset Request&body=Hello, I need to reset my password. My account email is ${form.email}`;
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault(); // "Prevent page reloads immediately
@@ -33,15 +41,15 @@ function Login() {
         setLoading(true);
         try {
 
-           const data = await loginUser(form);
+            const data = await loginUser(form);
             // Store token
-            login(data.token); 
+            login(data.token);
 
             // Decode token to get role
             const user = jwtDecode(data.token);
 
             // Redirect based on role
-            if (user.role_id === ROLES.ADMIN ) {
+            if (user.role_id === ROLES.ADMIN) {
                 navigate("/dashboard-admin");
             } else if (user.role_id === ROLES.NGO) {
                 navigate("/dashboard-ngo");
@@ -84,7 +92,10 @@ function Login() {
                         required
                     />
                 </div>
-
+                {/* Forgot Password Link */}
+                <div className="forgot-password">
+                    <Link onClick={handleForgotPassword}>Forgot Password?</Link>
+                </div>
                 <button type="submit">
                     {loading ? "Logging in..." : "Login"}
                 </button>
