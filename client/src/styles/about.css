@@ -1,0 +1,142 @@
+.about-page {
+  min-height: 100vh;
+  background: #f5f7fa;
+  color: #1e293b;
+}
+
+/* HERO */
+
+.hero-section {
+  height: 60vh;
+  display: flex;
+  background: linear-gradient(135deg, #111827, #305377);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.hero-overlay h1 {
+  font-size: 4rem;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.hero-overlay p {
+  color: #e2e8f0;
+  font-size: 1.2rem;
+  max-width: 700px;
+  line-height: 1.6;
+}
+
+/* SECTIONS */
+
+.about-section {
+  padding: 5rem 2rem;
+}
+
+.alt-bg {
+  background: white;
+}
+
+.section-content {
+  max-width: 1200px;
+  margin: auto;
+}
+
+.section-content h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: #0f172a;
+}
+
+.section-content p {
+  text-align: center;
+  line-height: 1.8;
+  font-size: 1.1rem;
+  max-width: 850px;
+  margin: auto;
+}
+
+/* CARDS */
+
+.card-grid,
+.partners-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.info-card,
+.partner-card {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  transition: 0.3s ease;
+}
+
+.info-card:hover,
+.partner-card:hover {
+  transform: translateY(-5px);
+}
+
+.info-card h3,
+.partner-card h3 {
+  margin-bottom: 1rem;
+  color: #2563eb;
+}
+
+/* CTA */
+
+.cta-section {
+  background: #0f172a;
+  color: white;
+  text-align: center;
+  padding: 5rem 2rem;
+}
+
+.cta-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.cta-section p {
+  max-width: 700px;
+  margin: auto;
+  line-height: 1.7;
+  color: #cbd5e1;
+}
+
+.cta-buttons {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.cta-buttons button {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+  .hero-overlay h1 {
+    font-size: 2.5rem;
+  }
+
+  .section-content h2 {
+    font-size: 2rem;
+  }
+}

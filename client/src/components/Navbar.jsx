@@ -15,6 +15,7 @@ function Navbar() {
             <div>GuardianLink</div>
             <ul>
                 <li><Link to="/">Home</Link></li>
+                <li><Link to="/about-us">About Us</Link></li>
                 {!user ? (
                     <>
                         <li><Link to="/login">Login</Link></li>

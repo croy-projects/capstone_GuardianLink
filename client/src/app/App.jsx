@@ -11,6 +11,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 
 // Pages
 import Home from "../pages/Home";
+import AboutUs from "../pages/About";
 import DashboardAdmin from "../pages/DashboardAdmin";
 import Register from "../pages/Register";
 import RegisterNGO from "../pages/RegisterNGO";
@@ -31,6 +32,7 @@ function App() {
         {/* Routes is a container for all routes */}
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about-us" element={<AboutUs />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/register-ngo" element={<RegisterNGO />} />

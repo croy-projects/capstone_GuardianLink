@@ -109,11 +109,12 @@ nav .link-button:hover{
   text-align: center;      /* center content */
   padding: 4rem 2rem;      /* large spacing */
   background: linear-gradient(135deg, #EAF2FB, #D6E6F8);     /* light blue background */
+  min-height: 40vh;
 }
 
 .hero h1 {
   font-size: 2.5rem;       /* large title */
-  margin-bottom: 1rem;     /* space below title */
+  margin-bottom: 6rem;     /* space below title */
 }
 
 /* Buttons inside hero */
@@ -150,7 +151,7 @@ nav .link-button:hover{
 section {
   padding: 2rem;     /* spacing around section */
   text-align: center;/* center content */
-}
+}  
 
 /* Cards container (grid layout) */
 .cards {

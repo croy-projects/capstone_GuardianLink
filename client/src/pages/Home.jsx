@@ -6,16 +6,14 @@ function Home() {
       <div className="hero">
         <h1>Connecting Cybersecurity Experts with NGOs</h1>
         <button className="btn-primary" onClick={() => navigate('/register-volunteer')}>Become a Volunteer</button>
-        <button className="btn-secondary" onClick={() => navigate('/register-ngo')}>Request Help</button>
+        <button className="btn-secondary" onClick={() => navigate('/register-ngo')}>Request Assistance</button>
       </div>
-
       <section>
-        <h2>About Us</h2>
+        <h2>What We Do</h2>
         <p>
-          We connect cybersecurity professionals with non-profits in need of protection.
+          Connecting cybersecurity professionals with nonprofits and small organizations that need protection.
         </p>
       </section>
-
       <section>
         <h2>Our Partners</h2>
         <div className="cards">
