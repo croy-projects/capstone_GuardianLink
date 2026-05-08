@@ -5,6 +5,7 @@ const pool = require('../db');
 const userService = require("./userService");
 const orgService = require("./orgService");
 const volunteerService = require("./volunteerService");
+const emailService = require('../services/emailService');
 
 const login = async (email, password) => {
     let conn;
@@ -57,6 +58,16 @@ const login = async (email, password) => {
     }
 };
 
+const forgotPassword = async (email) => {
+
+    const emailAdmin = process.env.MAIL_ADMIN;
+    const emailUser=email;
+    const subject="Forgot Password";
+    const message=`A password reset request was made for the account associated with: ${emailUser}`;
+
+    await emailService.sendEmail(emailAdmin, subject, message);
+
+};
 const registerNGO = async (data) => {
     let conn;
 
@@ -128,4 +139,4 @@ const registerVolunteer = async (data) => {
 
 };
 
-module.exports = { login, registerNGO, registerVolunteer };
+module.exports = { login, forgotPassword, registerNGO, registerVolunteer };

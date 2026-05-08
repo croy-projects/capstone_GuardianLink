@@ -130,3 +130,27 @@ sudo mysql -u root -p < server/db/seed.sql # import initial data
 ```bash
 npm test
 ```
+
+### Email Server Configuration
+Email Setup
+
+For development environments, use Mailpit as a local email testing tool
+The application uses Nodemailer for sending email
+
+Run Mailpit with Docker
+```bash
+docker run -d --name mailpit -p 1025:1025 -p 8025:8025 axllent/mailpit
+```
+
+Mailpit Web UI  
+http://localhost:8025
+
+Environment Configuration
+
+Set the following values to the server .env file:
+
+MAIL_HOST=localhost
+MAIL_PORT=1025
+MAIL_USER=
+MAIL_PASS=
+MAIL_FROM=GuardianLink <noreply@guardianlink.com>

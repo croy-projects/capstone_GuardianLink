@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { loginUser } from "../services/authService";
+import { loginUser, forgotPassword } from "../services/authService";
 import { ROLES } from "../config/roles";
 import { useAuth } from "./AuthContext";
 import "../styles/login.css";
 
 function Login() {
     const navigate = useNavigate();
-    const adminEmail = import.meta.env.VITE_ADMIN_EMAIL;
+
     const { user, login } = useAuth();
 
     const [form, setForm] = useState({
@@ -17,6 +17,7 @@ function Login() {
     });
 
     const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
     const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
@@ -26,13 +27,23 @@ function Login() {
         });
     };
 
-    const handleForgotPassword = () => {
+    const handleForgotPassword = async (e) => {
+        e.preventDefault();
         setError("");
+        setSuccess("");
         if (!form.email) {
             setError("Please enter your email first");
             return;
         }
-        window.location.href = `mailto:${adminEmail}?subject=GuardianLink Password Reset Request&body=Hello, I need to reset my password. My account email is ${form.email}`;
+        try {
+            await forgotPassword(form);
+            setSuccess("The request has been sent to the admin.");
+        } catch (err) {
+            console.log("err", err);
+            setError('Request failed. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -71,6 +82,7 @@ function Login() {
             <form onSubmit={handleSubmit} className="login-card">
                 <h2>Login</h2>
                 {error && <p className="error">{error}</p>}
+                {success && <p className="success">{success}</p>}
                 <div className="form-group">
                     <label>Email</label>
                     <input

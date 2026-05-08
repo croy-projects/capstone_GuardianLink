@@ -27,6 +27,28 @@ const login = async (req, res) => {
     }
 };
 
+const forgotPassword = async (req, res) => {
+
+    try {
+        const { email } = req.body;
+        //validation
+        if (!email ) {
+            return res.status(400).json({ message: "Missing required field" });
+        }
+
+        // send email to admin
+        await authService.forgotPassword(email);
+
+        //success
+        res.status(200).json({ message: "Request sent"});
+    } catch (err) {
+        console.error("authController.login error:", err);
+
+        res.status(500).json({ error: "Server error" });
+    }
+};
+
+
 const registerNGO = async (req, res, next) => {
     const { name, email, password, confirmPassword, areaOfConcern } = req.body;
     if (!name || !email || !password) {
@@ -50,7 +72,6 @@ const registerNGO = async (req, res, next) => {
         };
 
         const result = await authService.registerNGO(userData);
-
 
         res.status(201).json({
             message: "NGO registered successfully",
@@ -104,4 +125,4 @@ const registerVolunteer = async (req, res, next) => {
     }
 };
 
-module.exports = { login, registerNGO, registerVolunteer };
+module.exports = { login, forgotPassword, registerNGO, registerVolunteer };

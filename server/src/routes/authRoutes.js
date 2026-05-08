@@ -13,4 +13,6 @@ const uploadFields = upload.fields([
 
 router.post("/register-volunteer", uploadFields, authController.registerVolunteer);
 
+router.post("/forgot-password", authController.forgotPassword);
+
 module.exports = router;
