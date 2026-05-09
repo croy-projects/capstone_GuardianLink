@@ -20,6 +20,7 @@ import DashboardNGO from "../pages/DashboardNGO";
 import DashboardVolunteer from "../pages/DashboardVolunteer";
 import VolunteerDetails from "../pages/VolunteerDetails";
 import Profile from "../pages/Profile";
+import ResetPassword from "../pages/ResetPassword";
 
 // Main App component
 function App() {
@@ -67,6 +68,12 @@ function App() {
               <EditUser />
             </ProtectedRoute>
           } />
+          <Route path="/reset-password/:id" element={
+            <ProtectedRoute>
+              <ResetPassword />
+            </ProtectedRoute>
+          } />
+
           <Route path="/profile-user" element={
             <ProtectedRoute>
               <Profile />

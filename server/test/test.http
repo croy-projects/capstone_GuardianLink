@@ -1,1 +1,8 @@
-GET http://localhost:5000/api/test-email
+//GET http://localhost:5000/api/test-email
+
+PUT http://localhost:5000/api/auth/reset-password/29
+Content-Type: application/json
+
+{
+    "password": "test"
+}

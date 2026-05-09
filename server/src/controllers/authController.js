@@ -32,7 +32,7 @@ const forgotPassword = async (req, res) => {
     try {
         const { email } = req.body;
         //validation
-        if (!email ) {
+        if (!email) {
             return res.status(400).json({ message: "Missing required field" });
         }
 
@@ -48,6 +48,32 @@ const forgotPassword = async (req, res) => {
     }
 };
 
+const resetPassword = async (req, res) => {
+    try {
+
+        const { id } = req.params;
+        const password = req.body;
+        //validation
+        if (!id || !password) {
+            return res.status(400).json({
+                message: "User and password are required"
+            });
+        }
+
+        const result = await authService.updatePassword(id, password);
+        if (!result) {
+            return res.status(500).json({ message: "Invalid" });
+        }
+
+        //success
+        res.json(result);
+
+    } catch (err) {
+        console.error("reset Password error:", err);
+
+        res.status(500).json({ error: "Server error" });
+    }
+};
 
 const registerNGO = async (req, res, next) => {
     const { name, email, password, confirmPassword, areaOfConcern } = req.body;
@@ -85,14 +111,14 @@ const registerNGO = async (req, res, next) => {
 };
 
 const registerVolunteer = async (req, res, next) => {
-    
+
     const { name, email, password, confirmPassword, hours } = req.body;
 
     const resumeFile = req.files.resume?.[0];
     const backgroundCheckFile = req.files.backgroundCheck?.[0];
 
     if (!name || !email || !password || !hours) {
-         return next(new AppError("Missing required fields", 400));
+        return next(new AppError("Missing required fields", 400));
     }
 
     if (password !== confirmPassword) {
@@ -125,4 +151,4 @@ const registerVolunteer = async (req, res, next) => {
     }
 };
 
-module.exports = { login, forgotPassword, registerNGO, registerVolunteer };
+module.exports = { login, forgotPassword, resetPassword, registerNGO, registerVolunteer };

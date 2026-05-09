@@ -12,6 +12,14 @@ export const forgotPassword = (form) => {
         body: JSON.stringify(form)
     });
 };
+
+export const resetPassword = (id, password) => {
+    apiRequest(`/auth/reset-password/${id}`, {
+        method: "PUT",
+        body: JSON.stringify({password: password})
+    });
+};
+
 // register NGO
 export const registerNGO = (form) =>
     apiRequest("/auth/register-ngo", {

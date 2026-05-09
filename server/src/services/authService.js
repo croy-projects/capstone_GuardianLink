@@ -61,13 +61,35 @@ const login = async (email, password) => {
 const forgotPassword = async (email) => {
 
     const emailAdmin = process.env.MAIL_ADMIN;
-    const emailUser=email;
-    const subject="Forgot Password";
-    const message=`A password reset request was made for the account associated with: ${emailUser}`;
+    const emailUser = email;
+    const subject = "Forgot Password";
+    const message = `A password reset request was made for the account associated with: ${emailUser}`;
 
     await emailService.sendEmail(emailAdmin, subject, message);
 
 };
+
+const updatePassword = async (userId, password) => {
+    const conn = await pool.getConnection();
+
+    try {
+        const hashedPassword = await bcrypt.hash(password.password, 10);
+
+        const result = await conn.query(
+            `UPDATE users
+        SET password = ?
+        WHERE id = ?`,
+            [hashedPassword, userId]
+        );
+
+        result.insertId = Number(result.insertId);
+        return result;
+
+    } finally {
+        conn.release();
+    }
+};
+
 const registerNGO = async (data) => {
     let conn;
 
@@ -139,4 +161,4 @@ const registerVolunteer = async (data) => {
 
 };
 
-module.exports = { login, forgotPassword, registerNGO, registerVolunteer };
+module.exports = { login, forgotPassword, updatePassword, registerNGO, registerVolunteer };

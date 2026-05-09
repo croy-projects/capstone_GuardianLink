@@ -37,7 +37,7 @@ export default function UsersTable() {
                 <button className="btn-edit" onClick={() => navigate(`/edit-user/${u.id}`)}>
                   Edit
                 </button>
-                <button className="btn-reset">
+                <button className="btn-reset" onClick={() => navigate(`/reset-password/${u.id}`)}>
                   Reset Pass
                 </button>
                 <button className="btn-delete" onClick={() => deleteUser(u.id).then(loadUsers)}>
