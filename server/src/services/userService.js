@@ -24,7 +24,7 @@ const getUserByID = async (id) => {
       SELECT u.id, u.name, u.email, u.role_id, r.name AS role
       FROM users u
       JOIN roles r ON u.role_id = r.id
-      WHERE u.id = ?
+      WHERE u.id = ? 
     `, [id]);
     } finally {
         conn.release();
@@ -65,12 +65,23 @@ const updateUser = async (id, user) => {
     try {
         const { name, email, role_id } = user;
 
-        const result = await conn.query(
-            `UPDATE users
-        SET name = ?, email = ?, role_id = ?
-        WHERE id = ?`,
-            [name, email, role_id, id]
-        );
+        let result;
+        if (role_id) {
+            result = await conn.query(
+                `UPDATE users
+            SET name = ?, email = ?, role_id = ?
+            WHERE id = ?`,
+                [name, email, role_id, id]
+            );
+        } else {
+            result = await conn.query(
+                `UPDATE users
+            SET name = ?, email = ?
+            WHERE id = ?`,
+                [name, email, id]
+            );
+
+        }
 
         return result;
     } finally {
@@ -93,7 +104,7 @@ const getRoles = async () => {
     try {
         return await conn.query(`
       SELECT r.id, r.name AS role
-      FROM roles r
+        FROM roles r
     `);
     } finally {
         conn.release();

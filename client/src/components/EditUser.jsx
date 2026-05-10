@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
+import { useAuth } from "./AuthContext";
 import { getRoles } from "../services/roleService";
 import { getUserById, updateUser } from "../services/userService";
-
+import { ROLES } from "../config/roles";
 function EditUser() {
+
     const navigate = useNavigate();
     const { id } = useParams();
+    const { user } = useAuth();
+    const isAdmin = user.role_id === ROLES.ADMIN;
 
     const [roles, setRoles] = useState([]);
 
@@ -42,9 +46,20 @@ function EditUser() {
         e.preventDefault();
         setError("");
         try {
-            await updateUser(id, form);
+
+            const updateData = {
+                name: form.name,
+                email: form.email
+            }
+            // Only Admin can change role_id
+            if (isAdmin){
+                updateData.role_id = form.role_id;
+            }
+
+            await updateUser(id, updateData);
+
             setSuccess("User updated successfully!");
-            setTimeout(() => navigate("/dashboard-admin"), 1500); // go back to dashboard 
+            setTimeout(() => window.history.length > 1 ? navigate(-1) : navigate("/"), 1500); // go back
         } catch (err) {
             setError('Error updating user');
         }
@@ -54,11 +69,11 @@ function EditUser() {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const user = await getUserById(id);
+                const userDetail = await getUserById(id);
                 setForm({
-                    name: user.name,
-                    email: user.email,
-                    role_id: user.role_id
+                    name: userDetail.name,
+                    email: userDetail.email,
+                    role_id: userDetail.role_id
                 });
             } catch (err) {
                 setError("Unable to load user profile.");
@@ -97,6 +112,7 @@ function EditUser() {
                         value={form.role_id}
                         onChange={handleChange}
                         required
+                        disabled={!isAdmin}
                     >
                         <option value="">Select role</option>
                         {roles.map(role => (

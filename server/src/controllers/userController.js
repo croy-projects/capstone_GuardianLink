@@ -33,6 +33,11 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
     try {
         const { id } = req.params;
+        //Only admins can change roles
+        if (req.user.role_id !== ROLES.ADMIN) {
+            delete req.body.role_id;
+        }
+
         const { name, email, role_id } = req.body;
         await userService.updateUser(id, { name, email, role_id });
         res.status(200).json({ message: 'User updated' });
