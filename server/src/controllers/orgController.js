@@ -1,8 +1,13 @@
 //Controllers = HTTP only
 const orgService = require('../services/orgService');
+const ROLES = require('../config/roles');
 
 const getOrganizations = async (req, res) => {
     try {
+        if (req.user.role_id !== ROLES.ADMIN && req.user.role_id !== ROLES.VOLUNTEER) {
+            return res.status(403).json({ error: "Forbidden" });
+        }
+
         const organizations = await orgService.getOrganizations();
         res.json(organizations);
     } catch (err) {
@@ -12,21 +17,15 @@ const getOrganizations = async (req, res) => {
 
 const getOrgByID = async (req, res) => {
     try {
-        const organization = await orgService.getOrgByID(req.params.id);
+        const { id } = req.params;
+        if (req.user.role_id !== ROLES.ADMIN && req.user.role_id !== ROLES.VOLUNTEER && req.user.id.toString() !== id) {
+            return res.status(403).json({ error: "Forbidden" });
+        }        
+        const organization = await orgService.getOrgByID(id);
         res.json(organization[0]);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 };
 
-const deleteOrganization = async (req, res) => {
-    try {
-        // await userService.deleteUser(req.body);
-        // await orgService.deleteOrganization(req.body);
-        // res.status(400).json({ message: 'Organization deleted' });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
-
-module.exports = { getOrganizations, getOrgByID, deleteOrganization };
+module.exports = { getOrganizations, getOrgByID };

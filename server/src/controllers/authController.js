@@ -53,6 +53,11 @@ const resetPassword = async (req, res) => {
 
         const { id } = req.params;
         const password = req.body;
+
+        if (req.user.role_id !== ROLES.ADMIN && req.user.id.toString() !== id) {
+            return res.status(403).json({ error: "Forbidden" });
+        }
+        
         //validation
         if (!id || !password) {
             return res.status(400).json({

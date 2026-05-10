@@ -9,7 +9,7 @@ function EditUser() {
     const navigate = useNavigate();
     const { id } = useParams();
     const { user } = useAuth();
-    const isAdmin = user.role_id === ROLES.ADMIN;
+    const isAdmin = user?.role_id === ROLES.ADMIN;
 
     const [roles, setRoles] = useState([]);
 

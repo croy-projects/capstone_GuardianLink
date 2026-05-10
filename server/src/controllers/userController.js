@@ -6,6 +6,10 @@ const ROLES = require('../config/roles');
 
 const getUsers = async (req, res) => {
     try {
+        if (req.user.role_id !== ROLES.ADMIN) {
+            return res.status(403).json({ error: "Forbidden" });
+        }
+
         const users = await userService.getUsers();
         res.json(users);
     } catch (err) {
@@ -15,7 +19,12 @@ const getUsers = async (req, res) => {
 
 const getUserByID = async (req, res) => {
     try {
-        const user = await userService.getUserByID(req.params.id);
+        const { id } = req.params;
+
+        if (req.user.role_id !== ROLES.ADMIN && req.user.id.toString() !== id) {
+            return res.status(403).json({ error: "Forbidden" });
+        }
+        const user = await userService.getUserByID(id);
         res.json(user[0]);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -33,6 +42,11 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
     try {
         const { id } = req.params;
+
+        if (req.user.role_id !== ROLES.ADMIN && req.user.id.toString() !== id) {
+            return res.status(403).json({ error: "Forbidden" });
+        }
+
         //Only admins can change roles
         if (req.user.role_id !== ROLES.ADMIN) {
             delete req.body.role_id;
@@ -48,7 +62,13 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
     try {
-        await userService.deleteUser(req.params.id);
+        const { id } = req.params;
+
+        if (req.user.role_id !== ROLES.ADMIN && req.user.id.toString() !== id) {
+            return res.status(403).json({ error: "Forbidden" });
+        }
+
+        await userService.deleteUser(id);
         res.status(200).json({ message: 'User deleted' });
     } catch (err) {
         res.status(500).json({ error: err.message });

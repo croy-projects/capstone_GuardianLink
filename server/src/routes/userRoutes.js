@@ -4,14 +4,15 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const volunteerController = require('../controllers/volunteerController');
 const orgController = require('../controllers/orgController');
+const ROLES = require('../config/roles');
 
-const { authenticate } = require("../middleware/authMiddleware");
+const { authenticate, authorizeRole } = require("../middleware/authMiddleware");
 
 // GET /api/users
-router.get("/", authenticate, userController.getUsers);
+router.get("/", authenticate, authorizeRole(ROLES.ADMIN), userController.getUsers);
 
-router.get("/volunteers", authenticate, volunteerController.getVolunteers);
-router.get("/ngos", authenticate, orgController.getOrganizations);
+router.get("/volunteers", authenticate, authorizeRole(ROLES.ADMIN, ROLES.NGO), volunteerController.getVolunteers);
+router.get("/ngos", authenticate, authorizeRole(ROLES.ADMIN, ROLES.VOLUNTEER), orgController.getOrganizations);
 
 router.get("/profile", authenticate, userController.getProfile);
 

@@ -127,6 +127,7 @@ sudo mysql -u root -p < server/db/seed.sql # import initial data
 
 
 ### Tests (server api)
+Run the following command in the server folder, where Jest is installed and the test is configured in package.json
 ```bash
 npm test
 ```
