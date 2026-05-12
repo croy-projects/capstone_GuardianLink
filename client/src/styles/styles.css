@@ -291,6 +291,7 @@ section {
 /* ================= FORM ================= */
 .form-page {
   padding: 1rem;
+  min-height: calc(100vh - 134px);
 }
 .form-container {
   max-width: 98%;  /* limit width */
