@@ -31,13 +31,76 @@ const getVolunteerByID = async (id) => {
     }
 };
 
-const createVolunteer = async (data, conn) => {
-    const { user_id, hours, resume_filename, background_check_filename } = data;
+const createVolunteer = async (data, connTrx) => {
+    let conn;
+    if (connTrx) {
+        conn = connTrx;
+    } else {
+        conn = await pool.getConnection();
+    }
 
-    await conn.query(
-        'INSERT INTO volunteers (user_id, hours_by_week, resume, background_check) VALUES (?, ?, ?, ?)',
-        [user_id, hours, resume_filename, background_check_filename]
-    );
+    const { user_id, hours_by_week, resume_filename=null, background_check_filename=null } = data;
+
+    try {
+        const res = await conn.query(
+            'INSERT INTO volunteers (user_id, hours_by_week, resume, background_check) VALUES (?, ?, ?, ?)',
+            [user_id, hours_by_week, resume_filename, background_check_filename]
+        );
+    }
+    catch(err){
+        console.log("create vol", err)
+    }
+    finally {
+        if (!connTrx) {
+            conn.release();
+        }
+
+    }
 };
 
-module.exports = { getVolunteers, createVolunteer, getVolunteerByID };
+const updateVolunteer = async (id, data, connTrx) => {
+    let conn;
+    if (connTrx) {
+        conn = connTrx;
+    } else {
+        conn = await pool.getConnection();
+    }
+
+    try {
+        const { hours_by_week } = data;
+
+        const result = await conn.query(
+            `UPDATE volunteers
+            SET hours_by_week = ?
+            WHERE user_id = ?`,
+            [hours_by_week, id]
+        );
+
+    } finally {
+        if (!connTrx) {
+            conn.release();
+        }
+
+    }
+};
+
+const deleteVolunteer = async (id, connTrx) => {
+    let conn;
+    if (connTrx) {
+        conn = connTrx;
+    } else {
+        conn = await pool.getConnection();
+    }
+
+    try {
+        await conn.query('DELETE FROM volunteers WHERE user_id=?', [id]);
+    } finally {
+        if (!connTrx) {
+            conn.release();
+        }
+
+    }
+};
+
+
+module.exports = { getVolunteers, createVolunteer, updateVolunteer, getVolunteerByID, deleteVolunteer };

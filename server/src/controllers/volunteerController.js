@@ -20,8 +20,13 @@ const getVolunteerByID = async (req, res) => {
         const { id } = req.params;
         if (req.user.role_id !== ROLES.ADMIN && req.user.role_id !== ROLES.NGO && req.user.id.toString() !== id) {
             return res.status(403).json({ error: "Forbidden" });
-        }        
+        }
         const user = await volunteerService.getVolunteerByID(id);
+        if (!user.length) {
+            return res.status(404).json({
+                message: "Volunteer not found"
+            });
+        }
         res.json(user[0]);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -40,12 +45,12 @@ const createVolunteer = async (req, res) => {
 const updateVolunteer = async (req, res) => {
     try {
         const { id } = req.params;
-        const { hours } = req.body;
+        const { hours_by_week } = req.body;
 
         if (req.user.role_id !== ROLES.ADMIN && req.user.id.toString() !== id) {
             return res.status(403).json({ error: "Forbidden" });
-        }        
-        await volunteerService.updateVolunteer(id, { hours });
+        }
+        await volunteerService.updateVolunteer(id, { hours_by_week });
         res.status(200).json({ message: 'Volunteer updated' });
     } catch (err) {
         res.status(500).json({ error: err.message });

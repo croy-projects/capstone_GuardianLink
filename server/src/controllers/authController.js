@@ -98,7 +98,7 @@ const registerNGO = async (req, res, next) => {
             name,
             email,
             password,
-            areaOfConcern,
+            area_of_concern: areaOfConcern,
             role_id: ROLES.NGO,
         };
 

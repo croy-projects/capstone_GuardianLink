@@ -146,7 +146,7 @@ function RegisterVolunteer() {
                     <div className="form-group">
                         <label htmlFor="hours">Hours available / Week</label>
                         <input
-                            type="text"
+                            type="number"
                             name="hours"
                             value={form.hours}
                             onChange={handleChange}

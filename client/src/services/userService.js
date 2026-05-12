@@ -10,7 +10,7 @@ export const getVolunteers = () => apiRequest("/users/volunteers");
 export const getVolunteerById = (id) => apiRequest(`/users/volunteers/${id}`);
 
 export const getNGOs = () => apiRequest("/users/ngos");
-export const getNGOById = (id) => apiRequest(`/users/ngo/${id}`);
+export const getNGOById = (id) => apiRequest(`/users/ngos/${id}`);
 
 export const getProfile = () => apiRequest("/users/profile");
 
@@ -30,4 +30,16 @@ export const updateUser = (id, user) =>
 export const deleteUser = (id) =>
   apiRequest(`/users/${id}`, {
     method: "DELETE"
+  });
+
+export const updateNGO = (id, data) =>
+  apiRequest(`/users/ngos/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(data)
+  });
+
+export const updateVolunteer = (id, data) =>
+  apiRequest(`/users/volunteers/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(data)
   });

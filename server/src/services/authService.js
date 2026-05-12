@@ -91,12 +91,9 @@ const updatePassword = async (userId, password) => {
 };
 
 const registerNGO = async (data) => {
-    let conn;
+    const conn = conn = await pool.getConnection();
 
     try {
-
-        conn = await pool.getConnection();
-        await conn.beginTransaction();
 
         // Check existing user
         const existing = await conn.query(
@@ -109,29 +106,18 @@ const registerNGO = async (data) => {
         }
 
         const { userId } = await userService.createUser(data, conn);
-        data.user_id = userId
-
-        await orgService.createOrganization(data, conn);
-
-        await conn.commit();
 
         return { userId };
-
-    } catch (err) {
-        if (conn) await conn.rollback();
-        throw err;
-    } finally {
+    }
+    finally {
         if (conn) conn.release();
     }
 };
 
 const registerVolunteer = async (data) => {
-    let conn;
+    const conn = conn = await pool.getConnection();
 
     try {
-
-        conn = await pool.getConnection();
-        await conn.beginTransaction();
 
         // Check existing user
         const existing = await conn.query(
@@ -143,18 +129,10 @@ const registerVolunteer = async (data) => {
             throw new Error("Email already registered");
         }
 
-        const { userId } = await userService.createUser(data, conn);
-        data.user_id = userId
-
-        await volunteerService.createVolunteer(data, conn);
-
-        await conn.commit();
+        const { userId } = await userService.createUser(data);
 
         return { userId };
 
-    } catch (err) {
-        if (conn) await conn.rollback();
-        throw err;
     } finally {
         if (conn) conn.release();
     }

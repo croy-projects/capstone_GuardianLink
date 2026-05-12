@@ -31,23 +31,75 @@ const getOrgByID = async (id) => {
     }
 };
 
-const createOrganization = async (data, conn) => {
+const createOrganization = async (data, connTrx) => {
+    let conn;
+    if (connTrx) {
+        conn = connTrx;
+    } else {
+        conn = await pool.getConnection();
+    }
 
-    const { user_id, areaOfConcern } = data;
-
-    await conn.query(
-        'INSERT INTO organizations (user_id, area_of_concern) VALUES (?, ?)',
-        [user_id, areaOfConcern]
-    );
-};
-
-const deleteOrganization = async (id) => {
-    const conn = await pool.getConnection();
+    const { user_id, area_of_concern } = data;
     try {
-        await conn.query('DELETE FROM organizations WHERE id=?', [id]);
-    } finally {
-        conn.release();
+        await conn.query(
+            'INSERT INTO organizations (user_id, area_of_concern) VALUES (?, ?)',
+            [user_id, area_of_concern]
+        );
+
+    }
+     catch(err){
+        console.log("create organization error", err)
+    }
+    finally {
+        if (!connTrx) {
+            conn.release();
+        }
+
     }
 };
 
-module.exports = { getOrganizations, getOrgByID, createOrganization, deleteOrganization };
+const updateOrganization = async (id, data, connTrx) => {
+
+    let conn;
+    if (connTrx) {
+        conn = connTrx;
+    } else {
+        conn = await pool.getConnection();
+    }
+
+    try {
+        const { area_of_concern } = data;
+        await conn.query(
+            `UPDATE organizations
+            SET area_of_concern = ?
+            WHERE user_id = ?`,
+            [area_of_concern, id]
+        );
+
+    } finally {
+        if (!connTrx) {
+            conn.release();
+        }
+
+    }
+};
+
+const deleteOrganization = async (id, connTrx) => {
+    let conn;
+    if (connTrx) {
+        conn = connTrx;
+    } else {
+        conn = await pool.getConnection();
+    }
+
+    try {
+        await conn.query('DELETE FROM organizations WHERE user_id=?', [id]);
+    } finally {
+        if (!connTrx) {
+            conn.release();
+        }
+
+    }
+};
+
+module.exports = { getOrganizations, getOrgByID, createOrganization, updateOrganization, deleteOrganization };

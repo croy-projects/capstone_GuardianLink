@@ -43,7 +43,7 @@ app.use(errorHandler);
 
 // Used for handling errors that are not caught by errorHandler
 app.use((err, req, res, next) => {
-  console.error(err);
+  console.error("last error server catch", err);
 
   res.status(500).json({
     success: false,

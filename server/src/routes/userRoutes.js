@@ -27,6 +27,9 @@ router.get("/volunteers/:id", authenticate, volunteerController.getVolunteerByID
 router.get("/ngos/:id", authenticate, orgController.getOrgByID);
 
 router.put("/:id", authenticate, userController.updateUser);
+router.put("/volunteers/:id", authenticate, volunteerController.updateVolunteer);
+router.put("/ngos/:id", authenticate, orgController.updateOrganization);
+
 router.delete("/:id", authenticate, userController.deleteUser);
 
 module.exports = router;

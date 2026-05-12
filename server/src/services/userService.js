@@ -1,6 +1,9 @@
 //Services : logic + DB
 const bcrypt = require('bcrypt');
 const pool = require('../db');
+const ROLES = require('../config/roles');
+const orgService = require("./orgService");
+const volunteerService = require("./volunteerService");
 
 const getUsers = async () => {
     const conn = await pool.getConnection();
@@ -32,40 +35,58 @@ const getUserByID = async (id) => {
 };
 
 
-const createUser = async (user, connTrx) => {
-    let conn;
-    if (connTrx) {
-        conn = connTrx;
-    } else {
-        conn = await pool.getConnection();
-    }
+const createUser = async (user) => {
+    const conn = await pool.getConnection();
+    await conn.beginTransaction();
 
     try {
 
-        const { name, email, role_id, password } = user;
+        const { name, email, role_id, password, hours_by_week, area_of_concern } = user;
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const result = await conn.query(
             'INSERT INTO users (name, email, password, role_id) VALUES (?, ?, ?, ?)',
             [name, email, hashedPassword, role_id]
         );
+        const user_id = Number(result.insertId);
 
-        return { userId: Number(result.insertId) };
-
-    } finally {
-        if (!connTrx) {
-            conn.release();
+        const dataUser = {
+            hours_by_week,
+            area_of_concern,
+            user_id: Number(result.insertId)
         }
+        if (Number(role_id) === ROLES.NGO) {
+            orgService.createOrganization(dataUser, conn);
+        }
+        if (Number(role_id) === ROLES.VOLUNTEER) {
+            volunteerService.createVolunteer(dataUser, conn);
+        }
+
+        await conn.commit();
+
+        return { userId: user_id };
+
+
+    } catch (err) {
+        if (conn) await conn.rollback();
+        throw err;
+    } finally {
+        if (conn) conn.release();
     }
+
 };
 
 const updateUser = async (id, user) => {
     const conn = await pool.getConnection();
 
     try {
-        const { name, email, role_id } = user;
+
+        const { name, email, role_id, old_role_id, hours_by_week, area_of_concern } = user;
 
         let result;
+
+        await conn.beginTransaction();
+
         if (role_id) {
             result = await conn.query(
                 `UPDATE users
@@ -83,10 +104,37 @@ const updateUser = async (id, user) => {
 
         }
 
+        if (old_role_id !== role_id) {
+            if (old_role_id === ROLES.NGO) {
+                orgService.deleteOrganization(id, conn);
+                volunteerService.createVolunteer({ user_id: id, hours_by_week: hours_by_week }, conn);
+            }
+            if (old_role_id === ROLES.VOLUNTEER) {
+                volunteerService.deleteVolunteer(id, conn);
+                orgService.createOrganization({ user_id: id, area_of_concern: area_of_concern }, conn);
+            }
+        } else {
+            if (role_id === ROLES.NGO) {
+                orgService.updateOrganization(id, { user_id: id, area_of_concern: area_of_concern }, conn);
+            }
+            if (role_id === ROLES.VOLUNTEER) {
+                volunteerService.updateVolunteer(id, { user_id: id, hours_by_week: hours_by_week }, conn);
+            }
+
+        }
+
+
+        await conn.commit();
+
         return result;
+
+    } catch (err) {
+        if (conn) await conn.rollback();
+        throw err;
     } finally {
-        conn.release();
+        if (conn) conn.release();
     }
+
 };
 
 const deleteUser = async (id) => {

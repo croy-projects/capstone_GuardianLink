@@ -2,22 +2,28 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from "./AuthContext";
 import { getRoles } from "../services/roleService";
-import { getUserById, updateUser } from "../services/userService";
+import { getUserById, updateUser, getVolunteerById, getNGOById } from "../services/userService";
 import { ROLES } from "../config/roles";
 function EditUser() {
 
     const navigate = useNavigate();
     const { id } = useParams();
     const { user } = useAuth();
-    const isAdmin = user?.role_id === ROLES.ADMIN;
 
     const [roles, setRoles] = useState([]);
+    const [originalRole, setOriginalRole] = useState(null);
 
     const [form, setForm] = useState({
         name: '',
         role_id: '',
-        email: ''
+        email: '',
+        hours_by_week: '',
+        area_of_concern: ''
     });
+
+    const isAdmin = user?.role_id === ROLES.ADMIN;
+    const isVolunteer = Number(form.role_id) === ROLES.VOLUNTEER;
+    const isNGO = Number(form.role_id) === ROLES.NGO;
 
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
@@ -49,10 +55,15 @@ function EditUser() {
 
             const updateData = {
                 name: form.name,
-                email: form.email
+                email: form.email,
+                role_id: user.role_id,
+                hours_by_week: Number(form.hours_by_week),
+                area_of_concern: form.area_of_concern,
+                old_role_id: originalRole
             }
+
             // Only Admin can change role_id
-            if (isAdmin){
+            if (isAdmin) {
                 updateData.role_id = form.role_id;
             }
 
@@ -70,12 +81,38 @@ function EditUser() {
         const fetchUser = async () => {
             try {
                 const userDetail = await getUserById(id);
+
+                let extraData = {};
+                if (Number(userDetail.role_id) === ROLES.NGO) {
+                    const ngoData = await getNGOById(id);
+                    if (ngoData) {
+                        extraData = {
+                            area_of_concern:
+                                ngoData.area_of_concern || ""
+                        };
+
+                    }
+                }
+
+                if (Number(userDetail.role_id) === ROLES.VOLUNTEER) {
+                    const volunteerData = await getVolunteerById(id);
+                    extraData = {
+                        hours_by_week: volunteerData.hours_by_week || ""
+                    };
+                }
                 setForm({
                     name: userDetail.name,
                     email: userDetail.email,
-                    role_id: userDetail.role_id
+                    role_id: userDetail.role_id,
+                    hours_by_week: "",
+                    area_of_concern: "",
+                    ...extraData
                 });
+
+                setOriginalRole(userDetail.role_id);
+
             } catch (err) {
+                console.log("fetch user err", err);
                 setError("Unable to load user profile.");
                 return;
 
@@ -85,7 +122,7 @@ function EditUser() {
         };
 
         fetchUser();
-    }, [id, navigate]);
+    }, [id]);
 
     if (loading) return <p>Loading...</p>;
 
@@ -132,6 +169,32 @@ function EditUser() {
                         required
                     />
                 </div>
+                {isVolunteer && (
+                    <>
+                        <div className="form-group">
+                            <label htmlFor="hours_by_week">Hours Available / Week</label>
+                            <input
+                                type="number"
+                                name="hours_by_week"
+                                placeholder="Hours"
+                                value={form.hours_by_week}
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                    </>
+                )}
+                {isNGO && (
+                    <div className="form-group">
+                        <label htmlFor="area_of_concern">Area of Concern</label>
+                        <textarea
+                            name="area_of_concern"
+                            placeholder="Area of Concern"
+                            value={form.area_of_concern}
+                            onChange={handleChange}
+                        />
+                    </div>
+                )}
                 <div className="form-actions">
                     <button type="button" className="btn-action" onClick={() => window.history.length > 1 ? navigate(-1) : navigate("/")}>
                         Cancel
