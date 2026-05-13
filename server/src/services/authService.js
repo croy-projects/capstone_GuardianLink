@@ -91,7 +91,7 @@ const updatePassword = async (userId, password) => {
 };
 
 const registerNGO = async (data) => {
-    const conn = conn = await pool.getConnection();
+    const conn = await pool.getConnection();
 
     try {
 
@@ -115,7 +115,7 @@ const registerNGO = async (data) => {
 };
 
 const registerVolunteer = async (data) => {
-    const conn = conn = await pool.getConnection();
+    const conn = await pool.getConnection();
 
     try {
 

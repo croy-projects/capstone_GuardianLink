@@ -1,3 +1,6 @@
+const validator = require('validator');
+const sanitizeHtml = require('sanitize-html');
+
 const authService = require('../services/authService');
 const ROLES = require('../config/roles');
 const AppError = require('../errors/AppError');
@@ -40,7 +43,7 @@ const forgotPassword = async (req, res) => {
         await authService.forgotPassword(email);
 
         //success
-        res.status(200).json({ message: "Request sent"});
+        res.status(200).json({ message: "Request sent" });
     } catch (err) {
         console.error("authController.login error:", err);
 
@@ -57,7 +60,7 @@ const resetPassword = async (req, res) => {
         if (req.user.role_id !== ROLES.ADMIN && req.user.id.toString() !== id) {
             return res.status(403).json({ error: "Forbidden" });
         }
-        
+
         //validation
         if (!id || !password) {
             return res.status(400).json({
@@ -81,28 +84,43 @@ const resetPassword = async (req, res) => {
 };
 
 const registerNGO = async (req, res, next) => {
+
     const { name, email, password, confirmPassword, areaOfConcern } = req.body;
+
+
     if (!name || !email || !password) {
         return res.status(400).json({ message: "Missing required fields" });
     }
 
+    if (name.length > 255) {
+        return res.status(400).json({ message: "Name too long" });
+    }
     if (password !== confirmPassword) {
         return res.status(400).json({
             message: "Passwords do not match",
         });
     }
+    // Password checks (dont't sanitize to not change the value)
+    if (password.length < 6) {
+        return res.status(400).json({ error: "Password too short" });
+    }
+
+    // validate email
+    if (!validator.isEmail(email.trim())) {
+        return res.status(400).json({ error: "Invalid email" });
+    }
+
+    const cleanData = {
+        name: sanitizeHtml(name.trim()),
+        email: email.trim(),
+        password,
+        area_of_concern: sanitizeHtml(areaOfConcern),
+        role_id: ROLES.NGO,
+    };
 
     try {
 
-        const userData = {
-            name,
-            email,
-            password,
-            area_of_concern: areaOfConcern,
-            role_id: ROLES.NGO,
-        };
-
-        const result = await authService.registerNGO(userData);
+        const result = await authService.registerNGO(cleanData);
 
         res.status(201).json({
             message: "NGO registered successfully",
@@ -119,31 +137,47 @@ const registerVolunteer = async (req, res, next) => {
 
     const { name, email, password, confirmPassword, hours } = req.body;
 
-    const resumeFile = req.files.resume?.[0];
-    const backgroundCheckFile = req.files.backgroundCheck?.[0];
+    const resumeFile = req.files.resume?.[0] ?? null;// ?? converts only undefined or null to null
+    const backgroundCheckFile = req.files.backgroundCheck?.[0] ?? null;
+
 
     if (!name || !email || !password || !hours) {
         return next(new AppError("Missing required fields", 400));
+    }
+
+    if (name.length > 255) {
+        return res.status(400).json({ message: "Name too long" });
     }
 
     if (password !== confirmPassword) {
         return next(new AppError("Passwords do not match", 400));
     }
 
-    try {
+    // Password checks (dont't sanitize to not change the value)
+    if (password.length < 6) {
+        return res.status(400).json({ error: "Password too short" });
+    }
 
-        const userData = {
-            name,
-            email,
+    // validate email
+    if (!validator.isEmail(email.trim())) {
+        return res.status(400).json({ error: "Invalid email" });
+    }
+
+    try {
+        
+        const cleanData = {
+            name: sanitizeHtml(name.trim()),
+            email: email.trim(),
             password,
-            hours,
+            hours_by_week: parseInt(hours),
             role_id: ROLES.VOLUNTEER,
-            resume_filename: resumeFile.filename,
-            background_check_filename: backgroundCheckFile.filename
+            resume_filename: resumeFile ? resumeFile.filename : null,
+            background_check_filename: backgroundCheckFile ? backgroundCheckFile.filename : null
+
         };
 
-        const result = await authService.registerVolunteer(userData);
 
+        const result = await authService.registerVolunteer(cleanData);
 
         res.status(201).json({
             message: "Volunteer registered successfully",

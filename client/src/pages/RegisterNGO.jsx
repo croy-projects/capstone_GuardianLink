@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { validateEmail, validatePassword } from "../utils/validation";
 import { registerNGO } from "../services/authService";
 import "../styles/register.css";
 
@@ -27,13 +29,21 @@ function RegisterNGO() {
             return "Please fill in all required fields";
         }
 
-        if (form.password.length < 6) {
-            return "Password must be at least 6 characters";
+        if (form.name.length > 255){
+            return "Name too long";
         }
+
+        const emailError = validateEmail(form.email);
+        if (emailError) return emailError;
+
+        const passwordError = validatePassword(form.password);
+        if (passwordError) return passwordError;
+
 
         if (form.password !== form.confirmPassword) {
             return "Passwords do not match";
         }
+
         return null;
     };
 
@@ -101,7 +111,7 @@ function RegisterNGO() {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="areaOfConcern">Area of Concern</label>
+                        <label htmlFor="areaOfConcern">Area of Concern *</label>
                         <textarea
                             type="text"
                             name="areaOfConcern"

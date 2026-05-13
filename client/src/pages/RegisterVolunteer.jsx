@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { validateEmail, validatePassword } from "../utils/validation";
 import { registerVolunteer } from "../services/authService";
 import "../styles/register.css";
 
@@ -21,6 +23,7 @@ function RegisterVolunteer() {
     const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
+
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
@@ -29,9 +32,15 @@ function RegisterVolunteer() {
             return "Please fill in all required fields";
         }
 
-        if (form.password.length < 6) {
-            return "Password must be at least 6 characters";
+        if (form.name.length > 255) {
+            return "Name too long";
         }
+
+        const emailError = validateEmail(form.email);
+        if (emailError) return emailError;
+
+        const passwordError = validatePassword(form.password);
+        if (passwordError) return passwordError;
 
         if (form.password !== form.confirmPassword) {
             return "Passwords do not match";
@@ -144,7 +153,7 @@ function RegisterVolunteer() {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="hours">Hours available / Week</label>
+                        <label htmlFor="hours">Hours available / Week *</label>
                         <input
                             type="number"
                             name="hours"
