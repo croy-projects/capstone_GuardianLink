@@ -89,25 +89,24 @@ const registerNGO = async (req, res, next) => {
 
 
     if (!name || !email || !password) {
-        return res.status(400).json({ message: "Missing required fields" });
+        return next(new AppError("Missing required fields", 400));
     }
 
     if (name.length > 255) {
-        return res.status(400).json({ message: "Name too long" });
+        return next(new AppError("Name too long", 400));
     }
+
     if (password !== confirmPassword) {
-        return res.status(400).json({
-            message: "Passwords do not match",
-        });
+        return next(new AppError("Passwords do not match", 400));
     }
     // Password checks (dont't sanitize to not change the value)
     if (password.length < 6) {
-        return res.status(400).json({ error: "Password too short" });
+        return next(new AppError("Password too short", 400));
     }
 
     // validate email
     if (!validator.isEmail(email.trim())) {
-        return res.status(400).json({ error: "Invalid email" });
+        return next(new AppError("Invalid email", 400));
     }
 
     const cleanData = {
@@ -128,9 +127,20 @@ const registerNGO = async (req, res, next) => {
         });
 
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: "Server error" });
+        next(err);
     }
+};
+
+
+const validateHours = (hours) => {
+
+    const num = Number(hours);
+
+    if (isNaN(num)) return "Hours must be a number";
+    if (!Number.isInteger(num)) return "Hours must be an integer";
+    if (num < 1 || num > 100) return "Hours must be between 1 and 100";
+
+    return null;
 };
 
 const registerVolunteer = async (req, res, next) => {
@@ -146,7 +156,7 @@ const registerVolunteer = async (req, res, next) => {
     }
 
     if (name.length > 255) {
-        return res.status(400).json({ message: "Name too long" });
+        return next(new AppError("Name too long", 400));
     }
 
     if (password !== confirmPassword) {
@@ -155,16 +165,21 @@ const registerVolunteer = async (req, res, next) => {
 
     // Password checks (dont't sanitize to not change the value)
     if (password.length < 6) {
-        return res.status(400).json({ error: "Password too short" });
+        return next(new AppError("Password too short", 400));
     }
 
     // validate email
     if (!validator.isEmail(email.trim())) {
-        return res.status(400).json({ error: "Invalid email" });
+        return next(new AppError("Invalid email", 400));
     }
 
+    const error = validateHours(hours);
+    if (error) return next(new AppError(error, 400));
+
+
+
     try {
-        
+
         const cleanData = {
             name: sanitizeHtml(name.trim()),
             email: email.trim(),

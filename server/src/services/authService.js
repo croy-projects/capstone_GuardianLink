@@ -6,6 +6,7 @@ const userService = require("./userService");
 const orgService = require("./orgService");
 const volunteerService = require("./volunteerService");
 const emailService = require('../services/emailService');
+const AppError = require('../errors/AppError');
 
 const login = async (email, password) => {
     let conn;
@@ -102,7 +103,7 @@ const registerNGO = async (data) => {
         );
 
         if (existing.length > 0) {
-            throw new Error("Email already registered");
+            throw new AppError("Email already registered", 400);
         }
 
         const { userId } = await userService.createUser(data, conn);
@@ -126,7 +127,7 @@ const registerVolunteer = async (data) => {
         );
 
         if (existing.length > 0) {
-            throw new Error("Email already registered");
+            throw new AppError("Email already registered", 400);
         }
 
         const { userId } = await userService.createUser(data);
