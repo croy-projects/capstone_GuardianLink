@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -9,15 +10,19 @@ const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
 const errorHandler = require('./middleware/errorMiddleware');
 
+
 // Create Express app
 const app = express();
 const path = require("path");
+
+// set HTTP security headers to protect app
+app.use(helmet());
 
 //enable static file access
 // add security TODO
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
-// Enable CORS so React frontend can talk to backend
+// Enable CORS (Cross-Origin Resource Sharing) so React frontend can talk to backend
 app.use(cors());
 
 // Parse incoming JSON requests
