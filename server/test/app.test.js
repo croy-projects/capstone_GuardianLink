@@ -14,14 +14,14 @@ jest.mock('../src/db', () => ({
 const mockConn = {
     beginTransaction: jest.fn().mockResolvedValue(true),
     commit: jest.fn().mockResolvedValue(true),
-    rollback: jest.fn().mockResolvedValue(true),    
+    rollback: jest.fn().mockResolvedValue(true),
     query: jest.fn(),
     release: jest.fn()
 };
 
 
 process.env.JWT_SECRET = 'testsecret';
-const token = jwt.sign({ id: 1, role_id:1 }, process.env.JWT_SECRET);
+const token = jwt.sign({ id: 1, role_id: 1 }, process.env.JWT_SECRET);
 
 // reset before each test
 beforeEach(() => {
@@ -39,64 +39,64 @@ test('GET /api/test should return message : "API test routes is working"', async
 
 // // roles
 // // no token
-// test('GET /api/users/roles no token', async () => {
-//   const res = await request(app).get('/api/users/roles');
+test('GET /api/users/roles no token', async () => {
+    const res = await request(app).get('/api/users/roles');
 
-//   expect(res.statusCode).toBe(401);
-// });
+    expect(res.statusCode).toBe(401);
+});
 
-// // valid token
-// test('GET /api/users/roles should succeed with valid token', async () => {
+// valid token
+test('GET /api/users/roles should succeed with valid token', async () => {
 
-//     mockConn.query.mockResolvedValue([{ id: 1, name: 'Test' }]);
+    mockConn.query.mockResolvedValue([{ id: 1, name: 'Test' }]);
 
-//     const res = await request(app)
-//         .get('/api/users/roles')
-//         .set('Authorization', `Bearer ${token}`);
-    
-//     expect(res.statusCode).toBe(200);
-//     expect(res.body).toEqual([{ id: 1, name: 'Test' }]);
-// });
+    const res = await request(app)
+        .get('/api/users/roles')
+        .set('Authorization', `Bearer ${token}`);
 
-// // users
-// // no token
-// test('GET /api/users no token', async () => {
-//   const res = await request(app).get('/api/users');
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toEqual([{ id: 1, name: 'Test' }]);
+});
 
-//   expect(res.statusCode).toBe(401);
-// });
+// users
+// no token
+test('GET /api/users no token', async () => {
+    const res = await request(app).get('/api/users');
 
-// // valide token
-// test('GET /api/users should return ok', async () => {
+    expect(res.statusCode).toBe(401);
+});
 
-//     mockConn.query.mockResolvedValue([{ id: 1, name: 'Test' }]);
+// valide token
+test('GET /api/users should return ok', async () => {
 
-//     const res = await request(app)
-//             .get('/api/users')
-//             .set('Authorization', `Bearer ${token}`);
+    mockConn.query.mockResolvedValue([{ id: 1, name: 'Test' }]);
 
-//     expect(res.statusCode).toBe(200);
-//     expect(res.body).toEqual([{ id: 1, name: 'Test' }]);
+    const res = await request(app)
+        .get('/api/users')
+        .set('Authorization', `Bearer ${token}`);
 
-// });
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toEqual([{ id: 1, name: 'Test' }]);
+
+});
 
 // // get one user
 
 // no token
 test('GET /api/users/1 no token', async () => {
-  const res = await request(app).get('/api/users/1');
+    const res = await request(app).get('/api/users/1');
 
-  expect(res.statusCode).toBe(401);
+    expect(res.statusCode).toBe(401);
 });
 
 // valide token
 test('GET /api/users/2 should return ok', async () => {
 
-    mockConn.query.mockResolvedValue([{ id: 2, name: 'Test', role_id:2 }]);
+    mockConn.query.mockResolvedValue([{ id: 2, name: 'Test', role_id: 2 }]);
 
     const res = await request(app)
-            .get('/api/users/2')
-            .set('Authorization', `Bearer ${token}`);
+        .get('/api/users/2')
+        .set('Authorization', `Bearer ${token}`);
 
 
     expect(res.statusCode).toBe(200);
@@ -104,132 +104,131 @@ test('GET /api/users/2 should return ok', async () => {
 
 });
 
-// //create
-// // no token
-// test('POST /api/users no token', async () => {
-//   const res = await request(app).post('/api/users');
+//create
+// no token
+test('POST /api/users no token', async () => {
+    const res = await request(app).post('/api/users');
 
-//   expect(res.statusCode).toBe(401);
-// });
+    expect(res.statusCode).toBe(401);
+});
 
-// // valide token
-// test('POST /api/users should create user', async () => {
-//     mockConn.query.mockResolvedValue({ insertId: 1 });
+// valide token
+test('POST /api/users should create user', async () => {
+    mockConn.query.mockResolvedValue({ insertId: 1 });
 
-//     const res = await request(app)
-//         .post('/api/users')
-//         .set('Authorization', `Bearer ${token}`)
-//         .send({ name: 'John', password: '123456' });
+    const res = await request(app)
+        .post('/api/users')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ name: 'John', password: '123456' });
 
-//     // console.log(res.statusCode);
-//     // console.log("body", res.body);
-//     expect(res.statusCode).toBe(201);
-//     expect(res.body).toEqual({ message: 'User created' });
-// });
+    // console.log(res.statusCode);
+    // console.log("body", res.body);
+    expect(res.statusCode).toBe(201);
+    expect(res.body).toEqual({ message: 'User created' });
+});
 
-// //update
-// // no token
-// test('PUT /api/users no token', async () => {
-//   const res = await request(app).put('/api/users/1');
+//update
+// no token
+test('PUT /api/users no token', async () => {
+    const res = await request(app).put('/api/users/1');
 
-//   expect(res.statusCode).toBe(401);
-// });
+    expect(res.statusCode).toBe(401);
+});
 
-// // valide token
-// test('PUT /api/users/:id should update user', async () => {
-//     mockConn.query.mockResolvedValue({ affectedRows: 1 });
+// valide token
+test('PUT /api/users/:id should update user', async () => {
+    mockConn.query.mockResolvedValue({ affectedRows: 1 });
 
-//     const res = await request(app)
-//         .put('/api/users/1')
-//         .set('Authorization', `Bearer ${token}`)
-//         .send({ name: 'Updated' });
+    const res = await request(app)
+        .put('/api/users/1')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ name: 'Updated' });
 
-//     // console.log(res.statusCode);
-//     // console.log("body", res.body);
-//     expect(res.statusCode).toBe(200);
-//     expect(res.body).toEqual({ message: 'User updated' });
-// });
-
-
-// //delete 
-// // no token
-// test('DELETE /api/users/1 no token', async () => {
-//   const res = await request(app).delete('/api/users/1');
-
-//   expect(res.statusCode).toBe(401);
-// });
-
-// //valid token
-// test('DELETE /api/users/:id should delete user', async () => {
-//     mockConn.query.mockResolvedValue({ affectedRows: 1 });
-
-//     const res = await request(app)
-//         .delete('/api/users/1')
-//         .set('Authorization', `Bearer ${token}`);
-
-//     expect(res.statusCode).toBe(200);
-//     expect(res.body.message).toBe('User deleted');
-// });
+    // console.log(res.statusCode);
+    // console.log("body", res.body);
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toEqual({ message: 'User updated' });
+});
 
 
-// // Register NGO
-// // Missing required fields
-// test('POST /api/auth/register-ngo should not register ngo missing required fields', async () => {
-//     //mockConn.query.mockResolvedValue({ insertId: 0 });
+//delete 
+// no token
+test('DELETE /api/users/1 no token', async () => {
+    const res = await request(app).delete('/api/users/1');
 
-//     const res = await request(app)
-//         .post('/api/auth/register-ngo')
-//         .send({ name: '', email: 'ngotest@email.com', areaOfConcern: null, password: '123456' , confirmPassword: '123456'});
+    expect(res.statusCode).toBe(401);
+});
 
-//      console.log(res.statusCode);
-//      console.log("body", res.body);
-//     expect(res.statusCode).toBe(400);
-//     expect(res.body).toEqual({ message: 'Missing required fields' });
-// });
+//valid token
+test('DELETE /api/users/:id should delete user', async () => {
+    mockConn.query.mockResolvedValue({ affectedRows: 1 });
 
-// // Passwords do not match
-// test('POST /api/auth/register-ngo should not register passwords do not match', async () => {
-//     mockConn.query.mockResolvedValue({ insertId: 1 });
+    const res = await request(app)
+        .delete('/api/users/1')
+        .set('Authorization', `Bearer ${token}`);
 
-//     const res = await request(app)
-//         .post('/api/auth/register-ngo')
-//         .send({ name: 'ngotest', email: 'ngotest@email.com', areaOfConcern: 'test', password: '123456' , confirmPassword: '123d456'});
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toBe('User deleted');
+});
 
-//      console.log(res.statusCode);
-//      console.log("body", res.body);
-//     expect(res.statusCode).toBe(400);
-//     expect(res.body).toEqual( { message: 'Passwords do not match' });
-// });
 
-// test('POST /api/auth/register-ngo should register ngo', async () => {
-//     mockConn.query.mockResolvedValue({ insertId: 1 });
+// Register NGO
+// Missing required fields
+test('POST /api/auth/register-ngo should not register ngo missing required fields', async () => {
+    //mockConn.query.mockResolvedValue({ insertId: 0 });
 
-//     const res = await request(app)
-//         .post('/api/auth/register-ngo')
-//         .send({ name: 'ngotest', email: 'ngotest@email.com', areaOfConcern:'test', password: '123456' , confirmPassword: '123456'});
+    const res = await request(app)
+        .post('/api/auth/register-ngo')
+        .send({ name: '', email: 'ngotest@email.com', areaOfConcern: 'test', password: '123456', confirmPassword: '123456' });
 
-//      console.log(res.statusCode);
-//      console.log("body", res.body);
-//     expect(res.statusCode).toBe(201);
-//     expect(res.body).toEqual({ message: 'NGO registered successfully', userId: 1 });
-// });
+    console.log(res.statusCode);
+    expect(res.statusCode).toBe(400);
+    expect(res.body.errors.name).toEqual('Name is required');
+});
 
-// // Register Volunteer
-// // Missing required fields
+// Passwords do not match
+test('POST /api/auth/register-ngo should not register passwords do not match', async () => {
+    mockConn.query.mockResolvedValue({ insertId: 1 });
+
+    const res = await request(app)
+        .post('/api/auth/register-ngo')
+        .send({ name: 'ngotest', email: 'ngotest@email.com', areaOfConcern: 'test', password: '123456', confirmPassword: '123d456' });
+
+    console.log(res.statusCode);
+    expect(res.statusCode).toBe(400);
+    expect(res.body.errors.confirmPassword).toEqual('Passwords do not match');
+});
+
+test('POST /api/auth/register-ngo should register ngo', async () => {
+    mockConn.query.mockResolvedValue({ insertId: 1 });
+
+    const res = await request(app)
+        .post('/api/auth/register-ngo')
+        .send({ name: 'ngotest', email: 'ngotest@email.com', areaOfConcern: 'test', password: '123456', confirmPassword: '123456' });
+
+    console.log(res.statusCode);
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body).toEqual({ message: 'NGO registered successfully', userId: 1 });
+});
+
+// Register Volunteer
+// Missing required fields
 // test('POST /api/auth/register-volunteer should not register volunteer missing required fields', async () => {
 //     //mockConn.query.mockResolvedValue({ insertId: 0 });
 
+
 //     const res = await request(app)
 //         .post('/api/auth/register-volunteer')
-//         .send({ name: 'voltest', email: 'voltest@email.com', hours: '', password: '123456' , confirmPassword: '123456'});
+//         .send({ name: 'voltest', email: 'voltest@email.com', hours: 1, password: '123456' , confirmPassword: '123456', resume:null},  files: {});
 
 //      console.log(res.statusCode);
-//      console.log("body", res.body);
+
 //     expect(res.statusCode).toBe(400);
 //     expect(res.body).toEqual({ message: 'Missing required fields' });
 // });
 
-// // Passwords do not match
+// Passwords do not match
 // test('POST /api/auth/register-volunteer should not register volunteer passwords do not match', async () => {
 //     mockConn.query.mockResolvedValue({ insertId: 1 });
 
@@ -238,7 +237,6 @@ test('GET /api/users/2 should return ok', async () => {
 //         .send({ name: 'voltest', email: 'voltest@email.com', hours:2, password: '123456' , confirmPassword: '123d456'});
 
 //      console.log(res.statusCode);
-//      console.log("body", res.body);
 //     expect(res.statusCode).toBe(400);
 //     expect(res.body).toEqual( { message: 'Passwords do not match' });
 // });

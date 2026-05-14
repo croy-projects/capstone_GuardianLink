@@ -1,24 +1,21 @@
-const validator = require('validator');
-const sanitizeHtml = require('sanitize-html');
+const { validateVolunteer, validateNGO } = require("../utils/validation");
 
 const authService = require('../services/authService');
 const ROLES = require('../config/roles');
 const AppError = require('../errors/AppError');
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
 
     try {
         const { email, password } = req.body;
         //validation
         if (!email || !password) {
-            return res.status(400).json({
-                message: "Email and password are required"
-            });
+            return next(new AppError("Email and password are required", 400));
         }
 
         const result = await authService.login(email, password);
         if (!result) {
-            return res.status(401).json({ message: "Invalid credentials" });
+            return next(new AppError("Invalid credentials", 401));
         }
 
         //success
@@ -30,13 +27,13 @@ const login = async (req, res) => {
     }
 };
 
-const forgotPassword = async (req, res) => {
+const forgotPassword = async (req, res, next) => {
 
     try {
         const { email } = req.body;
         //validation
         if (!email) {
-            return res.status(400).json({ message: "Missing required field" });
+            return next(new AppError("Missing required field", 400));
         }
 
         // send email to admin
@@ -87,35 +84,22 @@ const registerNGO = async (req, res, next) => {
 
     const { name, email, password, confirmPassword, areaOfConcern } = req.body;
 
-
-    if (!name || !email || !password) {
-        return next(new AppError("Missing required fields", 400));
-    }
-
-    if (name.length > 255) {
-        return next(new AppError("Name too long", 400));
-    }
-
-    if (password !== confirmPassword) {
-        return next(new AppError("Passwords do not match", 400));
-    }
-    // Password checks (dont't sanitize to not change the value)
-    if (password.length < 6) {
-        return next(new AppError("Password too short", 400));
-    }
-
-    // validate email
-    if (!validator.isEmail(email.trim())) {
-        return next(new AppError("Invalid email", 400));
-    }
-
-    const cleanData = {
-        name: sanitizeHtml(name.trim()),
-        email: email.trim(),
+    const userData = {
+        name,
+        email,
         password,
-        area_of_concern: sanitizeHtml(areaOfConcern),
-        role_id: ROLES.NGO,
+        confirmPassword,
+        areaOfConcern
     };
+
+    const { errors, cleanData } = validateNGO(userData);
+
+    if (Object.keys(errors).length > 0) {
+        const message = Object.values(errors).join(", ");
+        const error = new AppError(message, 400);
+        error.errors = errors;
+        return next(error);
+    }
 
     try {
 
@@ -132,65 +116,34 @@ const registerNGO = async (req, res, next) => {
 };
 
 
-const validateHours = (hours) => {
-
-    const num = Number(hours);
-
-    if (isNaN(num)) return "Hours must be a number";
-    if (!Number.isInteger(num)) return "Hours must be an integer";
-    if (num < 1 || num > 100) return "Hours must be between 1 and 100";
-
-    return null;
-};
-
 const registerVolunteer = async (req, res, next) => {
 
     const { name, email, password, confirmPassword, hours } = req.body;
 
+    const userData = {
+        name,
+        email,
+        password,
+        confirmPassword,
+        hours
+    };
+    console.log("req.files", req.files);
     const resumeFile = req.files.resume?.[0] ?? null;// ?? converts only undefined or null to null
     const backgroundCheckFile = req.files.backgroundCheck?.[0] ?? null;
 
+    const { errors, cleanData } = validateVolunteer(userData);
 
-    if (!name || !email || !password || !hours) {
-        return next(new AppError("Missing required fields", 400));
+    cleanData.resume_filename = resumeFile ? resumeFile.filename : null;
+    cleanData.background_check_filename = backgroundCheckFile ? backgroundCheckFile.filename : null;
+
+    if (Object.keys(errors).length > 0) {
+        const message = Object.values(errors).join(", ");
+        const error = new AppError(message, 400);
+        error.errors = errors;
+        return next(error);
     }
-
-    if (name.length > 255) {
-        return next(new AppError("Name too long", 400));
-    }
-
-    if (password !== confirmPassword) {
-        return next(new AppError("Passwords do not match", 400));
-    }
-
-    // Password checks (dont't sanitize to not change the value)
-    if (password.length < 6) {
-        return next(new AppError("Password too short", 400));
-    }
-
-    // validate email
-    if (!validator.isEmail(email.trim())) {
-        return next(new AppError("Invalid email", 400));
-    }
-
-    const error = validateHours(hours);
-    if (error) return next(new AppError(error, 400));
-
-
 
     try {
-
-        const cleanData = {
-            name: sanitizeHtml(name.trim()),
-            email: email.trim(),
-            password,
-            hours_by_week: parseInt(hours),
-            role_id: ROLES.VOLUNTEER,
-            resume_filename: resumeFile ? resumeFile.filename : null,
-            background_check_filename: backgroundCheckFile ? backgroundCheckFile.filename : null
-
-        };
-
 
         const result = await authService.registerVolunteer(cleanData);
 

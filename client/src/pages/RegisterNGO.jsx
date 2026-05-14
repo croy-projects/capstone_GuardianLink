@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { validateEmail, validatePassword } from "../utils/validation";
+import { validateEmail, validatePassword, validateName } from "../utils/validation";
 import { registerNGO } from "../services/authService";
 import "../styles/register.css";
 
@@ -29,9 +29,8 @@ function RegisterNGO() {
             return "Please fill in all required fields";
         }
 
-        if (form.name.length > 255){
-            return "Name too long";
-        }
+        const nameError = validateName(form.name);
+        if (nameError) return nameError;
 
         const emailError = validateEmail(form.email);
         if (emailError) return emailError;
@@ -39,9 +38,14 @@ function RegisterNGO() {
         const passwordError = validatePassword(form.password);
         if (passwordError) return passwordError;
 
-
         if (form.password !== form.confirmPassword) {
             return "Passwords do not match";
+        }
+
+        if (!form.areaOfConcern || form.areaOfConcern.trim() === "") return "Area of Concern is required";
+
+        if (form.areaOfConcern.length > 5000) {
+            return "Area of Concern : text is too long";
         }
 
         return null;
@@ -59,9 +63,20 @@ function RegisterNGO() {
 
         setLoading(true);
 
-        await registerNGO(form);
-        setSuccess("NGO registered successfully!");
-        setTimeout(() => navigate("/login"), 1500); // go back to login 
+        try {
+            await registerNGO(form);
+            setSuccess("NGO registered successfully!");
+            setTimeout(() => navigate("/login"), 1500); // go back to login 
+        } catch (err) {
+            //extract backend error message safely
+            const message =
+                err.message ||
+                "Registration failed";// generic error
+            setError(message);
+        } finally {
+            setLoading(false);
+        }
+
 
     };
 

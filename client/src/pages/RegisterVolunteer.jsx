@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { validateEmail, validatePassword } from "../utils/validation";
+import { validateEmail, validatePassword, validateName } from "../utils/validation";
 import { registerVolunteer } from "../services/authService";
 import "../styles/register.css";
 
@@ -31,10 +31,8 @@ function RegisterVolunteer() {
         if (!form.name || !form.email || !form.password || !form.hours) {
             return "Please fill in all required fields";
         }
-
-        if (form.name.length > 255) {
-            return "Name too long";
-        }
+        const nameError = validateName(form.name);
+        if (nameError) return nameError;
 
         const emailError = validateEmail(form.email);
         if (emailError) return emailError;
@@ -44,6 +42,10 @@ function RegisterVolunteer() {
 
         if (form.password !== form.confirmPassword) {
             return "Passwords do not match";
+        }
+
+        if (!/^\d+$/.test(form.hours)) {
+            return "Hours must be a number";
         }
         return null;
     };

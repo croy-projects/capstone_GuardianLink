@@ -6,6 +6,7 @@ const userService = require("./userService");
 const orgService = require("./orgService");
 const volunteerService = require("./volunteerService");
 const emailService = require('../services/emailService');
+const ROLES = require('../config/roles');
 const AppError = require('../errors/AppError');
 
 const login = async (email, password) => {
@@ -105,7 +106,8 @@ const registerNGO = async (data) => {
         if (existing.length > 0) {
             throw new AppError("Email already registered", 400);
         }
-
+        
+        data.role_id = ROLES.NGO;
         const { userId } = await userService.createUser(data, conn);
 
         return { userId };
@@ -119,7 +121,7 @@ const registerVolunteer = async (data) => {
     const conn = await pool.getConnection();
 
     try {
-
+       
         // Check existing user
         const existing = await conn.query(
             "SELECT id FROM users WHERE email = ?",
@@ -130,6 +132,7 @@ const registerVolunteer = async (data) => {
             throw new AppError("Email already registered", 400);
         }
 
+        data.role_id = ROLES.VOLUNTEER;
         const { userId } = await userService.createUser(data);
 
         return { userId };

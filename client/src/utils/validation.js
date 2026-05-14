@@ -1,10 +1,20 @@
 // validation.js
 
+export const validateName = (name) => {
+    if (!name || name.trim() === "") return "Name is required";
+
+    if (name.length > 255) {
+        return "Name too long";
+    }
+
+    return null;
+};
+
 export const validateEmail = (email) => {
     if (!email) return "Email is required";
 
     if (email.length > 255) {
-        return "Invalid! email too long";
+        return "Email too long";
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -22,8 +32,8 @@ export const validatePassword = (password) => {
         return "Password must be at least 6 characters";
     }
 
-    if (password.length > 255) {
-        return "Password too long";
+    if (password.length > 100) {
+        return "Password is too long";
     }
 
     const passwordRegex = /^[A-Za-z0-9!@#$%^&*]+$/;
