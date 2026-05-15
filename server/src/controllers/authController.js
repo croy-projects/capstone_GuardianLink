@@ -89,7 +89,7 @@ const registerNGO = async (req, res, next) => {
         email,
         password,
         confirmPassword,
-        areaOfConcern
+        area_of_concern: areaOfConcern
     };
 
     const { errors, cleanData } = validateNGO(userData);
@@ -127,12 +127,12 @@ const registerVolunteer = async (req, res, next) => {
         confirmPassword,
         hours
     };
-    console.log("req.files", req.files);
+    
     const resumeFile = req.files.resume?.[0] ?? null;// ?? converts only undefined or null to null
     const backgroundCheckFile = req.files.backgroundCheck?.[0] ?? null;
 
     const { errors, cleanData } = validateVolunteer(userData);
-
+ 
     cleanData.resume_filename = resumeFile ? resumeFile.filename : null;
     cleanData.background_check_filename = backgroundCheckFile ? backgroundCheckFile.filename : null;
 

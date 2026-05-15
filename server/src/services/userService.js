@@ -41,7 +41,8 @@ const createUser = async (user) => {
 
     try {
 
-        const { name, email, role_id, password, hours_by_week, area_of_concern } = user;
+        const { name, email, role_id, password, hours_by_week, area_of_concern,  resume_filename, background_check_filename} = user;
+        
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const result = await conn.query(
@@ -53,7 +54,9 @@ const createUser = async (user) => {
         const dataUser = {
             hours_by_week,
             area_of_concern,
-            user_id: Number(result.insertId)
+            user_id: Number(result.insertId),
+            resume_filename,
+            background_check_filename
         }
         if (Number(role_id) === ROLES.NGO) {
             orgService.createOrganization(dataUser, conn);

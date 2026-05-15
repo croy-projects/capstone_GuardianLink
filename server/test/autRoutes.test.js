@@ -3,7 +3,7 @@ const express = require("express");
 
 const authRoutes = require("../src/routes/authRoutes");
 
-// 🔥 Mock middleware
+// Mock middleware
 jest.mock("../src/middleware/authMiddleware", () => ({
     authenticate: (req, res, next) => {
         req.user = { id: 1, role_id: 1 }; // fake admin
@@ -20,7 +20,7 @@ jest.mock("../src/middleware/uploadMiddleware", () => {
     };
 });
 
-// 🔥 Mock controller
+// Mock controller
 jest.mock("../src/controllers/authController", () => ({
     login: (req, res) => res.status(200).json({ message: "login ok" }),
     registerNGO: (req, res) => res.status(201).json({ message: "ngo ok" }),

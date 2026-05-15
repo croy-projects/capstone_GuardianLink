@@ -88,13 +88,14 @@ const validateVolunteer = (data) => {
         email: data.email?.trim(),
         password: data.password,
         confirmPassword: data.confirmPassword,
-        hours: data.hours
+        hours_by_week: data.hours
+
     };
 
     errors.name = validateName(cleanData.name);
     errors.email = validateEmail(cleanData.email);
     errors.password = validatePassword(cleanData.password);
-    errors.hours = validateHours(cleanData.hours);
+    errors.hours = validateHours(cleanData.hours_by_week);
 
     if (cleanData.password !== cleanData.confirmPassword) {
         errors.confirmPassword = "Passwords do not match";
@@ -118,13 +119,13 @@ const validateNGO = (data) => {
         email: data.email?.trim(),
         password: data.password,
         confirmPassword: data.confirmPassword,
-        area: sanitize(data.areaOfConcern)
+        area_of_concern: sanitize(data.areaOfConcern)
     };
 
     errors.name = validateName(cleanData.name);
     errors.email = validateEmail(cleanData.email);
     errors.password = validatePassword(cleanData.password);
-    errors.areaOfConcern = validateArea(cleanData.area);
+    errors.areaOfConcern = validateArea(cleanData.area_of_concern);
 
     if (cleanData.password !== cleanData.confirmPassword) {
         errors.confirmPassword = "Passwords do not match";
