@@ -1,11 +1,30 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getVolunteers } from '../services/userService';
+import { getProfile } from "../services/userService";
 
 export default function VolunteersTable() {
     const [users, setUsers] = useState([]);
+    const [profile, setProfile] = useState(null);
 
+    const createMailto = (volunteer) => {
+        const subject = encodeURIComponent(
+            "Cybersecurity Support Request from " + profile.name
+        );
+
+        const body = encodeURIComponent(
+            `Hi ${volunteer.name},\n\n` +
+            `We found your profile on GuardianLink and would love your help with our cybersecurity needs.\n\n` +
+            `Please let us know your availability.\n\n` +
+            `Best regards,\n${profile.name}\n${profile.email}`
+        );
+
+        return `mailto:${volunteer.email}?subject=${subject}&body=${body}`;
+    };
     const loadUsers = async () => {
+        const ngo = await getProfile();
+        setProfile(ngo);
+
         const data = await getVolunteers();
         setUsers(data);
     };
@@ -37,12 +56,13 @@ export default function VolunteersTable() {
                                 <button className="btn-view" onClick={() => navigate(`/volunteer-details/${u.id}`)}>
                                     View Resume
                                 </button>
-                                <button
-                                    className="btn-contact"
-                                    onClick={() => window.location.href = `mailto:${u.email}`}
+
+                                <button className="btn-contact"
+                                    onClick={() => (window.location.href = createMailto(u))}
                                 >
                                     Contact
                                 </button>
+
                             </td>
                         </tr>
                     ))}

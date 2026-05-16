@@ -57,9 +57,7 @@ function RegisterVolunteer() {
         if (!file) return;
 
         const allowedTypes = [
-            "application/pdf",
-            "application/msword",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            "application/pdf"
         ];
 
         const validExt = /\.(pdf)$/.test(file.name.toLowerCase());
