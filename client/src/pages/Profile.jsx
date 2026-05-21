@@ -10,13 +10,15 @@ function Profile() {
     const navigate = useNavigate();
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [profile, setProfile] = useState(null);
     const { user, logout } = useAuth();
 
     const handleDelete = async () => {
 
         setError("");
+        setLoading(true);
+
         const confirmDelete = window.confirm("Are you sure you want to delete your account?");
         if (confirmDelete) {
             try {
@@ -25,41 +27,49 @@ function Profile() {
                 logout();
                 setTimeout(() => navigate("/"), 1500); // go back to home
             } catch (err) {
-                setError('Error updating user');
+                setError('Error deleting user');
+            }
+            finally {
+                setLoading(false);
             }
         }
     };
 
     useEffect(() => {
-        if (!user) {
-            return <p>Please login to view your profile.</p>;
-        }
+        if (!user) return;
 
         const fetchProfile = async () => {
+            setLoading(true);
             try {
                 const data = await getProfile();
                 setProfile(data);
             } catch (err) {
-                console.log('err', err);
                 setError("Unable to load user profile.");
-                return;
-
             } finally {
                 setLoading(false);
             }
         };
 
         fetchProfile();
-    }, []); //Need an empty dependency array so it only runs once
+    }, [user]);
 
+    if (!user) {
+        return <p>Please login to view your profile.</p>;
+    }
 
-    if (loading) return <p>Loading...</p>;
-    if (!profile) return <p>No profile</p>;
+    if (loading) {
+        return <p>Loading...</p>;
+    }
+
+    if (!profile) {
+        return <p>No profile</p>;
+    }
     return (
 
         <div className="profile-page">
             {error && <p className="error">{error}</p>}
             {success && <p className="success">{success}</p>}
+
             {/* COMMON INFO HEADER */}
             <div className="profile-header">
                 <div className="profile-avatar">{profile.name?.charAt(0)}</div>
@@ -74,9 +84,12 @@ function Profile() {
                     <button className="btn-action" onClick={() => navigate(`/edit-user/${profile.id}`)}>
                         Edit Profile
                     </button>
-
-                    <button className="btn-delete" onClick={handleDelete}>
-                        Delete Account
+                    <button
+                        className="btn-delete"
+                        onClick={handleDelete}
+                        disabled={loading}
+                    >
+                        {loading ? "Deleting..." : "Delete Account"}
                     </button>
                 </div>
 
@@ -90,12 +103,10 @@ function Profile() {
                     <div className="card">
                         <h3>Details</h3>
                         {/* VOLUNTEER */}
-                        <>
-                            {profile.role_id === ROLES.VOLUNTEER && (
-                                <p><strong>Hours / Week:</strong> {profile.hours_by_week}</p>
+                        {profile.role_id === ROLES.VOLUNTEER && (
+                            <p><strong>Hours / Week:</strong> {profile.hours_by_week}</p>
 
-                            )}
-                        </>
+                        )}
                         {/* NGO */}
                         {profile.role_id === ROLES.NGO && (
                             <>

@@ -42,17 +42,17 @@ const forgotPassword = async (req, res, next) => {
         //success
         res.status(200).json({ message: "Request sent" });
     } catch (err) {
-        console.error("authController.login error:", err);
+        console.error("authController.forgotPassword error:", err);
 
         res.status(500).json({ error: "Server error" });
     }
 };
 
-const resetPassword = async (req, res) => {
+const resetPassword = async (req, res, next) => {
     try {
 
         const { id } = req.params;
-        const password = req.body;
+        const { password } = req.body;
 
         if (req.user.role_id !== ROLES.ADMIN && req.user.id.toString() !== id) {
             return res.status(403).json({ error: "Forbidden" });
@@ -60,14 +60,12 @@ const resetPassword = async (req, res) => {
 
         //validation
         if (!id || !password) {
-            return res.status(400).json({
-                message: "User and password are required"
-            });
+            return next(new AppError("User and password are required", 400));
         }
 
         const result = await authService.updatePassword(id, password);
         if (!result) {
-            return res.status(500).json({ message: "Invalid" });
+            return res.status(500).json({ message: "Error server reset password" });
         }
 
         //success
@@ -128,14 +126,8 @@ const registerVolunteer = async (req, res, next) => {
         hours
     };
     
-    const resumeFile = req.files.resume?.[0] ?? null;// ?? converts only undefined or null to null
-    const backgroundCheckFile = req.files.backgroundCheck?.[0] ?? null;
-
     const { errors, cleanData } = validateVolunteer(userData);
  
-    cleanData.resume_filename = resumeFile ? resumeFile.filename : null;
-    cleanData.background_check_filename = backgroundCheckFile ? backgroundCheckFile.filename : null;
-
     if (Object.keys(errors).length > 0) {
         const message = Object.values(errors).join(", ");
         const error = new AppError(message, 400);
@@ -143,6 +135,13 @@ const registerVolunteer = async (req, res, next) => {
         return next(error);
     }
 
+    if (req.files) {
+        const resumeFile = req.files.resume?.[0] ?? null;// ?? converts only undefined or null to null
+        const backgroundCheckFile = req.files.backgroundCheck?.[0] ?? null;
+        cleanData.resume_filename = resumeFile ? resumeFile.filename : null;
+        cleanData.background_check_filename = backgroundCheckFile ? backgroundCheckFile.filename : null;
+    }
+    
     try {
 
         const result = await authService.registerVolunteer(cleanData);

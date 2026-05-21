@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { validateEmail, validatePassword, validateName } from "../utils/validation";
+import { validate } from "../utils/validation";
 import { registerVolunteer } from "../services/authService";
 import "../styles/register.css";
 
@@ -25,29 +25,6 @@ function RegisterVolunteer() {
     const handleChange = (e) => {
 
         setForm({ ...form, [e.target.name]: e.target.value });
-    };
-
-    const validate = () => {
-        if (!form.name || !form.email || !form.password || !form.hours) {
-            return "Please fill in all required fields";
-        }
-        const nameError = validateName(form.name);
-        if (nameError) return nameError;
-
-        const emailError = validateEmail(form.email);
-        if (emailError) return emailError;
-
-        const passwordError = validatePassword(form.password);
-        if (passwordError) return passwordError;
-
-        if (form.password !== form.confirmPassword) {
-            return "Passwords do not match";
-        }
-
-        if (!/^\d+$/.test(form.hours)) {
-            return "Hours must be a number";
-        }
-        return null;
     };
 
     const handleFileChange = (e) => {
@@ -74,7 +51,7 @@ function RegisterVolunteer() {
         e.preventDefault();
         setError("");
 
-        const validationError = validate();
+        const validationError = validate(form, 'new');
         if (validationError) {
             setError(validationError);
             return;

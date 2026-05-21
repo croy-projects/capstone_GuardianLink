@@ -33,6 +33,10 @@ const getUserByID = async (req, res) => {
 
 const createUser = async (req, res) => {
     try {
+        const { role_id } = req.body;
+        if (req.user.role_id !== ROLES.ADMIN) {
+            return res.status(403).json({ error: "Forbidden" });
+        }
         await userService.createUser(req.body);
         res.status(201).json({ message: 'User created' });
     } catch (err) {
@@ -45,14 +49,15 @@ const updateUser = async (req, res) => {
     try {
         const { id } = req.params;
         const { name, email, role_id, hours_by_week, area_of_concern, old_role_id } = req.body;
-        
+
         const userData = {
-            name, 
-            email, 
-            role_id, 
-            hours_by_week, 
-            area_of_concern, 
-            old_role_id };
+            name,
+            email,
+            role_id,
+            hours_by_week,
+            area_of_concern,
+            old_role_id
+        };
 
         if (req.user.role_id !== ROLES.ADMIN && req.user.id.toString() !== id) {
             return res.status(403).json({ error: "Forbidden" });
@@ -62,7 +67,7 @@ const updateUser = async (req, res) => {
         if (req.user.role_id !== ROLES.ADMIN && old_role_id !== role_id) {
             return res.status(403).json({ error: "Forbidden" });
         }
-        
+
 
         await userService.updateUser(id, userData);
 
@@ -101,6 +106,10 @@ const getProfile = async (req, res) => {
     try {
         const user_id = req.user.id;
         const role_id = req.user.role_id;
+
+        if (req.user.role_id !== ROLES.ADMIN && req.user.id !== user_id) {
+            return res.status(403).json({ error: "Forbidden" });
+        }
 
         let data = {};
 

@@ -1,5 +1,5 @@
 // validation.js
-
+import { ROLES } from "../config/roles";
 export const validateName = (name) => {
     if (!name || name.trim() === "") return "Name is required";
 
@@ -44,3 +44,42 @@ export const validatePassword = (password) => {
     return null;
 };
 
+export const validate = (data, type) => {
+    const isVolunteer = Number(data.role_id) === ROLES.VOLUNTEER;
+    const isNGO = Number(data.role_id) === ROLES.NGO;
+    const isNew = (type === 'new');
+
+    //if (!data.name || !data.email || (isNew && !data.password) || !data.role_id) {
+    if (!data.name || !data.email || (isNew && !data.password)){
+        return "Please fill in all required fields";
+    }
+
+    const nameError = validateName(data.name);
+    if (nameError) return nameError;
+
+    const emailError = validateEmail(data.email);
+    if (emailError) return emailError;
+
+    if (isNew) {
+        const passwordError = validatePassword(data.password);
+
+        if (passwordError) return passwordError;
+
+        if (data.password !== data.confirmPassword) {
+            return "Passwords do not match";
+        }
+    }
+
+    if (isVolunteer && !data.hours_by_week) {
+        return "Hours are required for volunteers";
+    }
+
+    if (isNGO && (!data.area_of_concern || data.area_of_concern.trim() === "")) {
+        return "Areas of concern is required for organizations";
+    }
+    if (isNGO && data.area_of_concern.length > 5000) {
+        return "Area of Concern : text is too long";
+    }
+
+    return null;
+};

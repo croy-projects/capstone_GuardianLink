@@ -142,11 +142,22 @@ Run Mailpit with Docker
 ```bash
 docker run -d --name mailpit -p 1025:1025 -p 8025:8025 axllent/mailpit
 ```
+Start 
+```bash
+docker start mailpit
+```
+Stop
+```bash
+docker stop mailpit
+```
+
 
 Mailpit Web UI  
 http://localhost:8025
 
-Environment Configuration
+
+
+### Environment Configuration
 
 Set the following values to the server .env file:
 

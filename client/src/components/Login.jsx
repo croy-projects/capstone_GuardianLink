@@ -39,7 +39,6 @@ function Login() {
             await forgotPassword(form);
             setSuccess("The request has been sent to the admin.");
         } catch (err) {
-            console.log("err", err);
             setError('Request failed. Please try again.');
         } finally {
             setLoading(false);
@@ -71,7 +70,6 @@ function Login() {
             }
 
         } catch (err) {
-            console.log("err", err);
             setError('Login failed. Please try again.');
         } finally {
             setLoading(false);

@@ -4,6 +4,8 @@ import { useAuth } from "./AuthContext";
 import { getRoles } from "../services/roleService";
 import { getUserById, updateUser, getVolunteerById, getNGOById } from "../services/userService";
 import { ROLES } from "../config/roles";
+import { validate } from "../utils/validation";
+
 function EditUser() {
 
     const navigate = useNavigate();
@@ -36,8 +38,7 @@ function EditUser() {
                 const data = await getRoles();
                 setRoles(data);
             } catch (err) {
-                console.error(err);
-                setError("Failed to load roles. Please try again.");
+                setError("Failed to load roles.");
             }
         };
 
@@ -51,15 +52,32 @@ function EditUser() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
+        setSuccess("");
+
         try {
+
+            const validationError = validate(form);
+            if (validationError) {
+                setError(validationError);
+                return;
+            }
+
+            setLoading(true);
 
             const updateData = {
                 name: form.name,
                 email: form.email,
                 role_id: user.role_id,
-                hours_by_week: Number(form.hours_by_week),
-                area_of_concern: form.area_of_concern,
                 old_role_id: originalRole
+            }
+
+            if (isVolunteer) {
+                updateData.hours_by_week = form.hours_by_week
+                    ? Number(form.hours_by_week)
+                    : null;
+            }
+            if (isNGO) {
+                updateData.area_of_concern = form.area_of_concern;
             }
 
             // Only Admin can change role_id
@@ -73,6 +91,8 @@ function EditUser() {
             setTimeout(() => window.history.length > 1 ? navigate(-1) : navigate("/"), 1500); // go back
         } catch (err) {
             setError('Error updating user');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -112,7 +132,6 @@ function EditUser() {
                 setOriginalRole(userDetail.role_id);
 
             } catch (err) {
-                console.log("fetch user err", err);
                 setError("Unable to load user profile.");
                 return;
 
@@ -133,7 +152,7 @@ function EditUser() {
             {success && <p className="success">{success}</p>}
             <form onSubmit={handleSubmit} className="form-container">
                 <div className="form-group">
-                    <label htmlFor="name">Name</label>
+                    <label htmlFor="name">Name *</label>
                     <input
                         name="name"
                         placeholder="Name"
@@ -143,7 +162,7 @@ function EditUser() {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="role_id">Role</label>
+                    <label htmlFor="role_id">Role *</label>
                     <select
                         name="role_id"
                         value={form.role_id}
@@ -160,9 +179,10 @@ function EditUser() {
                     </select>
                 </div>
                 <div className="form-group">
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="email">Email *</label>
                     <input
                         name="email"
+                        type="email"
                         placeholder="Email"
                         value={form.email}
                         onChange={handleChange}

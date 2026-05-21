@@ -75,7 +75,7 @@ const updatePassword = async (userId, password) => {
     const conn = await pool.getConnection();
 
     try {
-        const hashedPassword = await bcrypt.hash(password.password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         const result = await conn.query(
             `UPDATE users

@@ -48,7 +48,7 @@ const createVolunteer = async (data, connTrx) => {
         );
     }
     catch(err){
-        console.log("create vol", err)
+        console.log("error create volunteer", err)
     }
     finally {
         if (!connTrx) {

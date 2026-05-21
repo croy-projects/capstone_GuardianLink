@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { createUser } from "../services/userService";
 import { getRoles } from "../services/roleService";
 import { ROLES } from "../config/roles";
+import { validate } from "../utils/validation";
 
 function CreateUser() {
     const navigate = useNavigate();
@@ -14,40 +15,67 @@ function CreateUser() {
         role_id: '',
         email: '',
         password: '',
+        confirmPassword: "",
         hours_by_week: '',
         area_of_concern: ''
     });
 
-    const isVolunteer = Number(form.role_id) === ROLES.VOLUNTEER;
-    const isNGO = Number(form.role_id) === ROLES.NGO;
+    const isVolunteer = form.role_id === ROLES.VOLUNTEER;
+    const isNGO = form.role_id === ROLES.NGO;
 
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
-
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setForm({
+            ...form,
+            [name]: name === "role_id" ? Number(value) : value
+        });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
+        setSuccess("");
+
         try {
+            const validationError = validate(form, 'new');
+            if (validationError) {
+                setError(validationError);
+                return;
+            }
+            if (!form.role_id){
+                setError("Select an item for Role");
+                return;
+            }
+            setLoading(true);
 
             const updateData = {
                 name: form.name,
                 email: form.email,
                 role_id: form.role_id,
                 password: form.password,
-                hours_by_week: Number(form.hours_by_week),
-                area_of_concern: form.area_of_concern
+                confirmPassword: form.confirmPassword
+            }
+            if (isVolunteer) {
+                updateData.hours_by_week = form.hours_by_week
+                    ? Number(form.hours_by_week)
+                    : null;
+            }
+            if (isNGO) {
+                updateData.area_of_concern = form.area_of_concern;
             }
 
             await createUser(updateData);
             setSuccess("User created successfully!");
             setTimeout(() => window.history.length > 1 ? navigate(-1) : navigate("/"), 1500); // go back
+
         } catch (err) {
-            setError('Error updating user');
+            setError(err.message || "Error creating user");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -59,11 +87,16 @@ function CreateUser() {
                 setRoles(data);
             } catch (err) {
                 console.error(err);
+                setError("Failed to load roles");
             }
         };
 
         fetchRoles();
     }, []);
+
+    if (loading) {
+        return <p>Loading...</p>;
+    }
 
     return (
         <div className="form-page">
@@ -72,7 +105,7 @@ function CreateUser() {
             {success && <p className="success">{success}</p>}
             <form onSubmit={handleSubmit} className="form-container">
                 <div className="form-group">
-                    <label htmlFor="name">Name</label>
+                    <label htmlFor="name">Name *</label>
 
                     <input
                         name="name"
@@ -83,7 +116,7 @@ function CreateUser() {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="role_id">Role</label>
+                    <label htmlFor="role_id">Role *</label>
 
                     <select
                         name="role_id"
@@ -100,10 +133,11 @@ function CreateUser() {
                     </select>
                 </div>
                 <div className="form-group">
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="email">Email *</label>
 
                     <input
                         name="email"
+                        type="email"
                         placeholder="Email"
                         value={form.email}
                         onChange={handleChange}
@@ -111,16 +145,27 @@ function CreateUser() {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password">Password *</label>
 
                     <input
                         name="password"
                         placeholder="Password"
+                        type="password"
                         value={form.password}
                         onChange={handleChange}
                         required
                     />
                 </div>
+                <div className="form-group">
+                    <label htmlFor="confirmPassword">Confirm Password *</label>
+                    <input
+                        type="password"
+                        name="confirmPassword"
+                        value={form.confirmPassword}
+                        onChange={handleChange}
+                    />
+                </div>
+
                 {isVolunteer && (
                     <>
                         <div className="form-group">
@@ -131,6 +176,7 @@ function CreateUser() {
                                 placeholder="Hours"
                                 value={form.hours_by_week}
                                 onChange={handleChange}
+                                required
                             />
                         </div>
 
@@ -144,6 +190,7 @@ function CreateUser() {
                             placeholder="Area of Concern"
                             value={form.area_of_concern}
                             onChange={handleChange}
+                            required
                         />
                     </div>
                 )}

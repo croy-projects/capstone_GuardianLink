@@ -6,11 +6,19 @@ export default function UsersTable() {
     const [users, setUsers] = useState([]);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
-
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     const loadUsers = async () => {
-        const data = await getUsers();
-        setUsers(data);
+        try {
+            const data = await getUsers();
+            setUsers(data);
+
+        } catch {
+            setError("Failed to load users");
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleDelete = async (id) => {
@@ -26,6 +34,10 @@ export default function UsersTable() {
             } catch (err) {
                 setError('Error updating user');
             }
+            finally {
+                setLoading(false);
+            }
+
         }
     };
 
@@ -33,14 +45,15 @@ export default function UsersTable() {
     useEffect(() => {
         loadUsers();
     }, []);
-    const navigate = useNavigate();
+    if (loading) {
+        return <p>Loading...</p>;
+    }
     return (
 
         <section className="table-container admin-section">
             <h3>Users List</h3>
             {error && <p className="error">{error}</p>}
             {success && <p className="success">{success}</p>}
-            
             <table className="users-table">
                 <thead>
                     <tr>

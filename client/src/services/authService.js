@@ -1,24 +1,23 @@
 import { apiRequest, apiWithFileRequest } from "../services/api";
 // Login
-export const loginUser = (form) => {
-    return apiRequest("/auth/login", {
+//  arrow function implicit return  
+export const loginUser = (form) => 
+    apiRequest("/auth/login", {
         method: "POST",
         body: JSON.stringify(form)
     });
-};
-export const forgotPassword = (form) => {
-    return apiRequest("/auth/forgot-password", {
-        method: "POST",
-        body: JSON.stringify(form)
-    });
-};
 
-export const resetPassword = (id, password) => {
+export const forgotPassword = (form) =>
+    apiRequest("/auth/forgot-password", {
+        method: "POST",
+        body: JSON.stringify(form)
+    });
+
+export const resetPassword = (id, password) =>
     apiRequest(`/auth/reset-password/${id}`, {
         method: "PUT",
         body: JSON.stringify({password: password})
     });
-};
 
 // register NGO
 export const registerNGO = (form) =>

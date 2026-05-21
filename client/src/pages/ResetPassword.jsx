@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { resetPassword } from "../services/authService";
+import { validatePassword } from "../utils/validation";
 
 import "../styles/reset.css";
 
@@ -10,7 +11,7 @@ function ResetPassword() {
 
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const [password, setPassword] = useState("");
 
@@ -21,14 +22,19 @@ function ResetPassword() {
         setSuccess("");
         setLoading(true);
         try {
-
-            const data = await resetPassword(id, password);
+            const validationError = validatePassword(password);
+            if (validationError) {
+                setError(validationError);
+                return;
+            }
+            await resetPassword(id, password);
             setSuccess("Password updated successfully!");
             setTimeout(() => navigate("/dashboard-admin"), 1500); // go back to dashboard 
 
         } catch (err) {
-            console.log("err", err);
+
             setError('Reset password failed. Please try again.');
+
         } finally {
             setLoading(false);
         }

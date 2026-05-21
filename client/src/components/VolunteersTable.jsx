@@ -6,7 +6,10 @@ import { getProfile } from "../services/userService";
 export default function VolunteersTable() {
     const [users, setUsers] = useState([]);
     const [profile, setProfile] = useState(null);
-
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+    
     const createMailto = (volunteer) => {
         const subject = encodeURIComponent(
             "Cybersecurity Support Request from " + profile.name
@@ -22,21 +25,40 @@ export default function VolunteersTable() {
         return `mailto:${volunteer.email}?subject=${subject}&body=${body}`;
     };
     const loadUsers = async () => {
-        const ngo = await getProfile();
-        setProfile(ngo);
+        setLoading(true);
+        setError("");
 
-        const data = await getVolunteers();
-        setUsers(data);
+        try {
+            try {
+                const ngo = await getProfile();
+                setProfile(ngo);
+            } catch {
+                setError("Failed to load profile");
+            }
+
+            try {
+                const data = await getVolunteers();
+                setUsers(data);
+            } catch {
+                setError("Failed to load volunteers");
+            }
+        } finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
         loadUsers();
     }, []);
-    const navigate = useNavigate();
+
+    if (loading) {
+        return <p>Loading...</p>;
+    }
     return (
 
         <section className="table-container">
             <h3>Available Volunteers</h3>
+            {error && <p className="error">{error}</p>}
             <table className="users-table">
                 <thead>
                     <tr>

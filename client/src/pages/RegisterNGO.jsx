@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { validateEmail, validatePassword, validateName } from "../utils/validation";
+import { validate } from "../utils/validation";
 import { registerNGO } from "../services/authService";
 import "../styles/register.css";
 
@@ -24,38 +24,11 @@ function RegisterNGO() {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const validate = () => {
-        if (!form.name || !form.email || !form.password || !form.areaOfConcern) {
-            return "Please fill in all required fields";
-        }
-
-        const nameError = validateName(form.name);
-        if (nameError) return nameError;
-
-        const emailError = validateEmail(form.email);
-        if (emailError) return emailError;
-
-        const passwordError = validatePassword(form.password);
-        if (passwordError) return passwordError;
-
-        if (form.password !== form.confirmPassword) {
-            return "Passwords do not match";
-        }
-
-        if (!form.areaOfConcern || form.areaOfConcern.trim() === "") return "Area of Concern is required";
-
-        if (form.areaOfConcern.length > 5000) {
-            return "Area of Concern : text is too long";
-        }
-
-        return null;
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
 
-        const validationError = validate();
+        const validationError = validate(form, 'new');
         if (validationError) {
             setError(validationError);
             return;

@@ -8,19 +8,31 @@ function VolunteerDetails() {
     const [volunteer, setVolunteer] = useState(null);
     const navigate = useNavigate();
 
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
         const fetchVolunteer = async () => {
-            const data = await getVolunteerById(id);
-            setVolunteer(data);
+            try {
+                const data = await getVolunteerById(id);
+                setVolunteer(data);
+            } catch (err) {
+                setError("Failed to load detail.");
+            } finally {
+                setLoading(false);
+            }
         };
 
         fetchVolunteer();
     }, [id]);
 
-    if (!volunteer) return <p>Loading...</p>;
+    if (loading) return <p>Loading...</p>;
 
+
+    if (!volunteer) return <p>No volunteer found</p>;
     return (
         <div className="volunteer-details">
+            {error && <p className="error">{error}</p>}
             <div className="info-section">
                 <h2>{volunteer.name}</h2>
                 <p><strong>Email:</strong> {volunteer.email}</p>
@@ -31,7 +43,7 @@ function VolunteerDetails() {
                 <h3>Resume</h3>
                 {volunteer.resume ? (
                     <embed
-                        src={`/uploads/${volunteer.resume}`}
+                        src={volunteer.resume ? `/uploads/${volunteer.resume}` : ""}
                         type="application/pdf"
                         width="100%"
                         height="600px"

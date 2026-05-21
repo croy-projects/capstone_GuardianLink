@@ -18,9 +18,11 @@ const getVolunteers = async (req, res) => {
 const getVolunteerByID = async (req, res) => {
     try {
         const { id } = req.params;
+
         if (req.user.role_id !== ROLES.ADMIN && req.user.role_id !== ROLES.NGO && req.user.id.toString() !== id) {
             return res.status(403).json({ error: "Forbidden" });
         }
+        
         const user = await volunteerService.getVolunteerByID(id);
         if (!user.length) {
             return res.status(404).json({

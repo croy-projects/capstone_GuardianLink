@@ -5,6 +5,9 @@ import { getProfile } from "../services/userService";
 export default function NGOTable() {
     const [users, setUsers] = useState([]);
     const [profile, setProfile] = useState(null);
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(true);
+
     const createMailto = (ngo) => {
         const subject = encodeURIComponent("Volunteer Support");
         const body = encodeURIComponent(
@@ -15,20 +18,38 @@ export default function NGOTable() {
     };
 
     const loadUsers = async () => {
-        const volunteer = await getProfile();
-        setProfile(volunteer);
+        try {
+            try {
+                const volunteer = await getProfile();
+                setProfile(volunteer);
+            } catch {
+                setError("Failed to load profile");
+            }
 
-        const data = await getNGOs();
-        setUsers(data);
+            try {
+                const data = await getNGOs();
+                setUsers(data);
+            } catch {
+                setError("Failed to load organizations");
+            }
+        } finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
         loadUsers();
     }, []);
+
+    if (loading) {
+        return <p>Loading...</p>;
+    }
+
     return (
         <div className="dashboard-container">
             <h2>Organizations Needing Help</h2>
             <h3>Browse and connect with organizations that require assistance.</h3>
+            {error && <p className="error">{error}</p>}
             <div className="ngo-grid">
                 {users.map((ngo) => (
                     <div key={ngo.id} className="ngo-card">

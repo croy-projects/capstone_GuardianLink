@@ -119,7 +119,7 @@ const validateNGO = (data) => {
         email: data.email?.trim(),
         password: data.password,
         confirmPassword: data.confirmPassword,
-        area_of_concern: sanitize(data.areaOfConcern)
+        area_of_concern: sanitize(data.area_of_concern)
     };
 
     errors.name = validateName(cleanData.name);
