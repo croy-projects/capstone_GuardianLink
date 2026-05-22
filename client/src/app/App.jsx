@@ -1,5 +1,6 @@
 // React Router handles page navigation without reload
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ROLES } from "../config/roles";
 
 // Page components
 import Navbar from "../components/Navbar";
@@ -39,43 +40,43 @@ function App() {
           <Route path="/register-ngo" element={<RegisterNGO />} />
           <Route path="/register-volunteer" element={<RegisterVolunteer />} />
           <Route path="/dashboard-ngo" element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={[ROLES.NGO]}>
               <DashboardNGO />
             </ProtectedRoute>
           } />
           <Route path="/volunteer-details/:id" element={
-            <ProtectedRoute>
+            <ProtectedRoute  allowedRoles={[ROLES.NGO]}>
               <VolunteerDetails />
             </ProtectedRoute>
           } />
           <Route path="/dashboard-volunteer" element={
-            <ProtectedRoute>
+            <ProtectedRoute  allowedRoles={[ROLES.VOLUNTEER]}>
               <DashboardVolunteer />
             </ProtectedRoute>
           } />          
           <Route path="/dashboard-admin" element={
-            <ProtectedRoute>
+            <ProtectedRoute  allowedRoles={[ROLES.ADMIN]}>
               <DashboardAdmin />
             </ProtectedRoute>
           } />
           <Route path="/create-user" element={
-            <ProtectedRoute>
+            <ProtectedRoute  allowedRoles={[ROLES.ADMIN]}>
               <CreateUser />
             </ProtectedRoute>
           } />
           <Route path="/edit-user/:id" element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={[ROLES.ADMIN, ROLES.NGO, ROLES.VOLUNTEER]} requireOwnership={true}>
               <EditUser />
             </ProtectedRoute>
           } />
           <Route path="/reset-password/:id" element={
-            <ProtectedRoute>
+            <ProtectedRoute  allowedRoles={[ROLES.ADMIN]}>
               <ResetPassword />
             </ProtectedRoute>
           } />
 
           <Route path="/profile-user" element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={[ROLES.ADMIN, ROLES.NGO, ROLES.VOLUNTEER]} requireOwnership={true}>
               <Profile />
             </ProtectedRoute>
           } />
