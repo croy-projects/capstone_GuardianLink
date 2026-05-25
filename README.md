@@ -85,9 +85,23 @@ Response:
 
 ## Environment Variables
 
+# Server
 add .env file in the server folder
 
+Configure the values based on your environment.
+
+```env
 PORT=5000
+DB_HOST=localhost
+DB_USER=glcdbuser
+DB_PASSWORD=password123
+DB_NAME=GLC_DB
+JWT_SECRET=supersecretkey
+JWT_EXPIRES_IN=1d
+UPLOAD_DIR=uploads
+```
+
+# Client
 
 add .env file in the client folder
 
@@ -157,12 +171,15 @@ http://localhost:8025
 
 
 
-### Environment Configuration
+### Mail Configuration
 
 Set the following values to the server .env file:
 
+```env
 MAIL_HOST=localhost
 MAIL_PORT=1025
 MAIL_USER=
 MAIL_PASS=
 MAIL_FROM=GuardianLink <noreply@guardianlink.com>
+MAIL_ADMIN=GuardianLink <admin@guardianlink.com>
+```
