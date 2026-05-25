@@ -176,11 +176,13 @@ section {
 .admin-section {
   padding: 2rem;
   text-align: left;
+  min-height: calc(100vh - 134px);
 }
 
 .table-container {
   overflow-x: auto;
   margin-top: 1rem;
+  text-align: left;
 }
 
 .users-table {

@@ -1,5 +1,4 @@
-import { Link } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
 import { ROLES } from "../config/roles";
 import { useAuth } from "./AuthContext";
 function Navbar() {

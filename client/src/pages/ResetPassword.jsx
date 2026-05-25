@@ -40,7 +40,7 @@ function ResetPassword() {
         }
 
     };
-
+    if (loading) return <p>Loading...</p>;
     return (
         <div className="reset-container">
             <div className="reset-card">

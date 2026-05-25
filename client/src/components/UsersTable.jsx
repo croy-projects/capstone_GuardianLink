@@ -50,7 +50,7 @@ export default function UsersTable() {
     }
     return (
 
-        <section className="table-container admin-section">
+        <section className="table-container">
             <h3>Users List</h3>
             {error && <p className="error">{error}</p>}
             {success && <p className="success">{success}</p>}

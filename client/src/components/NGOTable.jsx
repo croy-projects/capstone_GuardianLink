@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getNGOs } from '../services/userService';
-import { getProfile } from "../services/userService";
+import { getNGOs, getProfile } from '../services/userService';
 
 export default function NGOTable() {
     const [users, setUsers] = useState([]);

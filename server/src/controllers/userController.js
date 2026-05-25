@@ -33,7 +33,6 @@ const getUserByID = async (req, res) => {
 
 const createUser = async (req, res) => {
     try {
-        const { role_id } = req.body;
         if (req.user.role_id !== ROLES.ADMIN) {
             return res.status(403).json({ error: "Forbidden" });
         }

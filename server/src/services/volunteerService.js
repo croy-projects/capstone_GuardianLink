@@ -39,15 +39,15 @@ const createVolunteer = async (data, connTrx) => {
         conn = await pool.getConnection();
     }
 
-    const { user_id, hours_by_week, resume_filename=null, background_check_filename=null } = data;
+    const { user_id, hours_by_week, resume_filename = null, background_check_filename = null } = data;
 
     try {
-        const res = await conn.query(
+        await conn.query(
             'INSERT INTO volunteers (user_id, hours_by_week, resume, background_check) VALUES (?, ?, ?, ?)',
             [user_id, hours_by_week, resume_filename, background_check_filename]
         );
     }
-    catch(err){
+    catch (err) {
         console.log("error create volunteer", err)
     }
     finally {
@@ -69,7 +69,7 @@ const updateVolunteer = async (id, data, connTrx) => {
     try {
         const { hours_by_week } = data;
 
-        const result = await conn.query(
+        await conn.query(
             `UPDATE volunteers
             SET hours_by_week = ?
             WHERE user_id = ?`,
