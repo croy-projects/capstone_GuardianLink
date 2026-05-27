@@ -1,7 +1,11 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ROLES } from "../config/roles";
 import { useAuth } from "./AuthContext";
+import "../styles/navbar.css";
+
 function Navbar() {
+    const [menuOpen, setMenuOpen] = useState(false);
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const handleLogout = () => {
@@ -10,9 +14,15 @@ function Navbar() {
     };
 
     return (
-        <nav>
-            <div>GuardianLink</div>
-            <ul>
+        <nav className="navbar">
+            <div className="logo">GuardianLink</div>
+      <div
+        className="hamburger"
+        onClick={() => setMenuOpen(!menuOpen)}
+      >
+        {menuOpen ? "✖" : "☰"}
+      </div>
+            <ul className={menuOpen ? "nav-links active" : "nav-links"}>
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/about-us">About Us</Link></li>
                 {!user ? (

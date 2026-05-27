@@ -1,0 +1,88 @@
+/* ================= NAVBAR ================= */
+nav {
+  background:  var(--color-primary); /* dark blue background */
+  color: white;                /* white text */
+  display: flex;               /* flex layout */
+  justify-content: space-between; /* space between logo and menu */
+  padding: 1rem 2rem;          /* vertical & horizontal spacing */
+  font-weight: bold;
+}
+
+/* Navbar menu list */
+nav ul {
+  list-style: none;  /* remove bullets */
+  display: flex;     /* horizontal layout */
+  gap: 1rem;         /* space between items */
+}
+
+/* Navbar links */
+nav a {
+  color: white;            /* white text */
+  text-decoration: none;   /* remove underline */
+  font-weight: bold;       /* bold text */
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+nav .link-button {
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+  font: inherit;
+  font-weight: bold;       /* bold text */
+}
+
+nav .link-button:hover{
+  text-decoration: underline;
+}
+
+.logo {
+  font-size: 1.5rem;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+}
+
+.hamburger {
+  display: none;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+  .hamburger {
+    display: block;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 70px;
+    right: 0;
+    background: var(--color-primary-dark);
+    flex-direction: column;
+    width: 200px;
+    padding: 20px;
+
+    display: none;
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+}
