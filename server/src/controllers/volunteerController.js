@@ -1,6 +1,7 @@
 //Controllers = HTTP only
 const volunteerService = require('../services/volunteerService');
 const ROLES = require('../config/roles');
+const path = require("path");
 
 const getVolunteers = async (req, res) => {
     try {
@@ -35,6 +36,25 @@ const getVolunteerByID = async (req, res) => {
     }
 };
 
+const getVolunteerFile = async (req, res) => {
+    try {
+        
+        const { id, filename } = req.params;
+
+        if (req.user.role_id !== ROLES.ADMIN && req.user.role_id !== ROLES.NGO && req.user.id.toString() !== id) {
+            return res.status(403).json({ error: "Forbidden" });
+        }
+
+        const filePath = path.resolve(__dirname,"..","..", process.env.UPLOAD_DIR, filename);
+
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader("Content-Disposition", "inline");
+        res.sendFile(filePath);
+
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
 const createVolunteer = async (req, res) => {
     try {
         await volunteerService.createVolunteer(req.body);
@@ -59,4 +79,4 @@ const updateVolunteer = async (req, res) => {
     }
 };
 
-module.exports = { getVolunteers, getVolunteerByID, createVolunteer, updateVolunteer };
+module.exports = { getVolunteers, getVolunteerByID, getVolunteerFile, createVolunteer, updateVolunteer };

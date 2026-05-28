@@ -1,6 +1,7 @@
 node_modules/
 # uploaded user files
 uploads/
+private/
 # environment config file
 .env
 # logs

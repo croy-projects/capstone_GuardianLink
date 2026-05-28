@@ -1,4 +1,4 @@
-import { apiRequest } from "./api";
+import { apiRequest, apiRequestForBlob } from "./api";
 
 // GET requests
 export const getUsers = () => apiRequest("/users");
@@ -8,6 +8,7 @@ export const getUserById = (id) => apiRequest(`/users/${id}`);
 export const getVolunteers = () => apiRequest("/users/volunteers");
 
 export const getVolunteerById = (id) => apiRequest(`/users/volunteers/${id}`);
+export const getVolunteerFile = (id, filename) => apiRequestForBlob(`/users/volunteers/${id}/${filename}`);
 
 export const getNGOs = () => apiRequest("/users/ngos");
 export const getNGOById = (id) => apiRequest(`/users/ngos/${id}`);

@@ -24,6 +24,7 @@ router.get("/roles", authenticate, userController.getRoles);
 
 router.get("/:id", authenticate, userController.getUserByID);
 router.get("/volunteers/:id", authenticate, volunteerController.getVolunteerByID);
+router.get("/volunteers/:id/:filename", authenticate, volunteerController.getVolunteerFile);
 router.get("/ngos/:id", authenticate, orgController.getOrgByID);
 
 router.put("/:id", authenticate, userController.updateUser);

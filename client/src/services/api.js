@@ -30,6 +30,31 @@ export const apiRequest = async (endpoint, options = {}) => {
     return data;
 };
 
+export const apiRequestForBlob = async (endpoint, options = {}) => {
+    const token = localStorage.getItem("token");
+
+    const headers = {
+        ...options.headers
+    };
+
+    if (token) {
+        headers.Authorization = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${API_URL}${endpoint}`, {
+        ...options,
+        headers
+    });
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || "File download failed");
+    }
+
+    return await response.blob();
+    
+};
+
 export const apiWithFileRequest = async (endpoint, options = {}) => {
     const token = localStorage.getItem("token");
 
