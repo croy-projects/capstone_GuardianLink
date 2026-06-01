@@ -8,7 +8,7 @@ export default function VolunteersTable() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-    
+
     const createMailto = (volunteer) => {
         const subject = encodeURIComponent(
             "Cybersecurity Support Request from " + profile.name
@@ -74,11 +74,11 @@ export default function VolunteersTable() {
                             <td>{u.email}</td>
                             <td>{u.hours_by_week}</td>
                             <td className="actions">
-                                <button className="btn-view" onClick={() => navigate(`/volunteer-details/${u.id}`)}>
+                                <button type="button" className="btn-view" onClick={() => navigate(`/volunteer-details/${u.id}`)}>
                                     View Resume
                                 </button>
 
-                                <button className="btn-contact"
+                                <button type="button" className="btn-contact"
                                     onClick={() => (window.location.href = createMailto(u))}
                                 >
                                     Contact

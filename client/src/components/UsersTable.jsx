@@ -32,7 +32,7 @@ export default function UsersTable() {
                 setTimeout(() => setSuccess(""), 1500);
 
             } catch (err) {
-                setError('Error updating user');
+                setError('Error delete user');
             }
             finally {
                 setLoading(false);
@@ -70,13 +70,13 @@ export default function UsersTable() {
                             <td>{u.role}</td>
                             <td>{u.email}</td>
                             <td className="actions">
-                                <button className="btn-edit" onClick={() => navigate(`/edit-user/${u.id}`)}>
+                                <button type="button" className="btn-edit" onClick={() => navigate(`/edit-user/${u.id}`)}>
                                     Edit
                                 </button>
-                                <button className="btn-reset" onClick={() => navigate(`/reset-password/${u.id}`)}>
+                                <button type="button" className="btn-reset" onClick={() => navigate(`/reset-password/${u.id}`)}>
                                     Reset Pass
                                 </button>
-                                <button className="btn-delete" onClick={() => handleDelete(u.id)}>
+                                <button type="button" className="btn-delete" onClick={() => handleDelete(u.id)}>
                                     Delete
                                 </button>
                             </td>
@@ -85,7 +85,7 @@ export default function UsersTable() {
                 </tbody>
             </table>
             <div className="table-actions">
-                <button className="btn-action"
+                <button type="button" className="btn-action"
                     onClick={() => navigate('/create-user')}
                 >
                     Create User

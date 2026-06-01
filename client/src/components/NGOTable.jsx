@@ -57,7 +57,7 @@ export default function NGOTable() {
                         <p><strong>Concern:</strong> {ngo.area_of_concern}</p>
 
                         <div className="card-actions">
-                            <button onClick={() => (window.location.href = createMailto(ngo))}>
+                            <button type="button" onClick={() => (window.location.href = createMailto(ngo))}>
                                 Contact
                             </button>
 

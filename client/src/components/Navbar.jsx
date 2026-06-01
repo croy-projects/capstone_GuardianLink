@@ -16,12 +16,12 @@ function Navbar() {
     return (
         <nav className="navbar">
             <div className="logo">GuardianLink</div>
-      <div
-        className="hamburger"
-        onClick={() => setMenuOpen(!menuOpen)}
-      >
-        {menuOpen ? "✖" : "☰"}
-      </div>
+            <div
+                className="hamburger"
+                onClick={() => setMenuOpen(!menuOpen)}
+            >
+                {menuOpen ? "✖" : "☰"}
+            </div>
             <ul className={menuOpen ? "nav-links active" : "nav-links"}>
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/about-us">About Us</Link></li>
@@ -45,7 +45,7 @@ function Navbar() {
                             <li><Link to="/dashboard-volunteer">Dashboard</Link></li>
                         )}
                         <li><Link to="profile-user">Profile</Link></li>
-                        <li><button className="link-button" onClick={handleLogout}>Logout</button></li>
+                        <li><button type="button" className="link-button" onClick={handleLogout}>Logout</button></li>
                     </>
                 )}
             </ul>

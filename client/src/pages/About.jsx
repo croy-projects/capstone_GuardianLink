@@ -110,8 +110,8 @@ function AboutUs() {
                 </p>
 
                 <div className="cta-buttons">
-                    <button className="btn-primary" onClick={() => navigate('/register-volunteer')}>Become a Volunteer</button>
-                    <button className="btn-secondary" onClick={() => navigate('/register-ngo')}>Request Assistance</button>
+                    <button type="button" className="btn-primary" onClick={() => navigate('/register-volunteer')}>Become a Volunteer</button>
+                    <button type="button" className="btn-secondary" onClick={() => navigate('/register-ngo')}>Request Assistance</button>
                 </div>
             </section>
         </div>

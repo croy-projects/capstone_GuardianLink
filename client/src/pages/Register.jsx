@@ -15,7 +15,7 @@ function Register() {
                     <div className="card">
                         <h2>Become a Volunteer</h2>
                         <p>Offer your cybersecurity expertise to help NGOs in need.</p>
-                        <button onClick={() => navigate("/register-volunteer")}>
+                        <button type="button" onClick={() => navigate("/register-volunteer")}>
                             Register as Volunteer
                         </button>
                     </div>
@@ -24,7 +24,7 @@ function Register() {
                     <div className="card">
                         <h2>Request Assistance</h2>
                         <p>Register your organization to receive cybersecurity support.&nbsp;&nbsp;</p>
-                        <button onClick={() => navigate("/register-ngo")}>
+                        <button type="button" onClick={() => navigate("/register-ngo")}>
                             Register as NGO
                         </button>
                     </div>
