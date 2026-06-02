@@ -24,8 +24,8 @@ function Profile() {
             try {
                 await deleteUser(profile.id);
                 setSuccess("User deleted successfully!");
-                logout();
-                setTimeout(() => navigate("/"), 1500); // go back to home
+                logout(); //protected route handle redirect to login page
+               
             } catch (err) {
                 setError('Error deleting user');
             }
@@ -81,10 +81,10 @@ function Profile() {
                 </div>
                 {/* ACTIONS */}
                 <div className="profile-actions">
-                    <button className="btn-action" onClick={() => navigate(`/edit-user/${profile.id}`)}>
+                    <button type="button" className="btn-action" onClick={() => navigate(`/edit-user/${profile.id}`)}>
                         Edit Profile
                     </button>
-                    <button
+                    <button type="button"
                         className="btn-delete"
                         onClick={handleDelete}
                         disabled={loading}
@@ -104,8 +104,13 @@ function Profile() {
                         <h3>Details</h3>
                         {/* VOLUNTEER */}
                         {profile.role_id === ROLES.VOLUNTEER && (
-                            <p><strong>Hours / Week:</strong> {profile.hours_by_week}</p>
+                            <>
+                                <p><strong>Hours / Week:</strong> {profile.hours_by_week}</p>
 
+                                <button type="button" className="btn-view" onClick={() => navigate(`/volunteer-details/${profile.id}`)}>
+                                    View Detail
+                                </button>
+                            </>
                         )}
                         {/* NGO */}
                         {profile.role_id === ROLES.NGO && (

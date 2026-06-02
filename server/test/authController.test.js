@@ -92,7 +92,7 @@ describe("Auth Controller Tests", () => {
                     email: "john@test.com",
                     password: "123456",
                     confirmPassword: "123456",
-                    hours: 10
+                    hours_by_week: 10
                 },
                 files: {}
             });
@@ -105,6 +105,12 @@ describe("Auth Controller Tests", () => {
             });
 
             await authController.registerVolunteer(req, res, next);
+            console.log("next calls:", next.mock.calls);
+
+            console.log("status:", res.statusCode);
+            //console.log("json:", res._getJSONData());
+            console.log(res._isEndCalled());
+            console.log(res._getStatusCode());
 
             expect(res._getStatusCode()).toBe(201);
             expect(res._getJSONData().message)

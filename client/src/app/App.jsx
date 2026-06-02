@@ -45,7 +45,7 @@ function App() {
             </ProtectedRoute>
           } />
           <Route path="/volunteer-details/:id" element={
-            <ProtectedRoute  allowedRoles={[ROLES.NGO]}>
+            <ProtectedRoute  allowedRoles={[ROLES.ADMIN, ROLES.VOLUNTEER, ROLES.NGO]}>
               <VolunteerDetails />
             </ProtectedRoute>
           } />

@@ -5,6 +5,7 @@ const userController = require('../controllers/userController');
 const volunteerController = require('../controllers/volunteerController');
 const orgController = require('../controllers/orgController');
 const ROLES = require('../config/roles');
+const upload = require("../middleware/uploadMiddleware");
 
 const { authenticate, authorizeRole } = require("../middleware/authMiddleware");
 
@@ -27,9 +28,16 @@ router.get("/volunteers/:id", authenticate, volunteerController.getVolunteerByID
 router.get("/volunteers/:id/:filename", authenticate, volunteerController.getVolunteerFile);
 router.get("/ngos/:id", authenticate, orgController.getOrgByID);
 
-router.put("/:id", authenticate, userController.updateUser);
-router.put("/volunteers/:id", authenticate, volunteerController.updateVolunteer);
-router.put("/ngos/:id", authenticate, orgController.updateOrganization);
+// pass files
+const uploadFields = upload.fields([
+  { name: "resume", maxCount: 1 },
+  { name: "backgroundCheck", maxCount: 1 },
+]);
+router.put("/:id", authenticate, uploadFields, userController.updateUser);
+
+// Used? todo remove
+//router.put("/volunteers/:id", authenticate, uploadFields, volunteerController.updateVolunteer);
+//router.put("/ngos/:id", authenticate, orgController.updateOrganization);
 
 router.delete("/:id", authenticate, userController.deleteUser);
 

@@ -19,7 +19,7 @@ const getVolunteers = async (req, res) => {
 const getVolunteerByID = async (req, res) => {
     try {
         const { id } = req.params;
-
+        
         if (req.user.role_id !== ROLES.ADMIN && req.user.role_id !== ROLES.NGO && req.user.id.toString() !== id) {
             return res.status(403).json({ error: "Forbidden" });
         }
@@ -38,7 +38,7 @@ const getVolunteerByID = async (req, res) => {
 
 const getVolunteerFile = async (req, res) => {
     try {
-        
+
         const { id, filename } = req.params;
 
         if (req.user.role_id !== ROLES.ADMIN && req.user.role_id !== ROLES.NGO && req.user.id.toString() !== id) {
@@ -67,12 +67,12 @@ const createVolunteer = async (req, res) => {
 const updateVolunteer = async (req, res) => {
     try {
         const { id } = req.params;
-        const { hours_by_week } = req.body;
+        const { hours_by_week, resume_filename = null, background_check_filename = null } = req.body;
 
         if (req.user.role_id !== ROLES.ADMIN && req.user.id.toString() !== id) {
             return res.status(403).json({ error: "Forbidden" });
         }
-        await volunteerService.updateVolunteer(id, { hours_by_week });
+        await volunteerService.updateVolunteer(id, { hours_by_week, resume_filename, background_check_filename });
         res.status(200).json({ message: 'Volunteer updated' });
     } catch (err) {
         res.status(500).json({ error: err.message });

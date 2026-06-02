@@ -90,7 +90,7 @@ const registerNGO = async (req, res, next) => {
         area_of_concern: areaOfConcern
     };
 
-    const { errors, cleanData } = validateNGO(userData);
+    const { errors, cleanData } = validateNGO(userData, true);
 
     if (Object.keys(errors).length > 0) {
         const message = Object.values(errors).join(", ");
@@ -116,18 +116,18 @@ const registerNGO = async (req, res, next) => {
 
 const registerVolunteer = async (req, res, next) => {
 
-    const { name, email, password, confirmPassword, hours } = req.body;
+    const { name, email, password, confirmPassword, hours_by_week } = req.body;
 
     const userData = {
         name,
         email,
         password,
         confirmPassword,
-        hours
+        hours_by_week
     };
-    
-    const { errors, cleanData } = validateVolunteer(userData);
- 
+
+    const { errors, cleanData } = validateVolunteer(userData, true);
+
     if (Object.keys(errors).length > 0) {
         const message = Object.values(errors).join(", ");
         const error = new AppError(message, 400);
@@ -141,9 +141,8 @@ const registerVolunteer = async (req, res, next) => {
         cleanData.resume_filename = resumeFile ? resumeFile.filename : null;
         cleanData.background_check_filename = backgroundCheckFile ? backgroundCheckFile.filename : null;
     }
-    
-    try {
 
+    try {
         const result = await authService.registerVolunteer(cleanData);
 
         res.status(201).json({

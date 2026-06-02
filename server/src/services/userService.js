@@ -84,7 +84,7 @@ const updateUser = async (id, user) => {
 
     try {
 
-        const { name, email, role_id, old_role_id, hours_by_week, area_of_concern } = user;
+        const { name, email, role_id, old_role_id, hours_by_week, area_of_concern, resume_filename, background_check_filename } = user;
 
         let result;
 
@@ -107,21 +107,27 @@ const updateUser = async (id, user) => {
 
         }
 
-        if (old_role_id !== role_id) {
+        // When the role changes, delete the existing row from the previous role's table and create a new row in the current role's table.
+        if (Number(old_role_id) !== Number(role_id)) {
             if (old_role_id === ROLES.NGO) {
                 orgService.deleteOrganization(id, conn);
-                volunteerService.createVolunteer({ user_id: id, hours_by_week: hours_by_week }, conn);
+                volunteerService.createVolunteer(
+                    { user_id: id, hours_by_week: hours_by_week, resume_filename: resume_filename, background_check_filename:background_check_filename }
+                    , conn);
             }
             if (old_role_id === ROLES.VOLUNTEER) {
                 volunteerService.deleteVolunteer(id, conn);
                 orgService.createOrganization({ user_id: id, area_of_concern: area_of_concern }, conn);
             }
         } else {
-            if (role_id === ROLES.NGO) {
+
+            if (Number(role_id) === ROLES.NGO) {
                 orgService.updateOrganization(id, { user_id: id, area_of_concern: area_of_concern }, conn);
             }
-            if (role_id === ROLES.VOLUNTEER) {
-                volunteerService.updateVolunteer(id, { user_id: id, hours_by_week: hours_by_week }, conn);
+            if (Number(role_id) === ROLES.VOLUNTEER) {
+                volunteerService.updateVolunteer(id
+                        , { user_id: id, hours_by_week: hours_by_week, resume_filename: resume_filename, background_check_filename:background_check_filename }
+                        , conn);
             }
 
         }

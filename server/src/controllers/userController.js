@@ -2,7 +2,10 @@
 const userService = require('../services/userService');
 const orgService = require('../services/orgService');
 const volunteerService = require('../services/volunteerService');
+const { validateVolunteer, validateNGO, validateAdmin } = require("../utils/validation");
+
 const ROLES = require('../config/roles');
+const AppError = require('../errors/AppError');
 
 const getUsers = async (req, res) => {
     try {
@@ -44,7 +47,7 @@ const createUser = async (req, res) => {
     }
 };
 
-const updateUser = async (req, res) => {
+const updateUser = async (req, res, next) => {
     try {
         const { id } = req.params;
         const { name, email, role_id, hours_by_week, area_of_concern, old_role_id } = req.body;
@@ -53,22 +56,51 @@ const updateUser = async (req, res) => {
             name,
             email,
             role_id,
+            old_role_id,
             hours_by_week,
-            area_of_concern,
-            old_role_id
+            area_of_concern
         };
 
+        //Only admins or owner can change user info
         if (req.user.role_id !== ROLES.ADMIN && req.user.id.toString() !== id) {
             return res.status(403).json({ error: "Forbidden" });
         }
 
         //Only admins can change roles
-        if (req.user.role_id !== ROLES.ADMIN && old_role_id !== role_id) {
+        if (req.user.role_id !== ROLES.ADMIN && (!old_role_id || !role_id || old_role_id !== role_id)) {
             return res.status(403).json({ error: "Forbidden" });
         }
 
+        let errors ={}, cleanData = {};
 
-        await userService.updateUser(id, userData);
+        if (Number(userData.role_id) === ROLES.VOLUNTEER) {
+            ({ errors, cleanData } = validateVolunteer(userData));
+        }
+
+        if (Number(userData.role_id) === ROLES.NGO) {
+            ({ errors, cleanData } = validateNGO(userData));
+        }
+        
+        if (Number(userData.role_id) === ROLES.ADMIN) {
+            ({ errors, cleanData } = validateAdmin(userData));
+
+        }
+
+        if (Object.keys(errors).length > 0) {
+            const message = Object.values(errors).join(", ");
+            const error = new AppError(message, 400);
+            error.errors = errors;
+            return next(error);
+        }
+
+        if (req.files) {
+            const resumeFile = req.files.resume?.[0] ?? null;// ?? converts only undefined or null to null
+            const backgroundCheckFile = req.files.backgroundCheck?.[0] ?? null;
+            cleanData.resume_filename = resumeFile ? resumeFile.filename : null;
+            cleanData.background_check_filename = backgroundCheckFile ? backgroundCheckFile.filename : null;
+        }
+
+        await userService.updateUser(id, cleanData);
 
         res.status(200).json({ message: 'User updated' });
     } catch (err) {

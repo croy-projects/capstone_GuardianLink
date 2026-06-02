@@ -13,7 +13,7 @@ function RegisterVolunteer() {
         email: "",
         password: "",
         confirmPassword: "",
-        hours: "",
+        hours_by_week: "",
         resume: null,
         backgroundCheck: null,
     });
@@ -66,7 +66,7 @@ function RegisterVolunteer() {
             formData.append("email", form.email);
             formData.append("password", form.password);
             formData.append("confirmPassword", form.confirmPassword);
-            formData.append("hours", form.hours);
+            formData.append("hours_by_week", form.hours_by_week);
             formData.append("resume", form.resume);
             formData.append("backgroundCheck", form.backgroundCheck);
 
@@ -130,11 +130,11 @@ function RegisterVolunteer() {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="hours">Hours available / Week *</label>
+                        <label htmlFor="hours_by_week">Hours available / Week *</label>
                         <input
                             type="number"
-                            name="hours"
-                            value={form.hours}
+                            name="hours_by_week"
+                            value={form.hours_by_week}
                             onChange={handleChange}
                         />
                     </div>

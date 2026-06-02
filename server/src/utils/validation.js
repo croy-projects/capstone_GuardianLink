@@ -35,7 +35,7 @@ const validateEmail = (email) => {
 };
 
 
-const validatePassword = (password) => {
+const validatePassword = (password, confirmPassword) => {
     // Password checks (dont't sanitize to not change the value)
 
     if (!password) return "Password is required";
@@ -45,6 +45,10 @@ const validatePassword = (password) => {
     const regex = /^[A-Za-z0-9!@#$%^&*]+$/;
     if (!regex.test(password)) {
         return "Password : Allowed symbols: ! @ # $ % ^ & *";
+    }
+
+    if (password !== confirmPassword) {
+        return "Passwords do not match";
     }
 
     return null;
@@ -80,7 +84,7 @@ const validateArea = (text) => {
 };
 
 
-const validateVolunteer = (data) => {
+const validateVolunteer = (data, checkPassword) => {
     const errors = {};
 
     const cleanData = {
@@ -88,18 +92,19 @@ const validateVolunteer = (data) => {
         email: data.email?.trim(),
         password: data.password,
         confirmPassword: data.confirmPassword,
-        hours_by_week: data.hours
+        hours_by_week: data.hours_by_week,
+        ...data
 
     };
 
     errors.name = validateName(cleanData.name);
     errors.email = validateEmail(cleanData.email);
-    errors.password = validatePassword(cleanData.password);
     errors.hours = validateHours(cleanData.hours_by_week);
 
-    if (cleanData.password !== cleanData.confirmPassword) {
-        errors.confirmPassword = "Passwords do not match";
+    if (checkPassword) {
+        errors.password = validatePassword(cleanData.password, cleanData.confirmPassword);
     }
+
 
     // remove nulls
     Object.keys(errors).forEach(
@@ -112,23 +117,24 @@ const validateVolunteer = (data) => {
     };
 };
 
-const validateNGO = (data) => {
+const validateNGO = (data, checkPassword) => {
+    
     const errors = {};
     const cleanData = {
         name: sanitize(data.name?.trim()),
         email: data.email?.trim(),
         password: data.password,
         confirmPassword: data.confirmPassword,
-        area_of_concern: sanitize(data.area_of_concern)
+        area_of_concern: sanitize(data.area_of_concern),
+        ...data
     };
 
     errors.name = validateName(cleanData.name);
     errors.email = validateEmail(cleanData.email);
-    errors.password = validatePassword(cleanData.password);
     errors.areaOfConcern = validateArea(cleanData.area_of_concern);
 
-    if (cleanData.password !== cleanData.confirmPassword) {
-        errors.confirmPassword = "Passwords do not match";
+    if (checkPassword) {
+        errors.password = validatePassword(cleanData.password, cleanData.confirmPassword);
     }
 
     Object.keys(errors).forEach(
@@ -141,4 +147,33 @@ const validateNGO = (data) => {
     };
 };
 
-module.exports = { validateVolunteer, validateNGO };
+
+const validateAdmin = (data, checkPassword) => {
+    
+    const errors = {};
+    const cleanData = {
+        name: sanitize(data.name?.trim()),
+        email: data.email?.trim(),
+        password: data.password,
+        confirmPassword: data.confirmPassword,
+        ...data
+    };
+
+    errors.name = validateName(cleanData.name);
+    errors.email = validateEmail(cleanData.email);
+
+    if (checkPassword) {
+        errors.password = validatePassword(cleanData.password, cleanData.confirmPassword);
+    }
+
+    
+    Object.keys(errors).forEach(
+        (key) => errors[key] === null && delete errors[key]
+    );
+
+    return {
+        errors,
+        cleanData
+    };
+};
+module.exports = { validateVolunteer, validateNGO, validateAdmin };

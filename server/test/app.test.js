@@ -142,10 +142,10 @@ test('PUT /api/users/:id should update user', async () => {
     const res = await request(app)
         .put('/api/users/1')
         .set('Authorization', `Bearer ${token}`)
-        .send({ name: 'Updated' });
+        .send({ name: 'Updated', email: 'test@test.com', role_id:1, old_role_id:1 });
 
     // console.log(res.statusCode);
-    // console.log("body", res.body);
+    console.log("body", res.body);
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual({ message: 'User updated' });
 });
@@ -196,7 +196,7 @@ test('POST /api/auth/register-ngo should not register passwords do not match', a
 
     console.log(res.statusCode);
     expect(res.statusCode).toBe(400);
-    expect(res.body.errors.confirmPassword).toEqual('Passwords do not match');
+    expect(res.body.errors.password).toEqual('Passwords do not match');
 });
 
 test('POST /api/auth/register-ngo should register ngo', async () => {
@@ -220,7 +220,7 @@ test('POST /api/auth/register-ngo should register ngo', async () => {
 
     const res = await request(app)
         .post('/api/auth/register-volunteer')
-        .send({ name: '', email: 'voltest@email.com', hours: 1, password: '123456' , confirmPassword: '123456'});
+        .send({ name: '', email: 'voltest@email.com', hours_by_week: 1, password: '123456' , confirmPassword: '123456'});
 
      expect(res.statusCode).toBe(400);
      expect(res.body.errors.name).toEqual('Name is required');
@@ -232,11 +232,10 @@ test('POST /api/auth/register-volunteer should not register volunteer passwords 
 
     const res = await request(app)
         .post('/api/auth/register-volunteer')
-        .send({ name: 'voltest', email: 'voltest@email.com', hours: 2, password: '123456', confirmPassword: '123d456' });
-
-    console.log(res.statusCode);
+        .send({ name: 'voltest', email: 'voltest@email.com', hours_by_week: 2, password: '123456', confirmPassword: '123d456' });
+console.log("body", res.body);
     expect(res.statusCode).toBe(400);
-    expect(res.body.errors.confirmPassword).toEqual('Passwords do not match');
+    expect(res.body.errors.password).toEqual('Passwords do not match');
 });
 
 test('POST /api/auth/register-volunteer should register volunteer', async () => {
@@ -244,10 +243,11 @@ test('POST /api/auth/register-volunteer should register volunteer', async () => 
 
     const res = await request(app)
         .post('/api/auth/register-volunteer')
-        .send({ name: 'voltest', email: 'voltest@email.com', hours: 2, password: '123456', confirmPassword: '123456' });
+        .send({ name: 'voltest', email: 'voltest@email.com', hours_by_week: 2, password: '123456', confirmPassword: '123456' });
 
-    console.log(res.statusCode);
-    //  console.log("body", res.body);
+    
+       console.log("body", res.body);
+    
     expect(res.statusCode).toBe(201);
     expect(res.body).toEqual({ message: 'Volunteer registered successfully', userId: 1 });
 });

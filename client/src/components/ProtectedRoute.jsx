@@ -4,7 +4,6 @@ import { ROLES } from "../config/roles";
 const ProtectedRoute = ({ children, allowedRoles, requireOwnership }) => {
     const { user } = useAuth();
     const { id } = useParams();
-    //const token = localStorage.getItem("token");
 
     // Not logged in
     if (!user) {

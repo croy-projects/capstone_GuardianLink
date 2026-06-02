@@ -1,4 +1,4 @@
-import { apiRequest, apiRequestForBlob } from "./api";
+import { apiRequest, apiWithFileRequest, apiRequestForBlob } from "./api";
 
 // GET requests
 export const getUsers = () => apiRequest("/users");
@@ -22,10 +22,10 @@ export const createUser = (user) =>
     body: JSON.stringify(user)
   });
 
-export const updateUser = (id, user) =>
-  apiRequest(`/users/${id}`, {
+export const updateUser = (id, form) =>
+  apiWithFileRequest(`/users/${id}`, {
     method: "PUT",
-    body: JSON.stringify(user)
+    body: form
   });
 
 export const deleteUser = (id) =>

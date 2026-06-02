@@ -67,13 +67,15 @@ const updateVolunteer = async (id, data, connTrx) => {
     }
 
     try {
-        const { hours_by_week } = data;
+        const { hours_by_week, resume_filename = null, background_check_filename = null } = data;
 
         await conn.query(
             `UPDATE volunteers
-            SET hours_by_week = ?
+            SET hours_by_week = ?,
+                resume = COALESCE(?, resume),
+                background_check = COALESCE(?, background_check)
             WHERE user_id = ?`,
-            [hours_by_week, id]
+            [hours_by_week, resume_filename, background_check_filename, id]
         );
 
     } finally {
