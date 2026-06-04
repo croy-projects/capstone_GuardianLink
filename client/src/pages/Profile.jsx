@@ -97,62 +97,63 @@ function Profile() {
             </div>
 
             {/* BODY */}
-            <div className="profile-body">
+            {(profile.role_id === ROLES.NGO || profile.role_id === ROLES.VOLUNTEER) && (
+                <div className="profile-body">
+                    {/* LEFT */}
+                    <div className="profile-main">
+                        <div className="card">
+                            <h3>Details</h3>
+                            {/* VOLUNTEER */}
+                            {profile.role_id === ROLES.VOLUNTEER && (
+                                <div className="details-volunteer">
+                                    <p><strong>Hours / Week:</strong> {profile.hours_by_week}</p>
 
-                {/* LEFT */}
-                <div className="profile-main">
-                    <div className="card">
-                        <h3>Details</h3>
-                        {/* VOLUNTEER */}
-                        {profile.role_id === ROLES.VOLUNTEER && (
-                            <div className="details-volunteer">
-                                <p><strong>Hours / Week:</strong> {profile.hours_by_week}</p>
+                                    <div className="details-row">
+                                        <p className="item"><strong>Resume:</strong></p>
+                                        {profile.resume ? (
+                                            <span>&#10003; Uploaded - View in Detail</span>
 
-                                <div className="details-row">
-                                    <p className="item"><strong>Resume:</strong></p>
-                                    {profile.resume ? (
-                                        <span>&#10003; Uploaded - View in Detail</span>
+                                        ) : (
+                                            <span>&#128269; No resume submitted</span>
+                                        )}
+                                    </div>
+                                    <div className="details-row">
+                                        <p className="item"><strong>Background check:</strong></p>
 
-                                    ) : (
-                                        <span>&#128269; No resume submitted</span>
-                                    )}
+                                        {profile.background_check ? (
+                                            <span>&#10003; Uploaded - View in Detail</span>
+                                        ) : (
+                                            <span>&#128269; No background check submitted</span>
+                                        )}
+                                    </div>
+                                    <div className="details-row">
+                                        <p><strong>Background Check Status:</strong></p>
+
+                                        <BackgroundCheckStatus
+                                            status={profile.background_check_status}
+                                            hasDocument={!!profile.background_check}
+                                        />
+                                    </div>
+
+                                    <button type="button" className="btn-view" onClick={() => navigate(`/volunteer-details/${profile.id}`)}>
+                                        View Detail
+                                    </button>
                                 </div>
-                                <div className="details-row">
-                                    <p className="item"><strong>Background check:</strong></p>
+                            )}
+                            {/* NGO */}
+                            {profile.role_id === ROLES.NGO && (
+                                <>
+                                    <h3>Areas of Concern</h3>
+                                    <div className="long-text">
+                                        {profile.area_of_concern}
+                                    </div>
+                                </>
 
-                                    {profile.background_check ? (
-                                        <span>&#10003; Uploaded - View in Detail</span>
-                                    ) : (
-                                        <span>&#128269; No background check submitted</span>
-                                    )}
-                                </div>
-                                <div className="details-row">
-                                    <p><strong>Background Check Status:</strong></p>
-
-                                    <BackgroundCheckStatus
-                                        status={profile.background_check_status}
-                                        hasDocument={!!profile.background_check}
-                                    />
-                                </div>
-
-                                <button type="button" className="btn-view" onClick={() => navigate(`/volunteer-details/${profile.id}`)}>
-                                    View Detail
-                                </button>
-                            </div>
-                        )}
-                        {/* NGO */}
-                        {profile.role_id === ROLES.NGO && (
-                            <>
-                                <h3>Areas of Concern</h3>
-                                <div className="long-text">
-                                    {profile.area_of_concern}
-                                </div>
-                            </>
-
-                        )}
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 }

@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getVolunteers, getProfile } from '../services/userService';
+import BackgroundCheckStatus from "./BackgroundCheckStatus";
+import ResumeStatus from "./ResumeStatus";
+
 
 export default function VolunteersTable() {
     const [users, setUsers] = useState([]);
@@ -21,7 +24,7 @@ export default function VolunteersTable() {
             `Best regards,\n${profile.name}\n${profile.email}`
         );
 
-        return `mailto:${volunteer.email}?subject=${subject}&body=${body}`;
+        window.open(`mailto:${volunteer.email}?subject=${subject}&body=${body}`, "_blank");
     };
     const loadUsers = async () => {
         setLoading(true);
@@ -64,6 +67,8 @@ export default function VolunteersTable() {
                         <th>Name</th>
                         <th>Email</th>
                         <th>Hours / Week</th>
+                        <th className="documents-col">Resume</th>
+                        <th className="documents-col">Background Check</th>
                         <th className="actions-col">Actions</th>
                     </tr>
                 </thead>
@@ -73,13 +78,28 @@ export default function VolunteersTable() {
                             <td>{u.name}</td>
                             <td>{u.email}</td>
                             <td>{u.hours_by_week}</td>
+                            <td>
+                                <span>
+                                    <ResumeStatus hasDocument={u.resume} />
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    <BackgroundCheckStatus
+                                        status={u.background_check_status}
+                                        hasDocument={!!u.background_check}
+                                    />
+                                </span>
+                            </td>
+
+
                             <td className="actions">
                                 <button type="button" className="btn-view" onClick={() => navigate(`/volunteer-details/${u.id}`)}>
                                     View Resume
                                 </button>
 
                                 <button type="button" className="btn-contact"
-                                    onClick={() => (window.location.href = createMailto(u))}
+                                    onClick={() => createMailto(u)}
                                 >
                                     Contact
                                 </button>

@@ -13,7 +13,7 @@ export default function NGOTable() {
             `Hi ${ngo.name},\n\nI would like to help.\n\nThanks\n\n${profile.name}\n${profile.email}`
         );
 
-        return `mailto:${ngo.email}?subject=${subject}&body=${body}`;
+        window.open(`mailto:${ngo.email}?subject=${subject}&body=${body}`, "_blank");
     };
 
     const loadUsers = async () => {
@@ -57,7 +57,7 @@ export default function NGOTable() {
                         <p><strong>Concern:</strong> {ngo.area_of_concern}</p>
 
                         <div className="card-actions">
-                            <button type="button" onClick={() => (window.location.href = createMailto(ngo))}>
+                            <button type="button" onClick={() => createMailto(ngo)} >
                                 Contact
                             </button>
 
