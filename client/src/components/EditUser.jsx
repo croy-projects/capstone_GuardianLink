@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from "./AuthContext";
 import { getRoles } from "../services/roleService";
 import { getUserById, updateUser, getVolunteerById, getNGOById } from "../services/userService";
+import BackgroundCheckStatus from "./BackgroundCheckStatus";
 import { ROLES } from "../config/roles";
 import { validate } from "../utils/validation";
 
@@ -22,7 +23,8 @@ function EditUser() {
         hours_by_week: '',
         area_of_concern: '',
         resume: null,
-        backgroundCheck: null,
+        background_check: null,
+        background_check_status: ''
 
     });
 
@@ -52,7 +54,7 @@ function EditUser() {
         fetchRoles();
     }, []);
 
-
+    // Update and validate form 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setForm({
@@ -61,6 +63,7 @@ function EditUser() {
         });
     };
 
+    // Update and validate form for files
     const handleFileChange = (e) => {
         setError("");
         const file = e.target.files[0];
@@ -81,6 +84,7 @@ function EditUser() {
         setForm({ ...form, [e.target.name]: e.target.files[0] })
     };
 
+    // Submit form
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
@@ -112,10 +116,14 @@ function EditUser() {
                 if (form.resume) {
                     updateData.append("resume", form.resume);
                 }
-                if (form.backgroundCheck) {
-                    updateData.append("backgroundCheck", form.backgroundCheck);
+                if (form.background_check) {
+                    updateData.append("background_check", form.background_check);
                 }
 
+                // Only Admin can change background_check_status
+                if (isAdminAuth) {
+                    updateData.append("background_check_status", form.background_check_status);
+                }
 
             }
             if (isNGO) {
@@ -162,7 +170,8 @@ function EditUser() {
                     extraData = {
                         hours_by_week: volunteerData.hours_by_week || "",
                         resume: volunteerData.resume || "",
-                        background_check: volunteerData.background_check || ""
+                        background_check: volunteerData.background_check || "",
+                        background_check_status: volunteerData.background_check_status || "",
                     };
                 }
 
@@ -175,6 +184,7 @@ function EditUser() {
                     area_of_concern: "",
                     ...extraData
                 });
+
 
                 //keep original role before update
                 setOriginalRole(Number(userDetail.role_id));
@@ -189,6 +199,7 @@ function EditUser() {
         };
 
         fetchUser();
+
     }, [id]);
 
     if (loading) return <p>Loading...</p>;
@@ -253,7 +264,7 @@ function EditUser() {
                         <div className="form-group">
                             <label htmlFor="resume">Resume (.pdf)</label>
                             <p>
-                                {form.resume ? " Uploaded (Upload a new file to replace the current resume.)" : " No resume uploaded"}
+                                {form.resume ? <span>&#10003; Uploaded - View in Detail</span> : <span>&#128269; No resume submitted</span>}
                             </p>
                             <input
                                 type="file"
@@ -262,20 +273,55 @@ function EditUser() {
                                 accept=".pdf"
                                 onChange={handleFileChange}
                             />
+                            <p className="legend">Add a new file to replace the current resume.</p>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="backgroundCheck">Background Check (.pdf)</label>
+                            <label htmlFor="background_check">Background Check (.pdf) </label>
                             <p>
-                                {form.background_check ? " Uploaded (Upload a new file to replace the current background check.)" : " No background check uploaded"}
+                                {form.background_check ? <span>&#10003; Uploaded - View in Detail</span> : <span>&#128269; No background check submitted</span>}
                             </p>
-
                             <input
                                 type="file"
-                                name="backgroundCheck"
+                                name="background_check"
                                 accept=".pdf"
                                 onChange={handleFileChange}
                             />
+                            <p className="legend">Add a new file to replace the current background check.</p>
                         </div>
+
+
+                        {isAdminAuth && (
+                            <div className="form-group">
+                                <label htmlFor="background_check_status">
+                                    Background Check Status
+                                </label>
+
+                                <select
+                                    id="background_check_status"
+                                    name="background_check_status"
+                                    value={form.background_check_status}
+                                    onChange={handleChange}
+                                >
+                                    <option value="none">No Check on File</option>
+                                    <option value="pending">Pending Review</option>
+                                    <option value="verified">Verified</option>
+                                    <option value="flagged">Flagged / Action Needed</option>
+                                </select>
+                            </div>
+                        )}
+                        {!isAdminAuth && (
+                            <div className="form-group">
+                                    <label htmlFor="background_check_status">
+                                        Background Check Status
+                                    </label>
+
+                                    <BackgroundCheckStatus
+                                        status={form.background_check_status}
+                                        hasDocument={!!form.background_check}
+                                    />
+                                </div>
+
+                        )}
                     </>
                 )}
                 {isNGO && (

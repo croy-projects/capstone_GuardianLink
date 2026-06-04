@@ -10,9 +10,10 @@ const getUsers = async () => {
 
     try {
         return await conn.query(`
-      SELECT u.id, u.name, u.email, r.name AS role
+      SELECT u.id, u.name, u.email, r.name AS role, v.resume, v.background_check, v.background_check_status
       FROM users u
       JOIN roles r ON u.role_id = r.id
+      LEFT JOIN volunteers v ON v.user_id = u.id
     `);
     } finally {
         conn.release();
@@ -59,10 +60,10 @@ const createUser = async (user) => {
             background_check_filename
         }
         if (Number(role_id) === ROLES.NGO) {
-            orgService.createOrganization(dataUser, conn);
+            await orgService.createOrganization(dataUser, conn);
         }
         if (Number(role_id) === ROLES.VOLUNTEER) {
-            volunteerService.createVolunteer(dataUser, conn);
+            await volunteerService.createVolunteer(dataUser, conn);
         }
 
         await conn.commit();
@@ -83,9 +84,13 @@ const updateUser = async (id, user) => {
     const conn = await pool.getConnection();
 
     try {
+        const { name, email, role_id, old_role_id,
+                hours_by_week, area_of_concern,
+                resume_filename, background_check_filename,
+                background_check_status, background_check_reviewed_by
+              } = user;
 
-        const { name, email, role_id, old_role_id, hours_by_week, area_of_concern, resume_filename, background_check_filename } = user;
-
+                 
         let result;
 
         await conn.beginTransaction();
@@ -112,7 +117,10 @@ const updateUser = async (id, user) => {
             if (old_role_id === ROLES.NGO) {
                 orgService.deleteOrganization(id, conn);
                 volunteerService.createVolunteer(
-                    { user_id: id, hours_by_week: hours_by_week, resume_filename: resume_filename, background_check_filename:background_check_filename }
+                    { user_id: id, hours_by_week: hours_by_week, 
+                      resume_filename: resume_filename, background_check_filename:background_check_filename, 
+
+                    }
                     , conn);
             }
             if (old_role_id === ROLES.VOLUNTEER) {
@@ -126,12 +134,14 @@ const updateUser = async (id, user) => {
             }
             if (Number(role_id) === ROLES.VOLUNTEER) {
                 volunteerService.updateVolunteer(id
-                        , { user_id: id, hours_by_week: hours_by_week, resume_filename: resume_filename, background_check_filename:background_check_filename }
+                        , { user_id: id, hours_by_week: hours_by_week, 
+                            resume_filename: resume_filename, background_check_filename:background_check_filename,
+                            background_check_status, background_check_reviewed_by 
+                        }
                         , conn);
             }
 
         }
-
 
         await conn.commit();
 

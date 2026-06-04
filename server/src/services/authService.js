@@ -108,7 +108,7 @@ const registerNGO = async (data) => {
         }
         
         data.role_id = ROLES.NGO;
-        const { userId } = await userService.createUser(data, conn);
+        const { userId } = await userService.createUser(data);
 
         return { userId };
     }

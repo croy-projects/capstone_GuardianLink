@@ -55,28 +55,37 @@ const getVolunteerFile = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
-const createVolunteer = async (req, res) => {
-    try {
-        await volunteerService.createVolunteer(req.body);
-        res.status(201).json({ message: 'Volunteer created' });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
 
-const updateVolunteer = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { hours_by_week, resume_filename = null, background_check_filename = null } = req.body;
+// used? todo remove
 
-        if (req.user.role_id !== ROLES.ADMIN && req.user.id.toString() !== id) {
-            return res.status(403).json({ error: "Forbidden" });
-        }
-        await volunteerService.updateVolunteer(id, { hours_by_week, resume_filename, background_check_filename });
-        res.status(200).json({ message: 'Volunteer updated' });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
+// const createVolunteer = async (req, res) => {
+//     try {
+//         await volunteerService.createVolunteer(req.body);
+//         res.status(201).json({ message: 'Volunteer created' });
+//     } catch (err) {
+//         res.status(500).json({ error: err.message });
+//     }
+// };
 
-module.exports = { getVolunteers, getVolunteerByID, getVolunteerFile, createVolunteer, updateVolunteer };
+// used? todo remove
+// const updateVolunteer = async (req, res) => {
+//     try {
+//         const { id } = req.params;
+//         const { hours_by_week, resume_filename = null, background_check_filename = null, background_check_status } = req.body;
+
+//         if (req.user.role_id !== ROLES.ADMIN && req.user.id.toString() !== id) {
+//             return res.status(403).json({ error: "Forbidden" });
+//         }
+
+//         let background_check_reviewed_bY;
+//         if(req.user.role_id === ROLES.ADMIN){
+//             background_check_reviewed_by = req.user.id;
+//         }
+//         await volunteerService.updateVolunteer(id, { hours_by_week, resume_filename, background_check_filename, background_check_status, background_check_reviewed_by });
+//         res.status(200).json({ message: 'Volunteer updated' });
+//     } catch (err) {
+//         res.status(500).json({ error: err.message });
+//     }
+// };
+
+module.exports = { getVolunteers, getVolunteerByID, getVolunteerFile };

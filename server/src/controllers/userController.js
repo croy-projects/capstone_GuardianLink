@@ -4,6 +4,7 @@ const orgService = require('../services/orgService');
 const volunteerService = require('../services/volunteerService');
 const { validateVolunteer, validateNGO, validateAdmin } = require("../utils/validation");
 
+const BACKGROUND_CHECK_STATUS = require('../config/background_check_status');
 const ROLES = require('../config/roles');
 const AppError = require('../errors/AppError');
 
@@ -50,7 +51,7 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const { name, email, role_id, hours_by_week, area_of_concern, old_role_id } = req.body;
+        const { name, email, role_id, hours_by_week, area_of_concern, old_role_id, background_check_status } = req.body;
 
         const userData = {
             name,
@@ -71,7 +72,7 @@ const updateUser = async (req, res, next) => {
             return res.status(403).json({ error: "Forbidden" });
         }
 
-        let errors ={}, cleanData = {};
+        let errors = {}, cleanData = {};
 
         if (Number(userData.role_id) === ROLES.VOLUNTEER) {
             ({ errors, cleanData } = validateVolunteer(userData));
@@ -80,7 +81,7 @@ const updateUser = async (req, res, next) => {
         if (Number(userData.role_id) === ROLES.NGO) {
             ({ errors, cleanData } = validateNGO(userData));
         }
-        
+
         if (Number(userData.role_id) === ROLES.ADMIN) {
             ({ errors, cleanData } = validateAdmin(userData));
 
@@ -95,10 +96,23 @@ const updateUser = async (req, res, next) => {
 
         if (req.files) {
             const resumeFile = req.files.resume?.[0] ?? null;// ?? converts only undefined or null to null
-            const backgroundCheckFile = req.files.backgroundCheck?.[0] ?? null;
+            const backgroundCheckFile = req.files.background_check?.[0] ?? null;
             cleanData.resume_filename = resumeFile ? resumeFile.filename : null;
             cleanData.background_check_filename = backgroundCheckFile ? backgroundCheckFile.filename : null;
         }
+
+        // if a new background check file , set status to none
+        if (cleanData.background_check_filename) {
+            cleanData.background_check_status = BACKGROUND_CHECK_STATUS.NONE;
+            cleanData.background_check_reviewed_by = -1;
+        }
+
+        // if update done by admin user, set status to form value with reviewed by id
+        if (req.user.role_id === ROLES.ADMIN) {
+            cleanData.background_check_status = background_check_status;
+            cleanData.background_check_reviewed_by = req.user.id;
+        }
+
 
         await userService.updateUser(id, cleanData);
 

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUsers, deleteUser } from '../services/userService';
+import BackgroundCheckStatus from "./BackgroundCheckStatus";
+import ResumeStatus from "./ResumeStatus";
 
 export default function UsersTable() {
     const [users, setUsers] = useState([]);
@@ -60,6 +62,8 @@ export default function UsersTable() {
                         <th>Name</th>
                         <th>Role</th>
                         <th>Email</th>
+                        <th className="documents-col">Resume</th>
+                        <th className="documents-col">Background Check</th>
                         <th className="actions-col">Actions</th>
                     </tr>
                 </thead>
@@ -69,7 +73,34 @@ export default function UsersTable() {
                             <td>{u.name}</td>
                             <td>{u.role}</td>
                             <td>{u.email}</td>
+                            <td>
+                                {u.role === 'Volunteer' && (
+                                    <span>
+                                        <ResumeStatus hasDocument={u.resume} />
+                                    </span>
+
+                                )}
+
+
+                            </td>
+                            <td>
+
+                                {u.role === 'Volunteer' && (
+                                    <span>
+                                        <BackgroundCheckStatus
+                                            status={u.background_check_status}
+                                            hasDocument={!!u.background_check}
+                                        />
+                                    </span>
+
+                                )}
+
+                            </td>
+
                             <td className="actions">
+                                <button type="button" className="btn-action" onClick={() => navigate(`/volunteer-details/${u.id}`)}>
+                                    Detail
+                                </button>
                                 <button type="button" className="btn-edit" onClick={() => navigate(`/edit-user/${u.id}`)}>
                                     Edit
                                 </button>

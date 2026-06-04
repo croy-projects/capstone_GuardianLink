@@ -15,7 +15,7 @@ router.post("/register-ngo", authController.registerNGO);
 
 const uploadFields = upload.fields([
   { name: "resume", maxCount: 1 },
-  { name: "backgroundCheck", maxCount: 1 },
+  { name: "background_check", maxCount: 1 },
 ]);
 
 router.post("/register-volunteer", uploadFields, authController.registerVolunteer);

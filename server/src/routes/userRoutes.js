@@ -31,7 +31,7 @@ router.get("/ngos/:id", authenticate, orgController.getOrgByID);
 // pass files
 const uploadFields = upload.fields([
   { name: "resume", maxCount: 1 },
-  { name: "backgroundCheck", maxCount: 1 },
+  { name: "background_check", maxCount: 1 },
 ]);
 router.put("/:id", authenticate, uploadFields, userController.updateUser);
 

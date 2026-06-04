@@ -15,7 +15,7 @@ function RegisterVolunteer() {
         confirmPassword: "",
         hours_by_week: "",
         resume: null,
-        backgroundCheck: null,
+        background_check: null,
     });
 
     const [error, setError] = useState("");
@@ -68,7 +68,7 @@ function RegisterVolunteer() {
             formData.append("confirmPassword", form.confirmPassword);
             formData.append("hours_by_week", form.hours_by_week);
             formData.append("resume", form.resume);
-            formData.append("backgroundCheck", form.backgroundCheck);
+            formData.append("background_check", form.background_check);
 
             await registerVolunteer(formData);
             setSuccess("Volunteer registered successfully!");
@@ -149,10 +149,10 @@ function RegisterVolunteer() {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="backgroundCheck">Background Check (.pdf)</label>
+                        <label htmlFor="background_check">Background Check (.pdf)</label>
                         <input
                             type="file"
-                            name="backgroundCheck"
+                            name="background_check"
                             accept=".pdf"
                             onChange={handleFileChange}
                         />

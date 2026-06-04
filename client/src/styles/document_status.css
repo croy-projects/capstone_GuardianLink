@@ -1,0 +1,25 @@
+.background-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 500;
+    margin-inline-start: 1rem;
+    padding: 2px;
+}
+
+/*
+.background-status.verified {
+    color: green;
+}
+
+.background-status.pending {
+    color: orange;
+}
+
+.background-status.unverified {
+    color: red;
+}
+.background-status.unknown {
+    color: #0d6efd;
+}
+*/

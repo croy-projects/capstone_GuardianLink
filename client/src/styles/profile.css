@@ -21,8 +21,8 @@
 }
 
 .profile-avatar {
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     background: #4d8bc9;
     color: white;
@@ -53,15 +53,17 @@
     padding: 4px 10px;
     border-radius: 20px;
     font-size: 12px;
+    display: inline-block;
+    font-weight: 600;
 }
 
-.profile-actions button {
-    margin-left: 10px;
-    padding: 0.6rem 0.8rem;
+.profile-actions {
+    display: flex;
+    gap: 10px;
 }
 
 .profile-body {
-    /* display: grid; */
+    display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 20px;
 }
@@ -71,6 +73,22 @@
     padding: 20px;
     border-radius: 12px;
     border: 1px solid #e5e5e5;
+    margin-bottom: 20px;
+}
+
+
+/* ================= Details Volunteer ================= */
+.details-volunteer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.details-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+
 }
 
 .profile-page .long-text {
@@ -81,13 +99,20 @@
 }
 
 @media (max-width: 768px) {
-    .profile-body {
-        grid-template-columns: 1fr;
-    }
 
     .profile-header {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
+        align-items: center;
+        text-align: center;
+    }
+
+    .profile-info {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+    .profile-actions {
+        width: 100%;
+        justify-content: center;
     }
 }

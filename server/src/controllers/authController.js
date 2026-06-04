@@ -137,7 +137,7 @@ const registerVolunteer = async (req, res, next) => {
 
     if (req.files) {
         const resumeFile = req.files.resume?.[0] ?? null;// ?? converts only undefined or null to null
-        const backgroundCheckFile = req.files.backgroundCheck?.[0] ?? null;
+        const backgroundCheckFile = req.files.background_check?.[0] ?? null;
         cleanData.resume_filename = resumeFile ? resumeFile.filename : null;
         cleanData.background_check_filename = backgroundCheckFile ? backgroundCheckFile.filename : null;
     }

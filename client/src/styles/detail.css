@@ -1,133 +1,141 @@
-/* ================= PAGE DETAILS ================= */
-
-.volunteer-details {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-    padding: 20px;
-    max-width: 1200px;
-    margin: auto;
-    align-items: flex-start;
-    min-height: calc(100vh - 134px);
-}
-.detail-header {
-    max-width: 1200px;
-    padding: 0 0 0 20px;
-}
-
-.page-wrapper {
+/* Page */
+.volunteer-details-page {
     max-width: 1200px;
     margin: auto;
     padding: 20px;
 }
 
-.info-section,
-.resume-section {
+/* Main card */
+.profile-header-card {
     background: white;
-    border-radius: 14px;
-    box-shadow: var(--shadow);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    margin-bottom: 25px;
 }
 
-/* LEFT SIDE */
-.info-section {
-    flex: 1;
-    min-width: 300px;
-    padding: 1.8rem;
-}
-
-.info-section h2 {
-    color: var(--color-primary);
-    margin-bottom: 1rem;
-    font-size: 2rem;
-}
-
-.info-section p {
-    margin-bottom: 1rem;
-    font-size: 1rem;
-    line-height: 1.5;
-}
-
-
-.info-actions {
+/* Top row */
+.header-main {
     display: flex;
-    gap: 12px;
-    margin-top: 1.5rem;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
 }
+
+/* Avatar */
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #4d8bc9;
+    color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 2rem;
+    font-weight: bold;
+
+    flex-shrink: 0;
+}
+
+/* Name section */
+.identity-section {
+    flex: 1;
+    min-width: 220px;
+}
+
+.identity-section h2 {
+    margin: 0;
+    color: #1f2937;
+    font-size: 1.6rem;
+}
+
+.identity-section p {
+    margin-top: 6px;
+    color: #6b7280;
+}
+
+/* Right-side information */
+.quick-info {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+/* Pills */
+.info-pill {
+    background: #f9fafb;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    padding: 12px 18px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    min-width: 140px;
+}
+
+.label {
+    font-size: .85rem;
+    color: #6b7280;
+}
+
+/* Action row */
+.header-actions {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* Document selector card */
+.document-card {
+    background: white;
+    border-radius: 12px;
+    padding: 18px 24px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+}
+
 
 .document-selector {
     display: flex;
-    gap: 1.5rem;
-    margin-bottom: 1rem;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
 }
 
 .document-selector label {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-}
-
-.btn {
-    background: var(--color-primary);
-    color: white;
-    border: none;
-    padding: 0.7rem 1.2rem;
+    gap: 8px;           /* space between radio and text */
+    padding: 8px 14px;
+    border: 1px solid #d1d5db;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 0.95rem;
-    transition: 0.2s ease;
+    transition: background 0.2s ease;
 }
 
-.btn:hover {
-    background: var(--color-primary-dark);
+.document-selector label:hover {
+    background: #f9fafb;
 }
 
-/* RIGHT SIDE */
-.resume-section {
-    flex: 2;
-    min-width: 400px;
-    padding: 1rem;
+/* PDF viewer card */
+.document-viewer {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
 }
 
-.resume-header {
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: var(--color-primary);
-}
 
-.resume-preview {
-    width: 100%;
-    height: 600px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    overflow: hidden;
-    background: #f8fafc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #64748b;
-    font-size: 1rem;
-}
-
-.error-message {
-    margin-top: 1rem;
-    color: var(--color-error);
-}
 
 /* Responsive for mobile */
 @media (max-width: 768px) {
-    .volunteer-details {
+    .volunteer-details-page {
         flex-direction: column;
     }
 
-    .info-section,
-    .resume-section {
-        width: 100%;
-        min-width: 100%;
-    }
-
-    .resume-preview {
-        height: 400px;
-    }
 }

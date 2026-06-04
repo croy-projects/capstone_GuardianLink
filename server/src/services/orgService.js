@@ -48,7 +48,8 @@ const createOrganization = async (data, connTrx) => {
 
     }
      catch(err){
-        console.log("create organization error", err)
+        console.log("create organization error", err);
+        throw err;
     }
     finally {
         if (!connTrx) {

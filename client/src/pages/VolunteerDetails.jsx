@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { useAuth } from "../components/AuthContext";
 import { ROLES } from "../config/roles";
 import { getVolunteerById, getVolunteerFile } from "../services/userService";
+import BackgroundCheckStatus from "../components/BackgroundCheckStatus";
 
 import "../styles/detail.css";
 
@@ -25,7 +26,7 @@ function VolunteerDetails() {
 
     const [documents, setDocuments] = useState({
         resume: null,
-        backgroundCheck: null
+        background_check: null
     });
 
     const createdUrls = useRef([]);
@@ -125,7 +126,7 @@ function VolunteerDetails() {
 
     if (!volunteer) return <p>No volunteer found</p>;
     return (
-        <div className="page-wrapper">
+        <div className="volunteer-details-page">
             <div className="detail-header">
                 {error && (
                     <div className="error-message">
@@ -133,73 +134,111 @@ function VolunteerDetails() {
                     </div>
                 )}
             </div>
+            <div className="profile-header-card">
 
-            <div className="volunteer-details">
-                <div className="info-section">
-                    <h2>{volunteer.name}</h2>
-                    <p><strong>Email:</strong> {volunteer.email}</p>
-                    <p><strong>Hours / Week:</strong> {volunteer.hours_by_week}</p>
+                <div className="header-main">
 
-                    {(isVolunteer || isAdmin) && (
-                        <div className="document-selector">
-                            <label>
-                                <input
-                                    type="radio"
-                                    name="document"
-                                    checked={selectedDocument === "resume"}
-                                    onChange={() =>
-                                        handleDocumentView(volunteer.resume, "resume")
-                                    }
-                                />
-                                Resume
-                            </label>
+                    <div className="avatar">
+                        {volunteer.name?.charAt(0)}
+                    </div>
 
-                            <label>
-                                <input
-                                    type="radio"
-                                    name="document"
-                                    checked={selectedDocument === "backgroundCheck"}
-                                    onChange={() =>
-                                        handleDocumentView(
-                                            volunteer.background_check,
-                                            "backgroundCheck"
-                                        )
-                                    }
-                                />
-                                Background Check
-                            </label>
+                    <div className="identity-section">
+                        <h2>{volunteer.name}</h2>
+                        <p>{volunteer.email}</p>
+                    </div>
+
+                    <div className="quick-info">
+
+                        <div className="info-pill">
+                            <span className="label">Hours</span>
+                            <span>{volunteer.hours_by_week} / week</span>
                         </div>
+
+                        <div className="info-pill">
+                            <span className="label">Background Check</span>
+
+                            <BackgroundCheckStatus
+                                status={volunteer.background_check_status}
+                                hasDocument={!!volunteer.background_check}
+                            />
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div className="header-actions">
+                    <button
+                        type="button"
+                        className="btn-back btn-action"
+                        onClick={() =>
+                            window.history.length > 1
+                                ? navigate(-1)
+                                : navigate("/")
+                        }
+                    >
+                        Back
+                    </button>
+                </div>
+
+            </div>
+            {(isVolunteer || isAdmin) && (
+                <div className="document-card">
+                    <div className="document-selector">
+                        <label>
+                            <input
+                                type="radio"
+                                name="document"
+                                checked={selectedDocument === "resume"}
+                                onChange={() =>
+                                    handleDocumentView(volunteer.resume, "resume")
+                                }
+                            />
+                            Resume
+                        </label>
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="document"
+                                checked={selectedDocument === "backgroundCheck"}
+                                onChange={() =>
+                                    handleDocumentView(
+                                        volunteer.background_check,
+                                        "backgroundCheck"
+                                    )
+                                }
+                            />
+                            Background Check
+                        </label>
+                    </div>
+                </div>
+            )}
+            <div className="document-viewer">
+
+                {selectedDocument === "resume" && !volunteer.resume ? (
+                    <p>No resume submitted.</p>
+                ) : selectedDocument === "backgroundCheck" &&
+                    !volunteer.background_check ? (
+                    <p>No background check submitted.</p>
+                ) :
+                    documentUrl ? (
+                        <div>
+                            <h3>
+                                {selectedDocument === "resume"
+                                    ? "Resume"
+                                    : "Background Check"}
+                            </h3>
+                            <embed
+                                src={documentUrl}
+                                type="application/pdf"
+                                width="100%"
+                                height="600px"
+                            />
+                        </div>
+                    ) : (
+                        <p>No document to view.</p>
                     )}
-                    <div className="info-actions">
-                        <button type="button" className="btn" onClick={() => window.history.length > 1 ? navigate(-1) : navigate("/")}>Back</button>
-                    </div>
-                </div>
-
-                <div className="resume-section">
-                    <div className="resume-header">
-                        Document Viewer
-                    </div>
-
-                    {selectedDocument === "resume" && !volunteer.resume ? (
-                        <p>No resume uploaded.</p>
-                    ) : selectedDocument === "backgroundCheck" &&
-                        !volunteer.background_check ? (
-                        <p>No background check uploaded.</p>
-                    ) :
-                        documentUrl ? (
-                            <div className="resume-preview">
-                                <embed
-                                    src={documentUrl}
-                                    type="application/pdf"
-                                    width="100%"
-                                    height="600px"
-                                />
-                            </div>
-                        ) : (
-                            <p>No document to view.</p>
-                        )}
-
-                </div>
 
             </div>
         </div>

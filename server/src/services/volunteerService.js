@@ -1,12 +1,13 @@
 //Services : logic + DB
 const pool = require('../db');
+const BACKGROUND_CHECK_STATUS = require('../config/background_check_status');
 
 const getVolunteers = async () => {
     const conn = await pool.getConnection();
 
     try {
         return await conn.query(`
-        SELECT u.id, u.name, u.email, v.hours_by_week, v.resume, v.background_check
+        SELECT u.id, u.name, u.email, v.hours_by_week, v.resume, v.background_check, v.background_check_status, v.background_check_reviewed_by
         FROM users u
         JOIN volunteers v ON u.id = v.user_id
     `);
@@ -20,7 +21,7 @@ const getVolunteerByID = async (id) => {
 
     try {
         return await conn.query(`
-      SELECT u.id, u.name, u.email, u.role_id, r.name AS role, v.hours_by_week, v.resume, v.background_check
+      SELECT u.id, u.name, u.email, u.role_id, r.name AS role, v.hours_by_week, v.resume, v.background_check, v.background_check_status, v.background_check_reviewed_by
       FROM users u
       JOIN roles r ON u.role_id = r.id
       JOIN volunteers v ON u.id = v.user_id
@@ -43,12 +44,13 @@ const createVolunteer = async (data, connTrx) => {
 
     try {
         await conn.query(
-            'INSERT INTO volunteers (user_id, hours_by_week, resume, background_check) VALUES (?, ?, ?, ?)',
-            [user_id, hours_by_week, resume_filename, background_check_filename]
+            'INSERT INTO volunteers (user_id, hours_by_week, resume, background_check, background_check_status ) VALUES (?, ?, ?, ?, ?)',
+            [user_id, hours_by_week, resume_filename, background_check_filename, BACKGROUND_CHECK_STATUS.NONE ]
         );
     }
     catch (err) {
-        console.log("error create volunteer", err)
+        console.log("error create volunteer", err);
+        throw err;
     }
     finally {
         if (!connTrx) {
@@ -67,15 +69,19 @@ const updateVolunteer = async (id, data, connTrx) => {
     }
 
     try {
-        const { hours_by_week, resume_filename = null, background_check_filename = null } = data;
+        const { hours_by_week, resume_filename = null, background_check_filename = null,
+                background_check_status, background_check_reviewed_by 
+              } = data;
 
         await conn.query(
             `UPDATE volunteers
             SET hours_by_week = ?,
                 resume = COALESCE(?, resume),
-                background_check = COALESCE(?, background_check)
+                background_check = COALESCE(?, background_check),
+                background_check_status = COALESCE(?,background_check_status),
+                background_check_reviewed_by = COALESCE(?,background_check_reviewed_by)
             WHERE user_id = ?`,
-            [hours_by_week, resume_filename, background_check_filename, id]
+            [hours_by_week, resume_filename, background_check_filename, background_check_status, background_check_reviewed_by, id]
         );
 
     } finally {

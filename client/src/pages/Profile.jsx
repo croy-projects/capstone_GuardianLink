@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../components/AuthContext";
 import { ROLES } from "../config/roles";
 import { getProfile, deleteUser } from "../services/userService";
+import BackgroundCheckStatus from "../components/BackgroundCheckStatus";
 
 import "../styles/profile.css";
 
@@ -17,15 +18,15 @@ function Profile() {
     const handleDelete = async () => {
 
         setError("");
-        setLoading(true);
 
         const confirmDelete = window.confirm("Are you sure you want to delete your account?");
         if (confirmDelete) {
+            setLoading(true);
             try {
                 await deleteUser(profile.id);
                 setSuccess("User deleted successfully!");
                 logout(); //protected route handle redirect to login page
-               
+
             } catch (err) {
                 setError('Error deleting user');
             }
@@ -104,13 +105,40 @@ function Profile() {
                         <h3>Details</h3>
                         {/* VOLUNTEER */}
                         {profile.role_id === ROLES.VOLUNTEER && (
-                            <>
+                            <div className="details-volunteer">
                                 <p><strong>Hours / Week:</strong> {profile.hours_by_week}</p>
+
+                                <div className="details-row">
+                                    <p className="item"><strong>Resume:</strong></p>
+                                    {profile.resume ? (
+                                        <span>&#10003; Uploaded - View in Detail</span>
+
+                                    ) : (
+                                        <span>&#128269; No resume submitted</span>
+                                    )}
+                                </div>
+                                <div className="details-row">
+                                    <p className="item"><strong>Background check:</strong></p>
+
+                                    {profile.background_check ? (
+                                        <span>&#10003; Uploaded - View in Detail</span>
+                                    ) : (
+                                        <span>&#128269; No background check submitted</span>
+                                    )}
+                                </div>
+                                <div className="details-row">
+                                    <p><strong>Background Check Status:</strong></p>
+
+                                    <BackgroundCheckStatus
+                                        status={profile.background_check_status}
+                                        hasDocument={!!profile.background_check}
+                                    />
+                                </div>
 
                                 <button type="button" className="btn-view" onClick={() => navigate(`/volunteer-details/${profile.id}`)}>
                                     View Detail
                                 </button>
-                            </>
+                            </div>
                         )}
                         {/* NGO */}
                         {profile.role_id === ROLES.NGO && (

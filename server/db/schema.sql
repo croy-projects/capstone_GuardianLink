@@ -44,7 +44,14 @@ CREATE TABLE IF NOT EXISTS volunteers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     hours_by_week INT,
-    resume VARCHAR(255),
-    background_check VARCHAR(255),
+    resume VARCHAR(255) NULL,
+    background_check VARCHAR(255) NULL,
+    background_check_status ENUM(
+    'none',
+    'pending',
+    'verified',
+    'flagged'
+    ) DEFAULT 'none',
+    background_check_reviewed_by INT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

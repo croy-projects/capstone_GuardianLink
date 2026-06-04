@@ -73,7 +73,6 @@ export const apiWithFileRequest = async (endpoint, options = {}) => {
     });
 
     const data = await response.json();
-    
     if (!response.ok) {
         throw new Error(data.message || "API error");
     }
