@@ -142,7 +142,7 @@ test('PUT /api/users/:id should update user', async () => {
     const res = await request(app)
         .put('/api/users/1')
         .set('Authorization', `Bearer ${token}`)
-        .send({ name: 'Updated', email: 'test@test.com', role_id:1, old_role_id:1 });
+        .send({ name: 'Updated', email: 'test@test.com', role_id: 1, old_role_id: 1 });
 
     // console.log(res.statusCode);
     console.log("body", res.body);
@@ -161,11 +161,35 @@ test('DELETE /api/users/1 no token', async () => {
 
 //valid token
 test('DELETE /api/users/:id should delete user', async () => {
-    mockConn.query.mockResolvedValue({ affectedRows: 1 });
+
+    mockConn.query
+        .mockResolvedValueOnce([
+            {
+                id: 1,
+                role_id: 3
+            }
+        ])
+        .mockResolvedValueOnce([
+            {
+                resume: "resume.pdf",
+                background_check: "background.pdf"
+            }
+        ])
+        .mockResolvedValueOnce({
+            affectedRows: 1
+        });
+
+    jest.mock('../src/utils/files', () => ({
+        deleteFile: jest.fn().mockResolvedValue()
+    }));
 
     const res = await request(app)
         .delete('/api/users/1')
         .set('Authorization', `Bearer ${token}`);
+    
+        console.log("test delete", res.statusCode);
+    
+    console.log("mockConn.query.mock.calls ", mockConn.query.mock.calls);
 
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe('User deleted');
@@ -214,16 +238,16 @@ test('POST /api/auth/register-ngo should register ngo', async () => {
 
 // Register Volunteer
 // Missing required fields
- test('POST /api/auth/register-volunteer should not register volunteer missing required fields', async () => {
-     mockConn.query.mockResolvedValue({ insertId: 0 });
+test('POST /api/auth/register-volunteer should not register volunteer missing required fields', async () => {
+    mockConn.query.mockResolvedValue({ insertId: 0 });
 
 
     const res = await request(app)
         .post('/api/auth/register-volunteer')
-        .send({ name: '', email: 'voltest@email.com', hours_by_week: 1, password: '123456' , confirmPassword: '123456'});
+        .send({ name: '', email: 'voltest@email.com', hours_by_week: 1, password: '123456', confirmPassword: '123456' });
 
-     expect(res.statusCode).toBe(400);
-     expect(res.body.errors.name).toEqual('Name is required');
+    expect(res.statusCode).toBe(400);
+    expect(res.body.errors.name).toEqual('Name is required');
 });
 
 //Passwords do not match
@@ -233,7 +257,7 @@ test('POST /api/auth/register-volunteer should not register volunteer passwords 
     const res = await request(app)
         .post('/api/auth/register-volunteer')
         .send({ name: 'voltest', email: 'voltest@email.com', hours_by_week: 2, password: '123456', confirmPassword: '123d456' });
-console.log("body", res.body);
+    console.log("body", res.body);
     expect(res.statusCode).toBe(400);
     expect(res.body.errors.password).toEqual('Passwords do not match');
 });
@@ -245,9 +269,9 @@ test('POST /api/auth/register-volunteer should register volunteer', async () => 
         .post('/api/auth/register-volunteer')
         .send({ name: 'voltest', email: 'voltest@email.com', hours_by_week: 2, password: '123456', confirmPassword: '123456' });
 
-    
-       console.log("body", res.body);
-    
+
+    console.log("body", res.body);
+
     expect(res.statusCode).toBe(201);
     expect(res.body).toEqual({ message: 'Volunteer registered successfully', userId: 1 });
 });

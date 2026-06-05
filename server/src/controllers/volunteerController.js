@@ -25,12 +25,12 @@ const getVolunteerByID = async (req, res) => {
         }
         
         const user = await volunteerService.getVolunteerByID(id);
-        if (!user.length) {
+        if (!user) {
             return res.status(404).json({
                 message: "Volunteer not found"
             });
         }
-        res.json(user[0]);
+        res.json(user);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

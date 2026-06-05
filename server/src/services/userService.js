@@ -4,6 +4,8 @@ const pool = require('../db');
 const ROLES = require('../config/roles');
 const orgService = require("./orgService");
 const volunteerService = require("./volunteerService");
+const AppError = require('../errors/AppError');
+const { deleteFile } = require("../utils/files");
 
 const getUsers = async () => {
     const conn = await pool.getConnection();
@@ -24,15 +26,19 @@ const getUserByID = async (id) => {
     const conn = await pool.getConnection();
 
     try {
-        return await conn.query(`
-      SELECT u.id, u.name, u.email, u.role_id, r.name AS role
-      FROM users u
-      JOIN roles r ON u.role_id = r.id
-      WHERE u.id = ? 
-    `, [id]);
+        const rows = await conn.query(`
+        SELECT u.id, u.name, u.email, u.role_id, r.name AS role
+        FROM users u
+        JOIN roles r ON u.role_id = r.id
+        WHERE u.id = ? 
+        `, [id]);
+
+        return rows[0];
+
     } finally {
         conn.release();
     }
+
 };
 
 
@@ -42,8 +48,8 @@ const createUser = async (user) => {
 
     try {
 
-        const { name, email, role_id, password, hours_by_week, area_of_concern,  resume_filename, background_check_filename} = user;
-        
+        const { name, email, role_id, password, hours_by_week, area_of_concern, resume_filename, background_check_filename } = user;
+
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const result = await conn.query(
@@ -85,12 +91,12 @@ const updateUser = async (id, user) => {
 
     try {
         const { name, email, role_id, old_role_id,
-                hours_by_week, area_of_concern,
-                resume_filename, background_check_filename,
-                background_check_status, background_check_reviewed_by
-              } = user;
+            hours_by_week, area_of_concern,
+            resume_filename, background_check_filename,
+            background_check_status, background_check_reviewed_by
+        } = user;
 
-                 
+
         let result;
 
         await conn.beginTransaction();
@@ -117,8 +123,9 @@ const updateUser = async (id, user) => {
             if (old_role_id === ROLES.NGO) {
                 orgService.deleteOrganization(id, conn);
                 volunteerService.createVolunteer(
-                    { user_id: id, hours_by_week: hours_by_week, 
-                      resume_filename: resume_filename, background_check_filename:background_check_filename, 
+                    {
+                        user_id: id, hours_by_week: hours_by_week,
+                        resume_filename: resume_filename, background_check_filename: background_check_filename,
 
                     }
                     , conn);
@@ -134,11 +141,12 @@ const updateUser = async (id, user) => {
             }
             if (Number(role_id) === ROLES.VOLUNTEER) {
                 volunteerService.updateVolunteer(id
-                        , { user_id: id, hours_by_week: hours_by_week, 
-                            resume_filename: resume_filename, background_check_filename:background_check_filename,
-                            background_check_status, background_check_reviewed_by 
-                        }
-                        , conn);
+                    , {
+                        user_id: id, hours_by_week: hours_by_week,
+                        resume_filename: resume_filename, background_check_filename: background_check_filename,
+                        background_check_status, background_check_reviewed_by
+                    }
+                    , conn);
             }
 
         }
@@ -154,6 +162,32 @@ const updateUser = async (id, user) => {
         if (conn) conn.release();
     }
 
+};
+
+const deleteUserAndFiles = async (id) => {
+
+    const user = await getUserByID(id);
+
+    if (!user) {
+        throw new Error("User not found");
+    }
+
+    if (user.role_id === ROLES.VOLUNTEER) {
+
+        const volunteer = await volunteerService.getVolunteerByID(id);
+
+        await deleteUser(id);
+
+        if (volunteer?.resume) {
+            await deleteFile(volunteer.resume);
+        }
+
+        if (volunteer?.background_check) {
+            await deleteFile(volunteer.background_check);
+        }
+    } else {
+        await deleteUser(id);
+    }
 };
 
 const deleteUser = async (id) => {
@@ -178,4 +212,4 @@ const getRoles = async () => {
     }
 };
 
-module.exports = { getUsers, getUserByID, createUser, updateUser, deleteUser, getRoles };
+module.exports = { getUsers, getUserByID, createUser, updateUser, deleteUser, deleteUserAndFiles, getRoles };

@@ -19,13 +19,17 @@ const getOrgByID = async (id) => {
     const conn = await pool.getConnection();
 
     try {
-        return await conn.query(`
-      SELECT u.id, u.name, u.email, u.role_id, r.name AS role, o.area_of_concern
-      FROM users u
-      JOIN roles r ON u.role_id = r.id
-      JOIN organizations o ON o.user_id = u.id
-      WHERE u.id = ?
-    `, [id]);
+
+        const rows = await conn.query(`
+            SELECT u.id, u.name, u.email, u.role_id, r.name AS role, o.area_of_concern
+            FROM users u
+            JOIN roles r ON u.role_id = r.id
+            JOIN organizations o ON o.user_id = u.id
+            WHERE u.id = ?
+            `, [id]);
+
+        return rows[0];
+
     } finally {
         conn.release();
     }
@@ -47,7 +51,7 @@ const createOrganization = async (data, connTrx) => {
         );
 
     }
-     catch(err){
+    catch (err) {
         console.log("create organization error", err);
         throw err;
     }

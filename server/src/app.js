@@ -13,7 +13,7 @@ const errorHandler = require('./middleware/errorMiddleware');
 
 // Create Express app
 const app = express();
-const path = require("path");
+//const path = require("path");
 
 // set HTTP security headers to protect app
 app.use(helmet());

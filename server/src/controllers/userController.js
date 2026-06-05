@@ -3,6 +3,7 @@ const userService = require('../services/userService');
 const orgService = require('../services/orgService');
 const volunteerService = require('../services/volunteerService');
 const { validateVolunteer, validateNGO, validateAdmin } = require("../utils/validation");
+const { deleteFile } = require("../utils/files");
 
 const BACKGROUND_CHECK_STATUS = require('../config/background_check_status');
 const ROLES = require('../config/roles');
@@ -29,7 +30,7 @@ const getUserByID = async (req, res) => {
             return res.status(403).json({ error: "Forbidden" });
         }
         const user = await userService.getUserByID(id);
-        res.json(user[0]);
+        res.json(user);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -94,11 +95,22 @@ const updateUser = async (req, res, next) => {
             return next(error);
         }
 
+        let resumeFile;
+        let backgroundCheckFile;
+
+        const existingUser = await volunteerService.getVolunteerByID(id);
+
         if (req.files) {
-            const resumeFile = req.files.resume?.[0] ?? null;// ?? converts only undefined or null to null
-            const backgroundCheckFile = req.files.background_check?.[0] ?? null;
-            cleanData.resume_filename = resumeFile ? resumeFile.filename : null;
-            cleanData.background_check_filename = backgroundCheckFile ? backgroundCheckFile.filename : null;
+            resumeFile = req.files.resume?.[0] ?? null;// ?? converts only undefined or null to null
+            backgroundCheckFile = req.files.background_check?.[0] ?? null;
+
+            if (resumeFile) {
+                cleanData.resume_filename = resumeFile ? resumeFile.filename : null;
+            }
+
+            if (backgroundCheckFile) {
+                cleanData.background_check_filename = backgroundCheckFile ? backgroundCheckFile.filename : null;
+            }
         }
 
         // if a new background check file , set status to none
@@ -107,14 +119,20 @@ const updateUser = async (req, res, next) => {
             cleanData.background_check_reviewed_by = -1;
         }
 
-        // if update done by admin user, set status to form value with reviewed by id
+        // if update done by admin, set status to the form value with the reviewed_by admin user id
         if (req.user.role_id === ROLES.ADMIN) {
             cleanData.background_check_status = background_check_status;
             cleanData.background_check_reviewed_by = req.user.id;
         }
 
-
         await userService.updateUser(id, cleanData);
+
+        if (resumeFile) {
+            await deleteFile(existingUser.resume);
+        }
+        if (backgroundCheckFile) {
+            await deleteFile(existingUser.background_check);
+        }
 
         res.status(200).json({ message: 'User updated' });
     } catch (err) {
@@ -130,7 +148,8 @@ const deleteUser = async (req, res) => {
             return res.status(403).json({ error: "Forbidden" });
         }
 
-        await userService.deleteUser(id);
+        await userService.deleteUserAndFiles(id); 
+
         res.status(200).json({ message: 'User deleted' });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -170,7 +189,7 @@ const getProfile = async (req, res) => {
             data = await volunteerService.getVolunteerByID(user_id);
         }
 
-        res.json(data[0]);
+        res.json(data);
 
     } catch (err) {
         console.log("err", err);

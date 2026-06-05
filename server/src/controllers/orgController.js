@@ -22,13 +22,13 @@ const getOrgByID = async (req, res) => {
             return res.status(403).json({ error: "Forbidden" });
         }
         const organization = await orgService.getOrgByID(id);
-        if (!organization.length) {
+        if (!organization) {
             return res.status(404).json({
                 message: "Organization not found"
             });
         }
 
-        res.json(organization[0]);
+        res.json(organization);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
