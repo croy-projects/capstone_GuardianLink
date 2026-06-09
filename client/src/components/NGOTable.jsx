@@ -10,7 +10,7 @@ export default function NGOTable() {
     const createMailto = (ngo) => {
         const subject = encodeURIComponent("Volunteer Support");
         const body = encodeURIComponent(
-            `Hi ${ngo.name},\n\nI would like to help.\n\nThanks\n\n${profile.name}\n${profile.email}`
+            `Hello, I found your profile on GuardianLink and would like to volunteer for ${ngo.name}.\n\nThank you, and I look forward to hearing from you.\n\nBest regards\n\n${profile.name}\n${profile.email}`
         );
 
         window.open(`mailto:${ngo.email}?subject=${subject}&body=${body}`, "_blank");
