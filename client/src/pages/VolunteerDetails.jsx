@@ -43,6 +43,8 @@ function VolunteerDetails() {
     // [id]  that effect will re-run whenever id changes.  When no dependency array runs every render;
     useEffect(() => {
 
+        if (!user) return;
+        
         const fetchVolunteer = async () => {
             try {
                 const data = await getVolunteerById(id);
@@ -129,7 +131,7 @@ function VolunteerDetails() {
         <div className="volunteer-details-page">
             <div className="detail-header">
                 {error && (
-                    <div className="error-message">
+                    <div className="error">
                         <p>{error}</p>
                     </div>
                 )}

@@ -1,5 +1,6 @@
 /* Page */
 .volunteer-details-page {
+    min-height: calc(100vh - 134px);
     max-width: 1200px;
     margin: auto;
     padding: 20px;
@@ -20,6 +21,12 @@
     align-items: center;
     gap: 30px;
     flex-wrap: wrap;
+}
+
+.header-main-ngo {
+    display: flex;
+    gap: 30px;
+    flex-direction: column;
 }
 
 /* Avatar */

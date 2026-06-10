@@ -11,19 +11,24 @@ const ProtectedRoute = ({ children, allowedRoles, requireOwnership }) => {
     }
 
     const isAdmin = user.role_id === ROLES.ADMIN;
-    const isOwner = user.id?.toString() === id;
-    const isAllowedRole = allowedRoles?.includes(user.role_id);
+    // Ownership restriction (for edit pages)
+
+    const profileId = id ?? user?.id;
+    const isOwner = user?.id?.toString() === profileId?.toString();
 
     // with roles: check role not allowed
-    if (!isAllowedRole) {
+    const isAllowedRole = allowedRoles?.includes(user.role_id);
+    
+    //console.log("isOwner", isOwner);
+    //console.log("requireOwnership", requireOwnership);
+    
+    const hasAccess = isAdmin || (requireOwnership && isOwner) || isAllowedRole;
+    //console.log("hasAccess", hasAccess);
+
+    if (!hasAccess) {
         return <Navigate to="/" />;
     }
-
-    // Ownership restriction (for edit pages)
-    if (requireOwnership && id && !isAdmin && !isOwner) {
-        return <Navigate to="/" />;
-    }
-
+  
     return children;
 };
 

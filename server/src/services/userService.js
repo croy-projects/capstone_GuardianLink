@@ -16,6 +16,7 @@ const getUsers = async () => {
       FROM users u
       JOIN roles r ON u.role_id = r.id
       LEFT JOIN volunteers v ON v.user_id = u.id
+      ORDER BY u.role_id DESC
     `);
     } finally {
         conn.release();

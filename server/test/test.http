@@ -1,8 +1,11 @@
 //GET http://localhost:5000/api/test-email
 
-PUT http://localhost:5000/api/auth/reset-password/29
-Content-Type: application/json
 
-{
-    "password": "test"
-}
+# PUT http://localhost:5000/api/auth/reset-password/29
+# Content-Type: application/json
+
+# {
+#     "password": "test"
+# }
+
+GET http://localhost:5000/api/users/volunteers/8/781006419098-sample_resume_johnDoe.pdf

@@ -98,9 +98,22 @@ export default function UsersTable() {
                             </td>
 
                             <td className="actions">
-                                <button type="button" className="btn-action" onClick={() => navigate(`/volunteer-details/${u.id}`)}>
-                                    Detail
-                                </button>
+                                {u.role === 'Volunteer' && (
+                                    <button type="button" className="btn-action" onClick={() => navigate(`/volunteer-details/${u.id}`)}>
+                                        Detail
+                                    </button>
+                                )}
+                                {(u.role === 'Organization') && (
+                                    <button type="button" className="btn-action" onClick={() => navigate(`/organization-details/${u.id}`)}>
+                                        Detail
+                                    </button>
+
+                                )}
+                                {(u.role === 'Admin') && (
+                                    <button type="button" disabled className="btn-action" style={{ visibility: 'hidden' }}  >
+                                        Detail
+                                    </button>
+                                )}
                                 <button type="button" className="btn-edit" onClick={() => navigate(`/edit-user/${u.id}`)}>
                                     Edit
                                 </button>

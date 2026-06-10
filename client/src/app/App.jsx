@@ -20,6 +20,7 @@ import RegisterVolunteer from "../pages/RegisterVolunteer";
 import DashboardNGO from "../pages/DashboardNGO";
 import DashboardVolunteer from "../pages/DashboardVolunteer";
 import VolunteerDetails from "../pages/VolunteerDetails";
+import OrganizationDetails from "../pages/OrganizationDetails";
 import Profile from "../pages/Profile";
 import ResetPassword from "../pages/ResetPassword";
 
@@ -45,8 +46,13 @@ function App() {
             </ProtectedRoute>
           } />
           <Route path="/volunteer-details/:id" element={
-            <ProtectedRoute  allowedRoles={[ROLES.ADMIN, ROLES.VOLUNTEER, ROLES.NGO]}>
+            <ProtectedRoute  allowedRoles={[ROLES.ADMIN, ROLES.NGO]} requireOwnership={true}>
               <VolunteerDetails />
+            </ProtectedRoute>
+          } />
+          <Route path="/organization-details/:id" element={
+            <ProtectedRoute  allowedRoles={[ROLES.ADMIN, ROLES.VOLUNTEER]} requireOwnership={true}>
+              <OrganizationDetails />
             </ProtectedRoute>
           } />
           <Route path="/dashboard-volunteer" element={
@@ -65,7 +71,7 @@ function App() {
             </ProtectedRoute>
           } />
           <Route path="/edit-user/:id" element={
-            <ProtectedRoute allowedRoles={[ROLES.ADMIN, ROLES.NGO, ROLES.VOLUNTEER]} requireOwnership={true}>
+            <ProtectedRoute allowedRoles={[ROLES.ADMIN]} requireOwnership={true}>
               <EditUser />
             </ProtectedRoute>
           } />
@@ -76,7 +82,7 @@ function App() {
           } />
 
           <Route path="/profile-user" element={
-            <ProtectedRoute allowedRoles={[ROLES.ADMIN, ROLES.NGO, ROLES.VOLUNTEER]} requireOwnership={true}>
+            <ProtectedRoute allowedRoles={[ROLES.ADMIN]} requireOwnership={true}>
               <Profile />
             </ProtectedRoute>
           } />
