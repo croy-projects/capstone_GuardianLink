@@ -95,7 +95,7 @@ export default function VolunteersTable() {
 
                             <td className="actions">
                                 <button type="button" className="btn-view" onClick={() => navigate(`/volunteer-details/${u.id}`)}>
-                                    View Resume
+                                    Details
                                 </button>
 
                                 <button type="button" className="btn-contact"

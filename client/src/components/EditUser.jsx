@@ -344,7 +344,7 @@ function EditUser() {
                     </button>
                     {isVolunteer && (
                         <button type="button" className="btn-view" onClick={() => navigate(`/volunteer-details/${id}`)}>
-                            View Detail
+                            Details
                         </button>
                     )}
                 </div>

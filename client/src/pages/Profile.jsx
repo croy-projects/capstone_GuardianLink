@@ -136,7 +136,7 @@ function Profile() {
                                     </div>
 
                                     <button type="button" className="btn-view" onClick={() => navigate(`/volunteer-details/${profile.id}`)}>
-                                        View Detail
+                                        Details
                                     </button>
                                 </div>
                             )}
