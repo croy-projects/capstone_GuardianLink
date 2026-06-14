@@ -21,9 +21,7 @@ const login = async (req, res, next) => {
         //success
         res.json(result);
     } catch (err) {
-        console.error("authController.login error:", err);
-
-        res.status(500).json({ error: "Server error" });
+        next(err);
     }
 };
 
@@ -42,9 +40,7 @@ const forgotPassword = async (req, res, next) => {
         //success
         res.status(200).json({ message: "Request sent" });
     } catch (err) {
-        console.error("authController.forgotPassword error:", err);
-
-        res.status(500).json({ error: "Server error" });
+        next(err);
     }
 };
 
@@ -72,9 +68,7 @@ const resetPassword = async (req, res, next) => {
         res.json(result);
 
     } catch (err) {
-        console.error("reset Password error:", err);
-
-        res.status(500).json({ error: "Server error" });
+        next(err);
     }
 };
 

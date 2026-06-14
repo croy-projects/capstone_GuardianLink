@@ -2,7 +2,7 @@
 const orgService = require('../services/orgService');
 const ROLES = require('../config/roles');
 
-const getOrganizations = async (req, res) => {
+const getOrganizations = async (req, res, next) => {
     try {
         if (req.user.role_id !== ROLES.ADMIN && req.user.role_id !== ROLES.VOLUNTEER) {
             return res.status(403).json({ error: "Forbidden" });
@@ -11,11 +11,11 @@ const getOrganizations = async (req, res) => {
         const organizations = await orgService.getOrganizations();
         res.json(organizations);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        next(err);
     }
 };
 
-const getOrgByID = async (req, res) => {
+const getOrgByID = async (req, res, next) => {
     try {
         const { id } = req.params;
         if (req.user.role_id !== ROLES.ADMIN && req.user.role_id !== ROLES.VOLUNTEER && req.user.id.toString() !== id) {
@@ -30,35 +30,37 @@ const getOrgByID = async (req, res) => {
 
         res.json(organization);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        next(err);
     }
 };
 
-const updateOrganization = async (req, res) => {
-    const { id } = req.params;
-    const { name, email, area_of_concern } = req.body;
+// Used? todo remove
+// const updateOrganization = async (req, res, next) => {
+//     const { id } = req.params;
+//     const { name, email, area_of_concern } = req.body;
 
-    if (!name || !email) {
-        return res.status(400).json({ message: "Missing required fields" });
-    }
-    try {
+//     if (!name || !email) {
+//         return res.status(400).json({ message: "Missing required fields" });
+//     }
+//     try {
 
-        const userData = {
-            name,
-            email,
-            area_of_concern,
-            role_id: ROLES.NGO,
-        };
+//         const userData = {
+//             name,
+//             email,
+//             area_of_concern,
+//             role_id: ROLES.NGO,
+//         };
 
-        await orgService.updateOrganization(id, userData);
-        res.status(200).json({
-            message: "NGO update successfully",
-        });
+//         await orgService.updateOrgfanization(id, userData);
+//         res.status(200).json({
+//             message: "NGO update successfully",
+//         });
 
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: "Server error" });
-    }
-};
+//     } catch (err) {
+//         next(err);
+//         // console.error(err);
+//         // res.status(500).json({ message: "Server error" });
+//     }
+// };
 
-module.exports = { getOrganizations, getOrgByID, updateOrganization };
+module.exports = { getOrganizations, getOrgByID };

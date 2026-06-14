@@ -9,7 +9,7 @@ const BACKGROUND_CHECK_STATUS = require('../config/background_check_status');
 const ROLES = require('../config/roles');
 const AppError = require('../errors/AppError');
 
-const getUsers = async (req, res) => {
+const getUsers = async (req, res, next) => {
     try {
         if (req.user.role_id !== ROLES.ADMIN) {
             return res.status(403).json({ error: "Forbidden" });
@@ -18,11 +18,11 @@ const getUsers = async (req, res) => {
         const users = await userService.getUsers();
         res.json(users);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        next(err);
     }
 };
 
-const getUserByID = async (req, res) => {
+const getUserByID = async (req, res, next) => {
     try {
         const { id } = req.params;
 
@@ -32,11 +32,11 @@ const getUserByID = async (req, res) => {
         const user = await userService.getUserByID(id);
         res.json(user);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        next(err);
     }
 };
 
-const createUser = async (req, res) => {
+const createUser = async (req, res, next) => {
     try {
         if (req.user.role_id !== ROLES.ADMIN) {
             return res.status(403).json({ error: "Forbidden" });
@@ -44,8 +44,7 @@ const createUser = async (req, res) => {
         await userService.createUser(req.body);
         res.status(201).json({ message: 'User created' });
     } catch (err) {
-        console.log("create user err", err);
-        res.status(500).json({ error: err.message });
+        next(err);
     }
 };
 
@@ -136,11 +135,11 @@ const updateUser = async (req, res, next) => {
 
         res.status(200).json({ message: 'User updated' });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        next(err);
     }
 };
 
-const deleteUser = async (req, res) => {
+const deleteUser = async (req, res, next) => {
     try {
         const { id } = req.params;
 
@@ -152,21 +151,20 @@ const deleteUser = async (req, res) => {
 
         res.status(200).json({ message: 'User deleted' });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        next(err);
     }
 };
 
-const getRoles = async (req, res) => {
+const getRoles = async (req, res, next) => {
     try {
         const roles = await userService.getRoles();
         res.json(roles);
     } catch (err) {
-        console.log(err);
-        res.status(500).json({ error: err.message });
+        next(err);
     }
 };
 
-const getProfile = async (req, res) => {
+const getProfile = async (req, res, next) => {
     try {
         const user_id = req.user.id;
         const role_id = req.user.role_id;
@@ -192,8 +190,7 @@ const getProfile = async (req, res) => {
         res.json(data);
 
     } catch (err) {
-        console.log("err", err);
-        res.status(500).json({ error: err.message });
+        next(err);
     }
 };
 

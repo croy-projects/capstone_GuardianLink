@@ -3,7 +3,7 @@ const volunteerService = require('../services/volunteerService');
 const ROLES = require('../config/roles');
 const path = require("path");
 
-const getVolunteers = async (req, res) => {
+const getVolunteers = async (req, res, next) => {
     try {
         if (req.user.role_id !== ROLES.ADMIN && req.user.role_id !== ROLES.NGO) {
             return res.status(403).json({ error: "Forbidden" });
@@ -12,11 +12,11 @@ const getVolunteers = async (req, res) => {
         const volunteers = await volunteerService.getVolunteers();
         res.json(volunteers);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        next(err);
     }
 };
 
-const getVolunteerByID = async (req, res) => {
+const getVolunteerByID = async (req, res, next) => {
     try {
         const { id } = req.params;
         
@@ -32,11 +32,11 @@ const getVolunteerByID = async (req, res) => {
         }
         res.json(user);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        next(err);
     }
 };
 
-const getVolunteerFile = async (req, res) => {
+const getVolunteerFile = async (req, res, next) => {
     try {
 
         const { id, filename } = req.params;
@@ -52,7 +52,7 @@ const getVolunteerFile = async (req, res) => {
         res.sendFile(filePath);
 
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        next(err);
     }
 };
 
