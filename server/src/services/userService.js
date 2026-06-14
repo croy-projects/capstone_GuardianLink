@@ -16,7 +16,7 @@ const getUsers = async () => {
       FROM users u
       JOIN roles r ON u.role_id = r.id
       LEFT JOIN volunteers v ON v.user_id = u.id
-      ORDER BY u.role_id DESC
+      ORDER BY u.role_id DESC, u.name
     `);
     } finally {
         conn.release();
@@ -53,6 +53,16 @@ const createUser = async (user) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        // Check existing user
+        const existing = await conn.query(
+            "SELECT id FROM users WHERE email = ?",
+            [email]
+        );
+
+        if (existing.length > 0) {
+            throw new AppError("Email already registered", 400);
+        }
+
         const result = await conn.query(
             'INSERT INTO users (name, email, password, role_id) VALUES (?, ?, ?, ?)',
             [name, email, hashedPassword, role_id]
@@ -79,6 +89,7 @@ const createUser = async (user) => {
 
 
     } catch (err) {
+        console.log("err", err)
         if (conn) await conn.rollback();
         throw err;
     } finally {
