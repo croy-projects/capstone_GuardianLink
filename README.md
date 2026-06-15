@@ -42,16 +42,6 @@ npm install
 
 ---
 
-##  File Uploads
- The dedicated folder must be created on the backend server to store registration files generated during the application process.  
- Configuration setup is available in server/.env file
-
-```
- /server/private/uploads
-```
-
----
-
 ## Database
 
 Database: MariaDB 
