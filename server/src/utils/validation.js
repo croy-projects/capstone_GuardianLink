@@ -88,12 +88,12 @@ const validateVolunteer = (data, checkPassword) => {
     const errors = {};
 
     const cleanData = {
+        ...data,
         name: sanitize(data.name?.trim()),
         email: data.email?.trim(),
         password: data.password,
         confirmPassword: data.confirmPassword,
-        hours_by_week: data.hours_by_week,
-        ...data
+        hours_by_week: data.hours_by_week
 
     };
 
@@ -121,12 +121,12 @@ const validateNGO = (data, checkPassword) => {
     
     const errors = {};
     const cleanData = {
+        ...data,        
         name: sanitize(data.name?.trim()),
         email: data.email?.trim(),
         password: data.password,
         confirmPassword: data.confirmPassword,
-        area_of_concern: sanitize(data.area_of_concern),
-        ...data
+        area_of_concern: sanitize(data.area_of_concern)
     };
 
     errors.name = validateName(cleanData.name);
@@ -152,11 +152,11 @@ const validateAdmin = (data, checkPassword) => {
     
     const errors = {};
     const cleanData = {
+        ...data,
         name: sanitize(data.name?.trim()),
         email: data.email?.trim(),
         password: data.password,
-        confirmPassword: data.confirmPassword,
-        ...data
+        confirmPassword: data.confirmPassword
     };
 
     errors.name = validateName(cleanData.name);
